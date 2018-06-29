@@ -10,7 +10,23 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
+import json
 import os
+from pathlib import Path
+
+config = os.environ.get('config', None)
+if config is None:
+    hdir = str(Path.home())
+    config = os.path.sep.join([hdir, "configs", "simplred_prod.json"])
+
+if config:
+    with open(config, 'r') as fp:
+        config = json.load(fp)
+else:
+    raise Exception("No Configuration Found")
+
+if config.get('postgres', None) is None or config['postgres'].get('config', None) is None:
+    raise Exception("No PostgreSQL Configuration Found")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'fontawesome'
 ]
 
 MIDDLEWARE = [
@@ -70,15 +87,22 @@ TEMPLATES = [
 WSGI_APPLICATION = 'webeditr.wsgi.application'
 
 
+
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': config['postgres']['config']['name'],
+        'USER': config['postgres']['config']['user'],
+        'PASSWORD': config['postgres']['config']['pwd'],
+        'HOST': config['postgres']['config']['host'],
+        'PORT': config['postgres']['config'].get('port', '5432'),
     }
 }
+
 
 
 # Password validation
@@ -118,3 +142,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# email
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'asevans48@gmail.com'
+EMAIL_HOST_PASSWORD = 'psq*4500'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Simplr Insites Team <noreply@simplrinsites.com>'
