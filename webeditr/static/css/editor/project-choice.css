@@ -1,0 +1,14 @@
+
+
+@media
+only screen
+and (min-device-width: 1800px){
+    .project-choice-div{
+        position: absolute;
+        left: 37%;
+        top: 33%;
+        width: 500px;
+        height: 300px;
+        background-color: grey;
+    }
+}

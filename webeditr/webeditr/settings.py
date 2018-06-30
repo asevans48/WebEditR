@@ -17,7 +17,7 @@ from pathlib import Path
 config = os.environ.get('config', None)
 if config is None:
     hdir = str(Path.home())
-    config = os.path.sep.join([hdir, "configs", "simplred_prod.json"])
+    config = os.path.sep.join([hdir, "configs", "webeditr.json"])
 
 if config:
     with open(config, 'r') as fp:
@@ -30,6 +30,9 @@ if config.get('postgres', None) is None or config['postgres'].get('config', None
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+print(BASE_DIR)
+print(os.path.join(BASE_DIR, 'templates'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -53,7 +56,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'fontawesome'
+    'fontawesome',
+    'editor'
 ]
 
 MIDDLEWARE = [
@@ -71,7 +75,7 @@ ROOT_URLCONF = 'webeditr.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -86,6 +90,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'webeditr.wsgi.application'
 
+CSRF_USE_SESSIONS = True
 
 
 # Database
@@ -100,6 +105,9 @@ DATABASES = {
         'PASSWORD': config['postgres']['config']['pwd'],
         'HOST': config['postgres']['config']['host'],
         'PORT': config['postgres']['config'].get('port', '5432'),
+        'OPTIONS': {
+            'options': '-c search_path=webeditr'
+        }
     }
 }
 
@@ -142,6 +150,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
 
 # email
 
