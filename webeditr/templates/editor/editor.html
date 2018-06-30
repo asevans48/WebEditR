@@ -6,10 +6,15 @@
         {% load fontawesome %}
         {% fontawesome_stylesheet %}
 
-        <!-- external -->
+        <!-- glyphicons -->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
         <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet"/>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- bootstrap.css -->
+        <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"/>
+
+        <!-- page css -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/page/page.css' %}"/>
 
         <!-- editor css -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/editor/editor.css' %}"/>
@@ -24,13 +29,14 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/editor/project-choice.css' %}"/>
 
         <!-- editor js -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="{% static 'js/security/cookies.js' %}"></script>
         <script src="{% static 'js/editor/editor.js' %}"></script>
     </head>
     <body>
         {% csrf_token %}
         <div class="pallet">
-            
+
         </div>
         <div class="filesystem">
 
