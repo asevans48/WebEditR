@@ -34,6 +34,18 @@ class Element(models.Model):
     perc_page_height = models.FloatField(null=False)
     perc_page_width = models.FloatField(null=False)
 
+    def to_dict(self):
+        return {
+            'name': self.name,
+            'id_attr': self.id_attr,
+            'tag_name': self.tag_name,
+            'class_name': self.class_name,
+            'description': self.description,
+            'attributes': self.attributes,
+            'perc_page_height': self.perc_page_height,
+            'perc_page_width': self.perc_page_width
+        }
+
 
 class Page(models.Model):
     name = models.CharField(max_length=512, null=False, db_index=True)

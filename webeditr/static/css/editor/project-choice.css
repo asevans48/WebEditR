@@ -3,19 +3,22 @@
 @media
 only screen
 and (min-device-width: 1800px){
+
+    .project-add-div{
+        position: absolute;
+        width: 420px;
+        height: 280px;
+        left: 70px;
+        top: 70px;
+        border-radius: 22px;
+    }
+
     .project-choice-div{
         position: absolute;
         left: 37%;
         top: 33%;
         width: 500px;
-        height: 300px;
-        background: -moz-linear-gradient(90deg, rgba(192,192,192,1) 0%, rgba(128,128,128,1) 100%); /* ff3.6+ */
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(128,128,128,1)), color-stop(100%, rgba(192,192,192,1))); /* safari4+,chrome */
-        background: -webkit-linear-gradient(90deg, rgba(192,192,192,1) 0%, rgba(128,128,128,1) 100%); /* safari5.1+,chrome10+ */
-        background: -o-linear-gradient(90deg, rgba(192,192,192,1) 0%, rgba(128,128,128,1) 100%); /* opera 11.10+ */
-        background: -ms-linear-gradient(90deg, rgba(192,192,192,1) 0%, rgba(128,128,128,1) 100%); /* ie10+ */
-        background: linear-gradient(0deg, rgba(192,192,192,1) 0%, rgba(128,128,128,1) 100%); /* w3c */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#808080', endColorstr='#c0c0c0',GradientType=0 ); /* ie6-9 */
+        height: 250px;
         border-radius: 22px;
     }
 
@@ -39,15 +42,57 @@ and (min-device-width: 1800px){
         float: left;
     }
 
+    .project-desc-inpt{
+        position: absolute;
+        left: 10px;
+        width: 400px;
+        height: 150px;
+
+    }
+
     .project-sel-add-btn{
         color: white;
         margin-left: 10px;
-        font-size: 2.2em;
+        font-size: 1.5em;
+    }
+
+    .project-title-div{
+        font-size: 2em;
+        color: white;
+        margin-top: 2%;
+        margin-left: 35%;
+        font-weight: bold;
+    }
+
+    .project-name-div{
+        width: 250px;
+        text-align: center;
+    }
+
+    .project-name{
+        postion: relative;
+        left: 10px;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    .project-name-inpt{
+        margin-left: 70px;
+        width: 250px;
+    }
+
+    .project-sbmt-btn{
+        font-weight: bold;
+        font-size: 1.2em;
+        position: absolute;
+        top: 240px;
+        left: 170px;
     }
 
     .input-sel-btn{
         position: absolute;
-        font-size: 1.7em;
+        font-weight: bold;
+        font-size: 1.2em;
         left: 200px;
         top: 170px;
         width: 100px;

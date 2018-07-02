@@ -7,8 +7,12 @@
         {% fontawesome_stylesheet %}
 
         <!-- glyphicons -->
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/material-icons.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap-glyphicon.css' %}"/>
+
+        <!-- jquery ui css -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/ui/jquery-ui.css' %}"/>
+
 
         <!-- bootstrap.css -->
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"/>
@@ -28,9 +32,18 @@
         <!-- project choice css -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/editor/project-choice.css' %}"/>
 
+        <!-- gradients css -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/gradients/gradients.css' %}"/>
+
+
         <!-- editor js -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="{% static 'js/jquery/jquery-3.3.1.min.js' %}"></script>
+        <script src="{% static 'js/ui/jquery-ui.js' %}"></script>
         <script src="{% static 'js/security/cookies.js' %}"></script>
+        <script src="{% static 'js/editor/filesystem.js' %}"></script>
+        <script src="{% static 'js/editor/pallet.js' %}"></script>
+        <script src="{% static 'js/editor/project_gui.js' %}"></script>
+        <script src="{% static 'js/editor/project.js' %}"></script>
         <script src="{% static 'js/editor/editor.js' %}"></script>
     </head>
     <body>
