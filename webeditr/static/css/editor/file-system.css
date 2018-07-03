@@ -1,0 +1,34 @@
+
+@media
+only screen
+and (min-device-width: 1800px){
+
+    .fsys-div{
+        z-index: 10;
+        position: absolute;
+        left: 200px;
+        top: 50px;
+        width: 175px;
+        height: 270px;
+        border-radius: 22px;
+    }
+
+    .fsys-title-div{
+        position: absolute;
+        font-size: 1.5em;
+        font-weight: bold;
+        color: white;
+        left: 45px;
+        top: 15px;
+    }
+
+    .fsys-files-div{
+        position: absolute;
+        top: 40px;
+        left: 14px;
+        width: 150px;
+        height: 200px;
+        background-color: white;
+        border-radius: 5px;
+    }
+}

@@ -14,5 +14,7 @@ var project = {
 
 
 $(document).ready(function(){
+    $('.background-dots').css('width', window.innerWidth);
+    $('.background-dots').css('height', $(window).height());
     get_starting_div();
 });

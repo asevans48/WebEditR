@@ -41,22 +41,23 @@ def get_projects(request):
 def get_project_assets(request):
     try:
         rdict = dict(request.POST)
-        pname = rdict['project_name'][0]
-        if pname and len(pname.strip()) > 0:
+        project_id = rdict['project_id'][0]
+        if project_id:
             pdict = {}
-            pages = PageProject.objects.filter(page_name_contains=pname)
+            pdict['pages'] = []
+            pages = list(PageProject.objects.filter(project=project_id))
             page_list = []
-            if pages and len(pages) > 0:
-                for page in pages:
-                    page_list.append({'name': page.name,
-                                      'description': page.description})
-            else:
-                return JsonResponse({'success': False, 'msg': 'Internal Error'})
-            pdict['pages'].append(page_list)
-            sheets = assets.get_style_sheets_by_project(pname)
-            pdict['stylesheets'] = sheets
-            sheets = assets.get_scripts_by_project(pname)
-            pdict['scripthseets'] = sheets
+            for page in pages:
+                page_dict = {
+                    'name': page.name,
+                    'description': page.description,
+                    'page_id': page.id}
+                page_dict['sheets'] = assets.get_stylesheets_by_page_id(
+                                                                        page.id)
+                page_dict['scripts'] = assets.get_scriptsheets_by_page_id(
+                                                                          page.id)
+                pdict['pages'].append(page_dict)
+            print(pdict)
             return JsonResponse({'success': True, 'pages': pdict})
         else:
             return JsonResponse({'success': False, 'msg': 'No Project Name'})

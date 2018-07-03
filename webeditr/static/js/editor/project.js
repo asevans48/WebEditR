@@ -1,26 +1,32 @@
 
 //get project information
-function get_project_files(elmnt){
+function get_project_assets(elmnt){
     var choice_div = $(elmnt);
-    var sel_div = choice_div.find('.project-choice-sel');
+    var sel_div = $('.project-choice-sel');
     if(sel_div != undefined && sel_div != null){
         var pname = sel_div.val();
+        var project_title = sel_div.text();
         var data = {
-                    'project_name': pname};
+                    'project_id': pname};
         $.ajax({
             type: 'POST',
             url: '/get_project_assets/',
             data: data,
             success: function(data){
-                project.project_assets = data
-                open_project_file_panel(pname);
+                if(data.success){
+                    open_project_file_panel(
+                                            pname,
+                                            project_title,
+                                            data);
+                }else{
+                    alert(data.msg);
+                }
             }
         }).fail(function(jqXHR, textStatus){
             console.log("Request Failed" + textStatus);
             console.log(jqXHR);
         });
     }
-
 }
 
 
@@ -36,7 +42,6 @@ function get_projects(){
             var project_select = $('.project-choice-sel');
             if(projects != undefined && projects != null){
                 for(var i = 0; i < projects.length; i++){
-                    console.log(projects[i]);
                     var name = projects[i].name;
                     var id = projects[i].id;
                     var opt = $('<option>', {
@@ -62,7 +67,6 @@ function submit_project(elmnt){
     var pdesc = $('.project-desc-inpt');
     data["project_name"] = pname.val();
     data["project_description"] = pdesc.val();
-    console.log(data);
     $.ajax({
        type: "POST",
        url: '/submit_project/',
@@ -157,7 +161,7 @@ function get_starting_div(){
     var ok_btn = $('<button>', {
                 type: 'button',
                 class: 'input-sel-btn form-control btn btn-primary',
-                onclick: 'get_project_files(this);'});
+                onclick: 'get_project_assets(this);'});
     ok_btn.html('Get Project');
     ok_div.append(ok_btn);
     project_chooser.append(ok_div);
