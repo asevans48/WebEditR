@@ -1,42 +1,168 @@
 
-function remove_page(elmnt){
-    var page_rem_btn = $(elmnt);
+function remove_sheet(elmnt){
+    var sheet_div = $(elmnt).parent()
+    var sheet_id = sheet_div.attr('id');
+    var sheet_name = sheet_id.find('.sheet-title').html();
+    var sheet_type = null;
+    if(sheet_name.endsWith("css")){
+        sheet_type = "css";
+    }else if(sheet_name.endsWith("js"))
+        sheet_type = "js";
+    }
+    var data{
+        'sheet_id': sheet_id;
+        'sheet_type': sheet_type;
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: '/remove_sheet/',
+        data: data,
+        success: function(data){
+            if(data.success){
+                open_project_file_panel(
+                                        pname,
+                                        project_title,
+                                        data);
+            }else{
+                alert(data.msg);
+            }
+        }
+    }).fail(function(jqXHR, textStatus){
+        console.log("Request Failed" + textStatus);
+        console.log(jqXHR);
+    });
 
 }
 
+function update_project_assets(){
+    var pname = project_objects.pname;
+    var project_title = project_objects.current_project;
+    var data = {
+                'project_id': pname};
+    $.ajax({
+        type: 'POST',
+        url: '/get_project_assets/',
+        data: data,
+        success: function(data){
+            if(data.success){
+                open_project_file_panel(
+                                        pname,
+                                        project_title,
+                                        data);
+            }else{
+                alert(data.msg);
+            }
+        }
+    }).fail(function(jqXHR, textStatus){
+        console.log("Request Failed" + textStatus);
+        console.log(jqXHR);
+    });
+}
+
+
+function remove_page(elmnt){
+    var page_rem_btn = $(elmnt);
+    var page_id = page_rem_btn.parent().attr('id');
+    var data = {
+        'page_id': page_id;
+    }
+
+    $.ajax({
+
+    }).fail(function(jqXHR, textStatus){
+        console.log("Request Failed: " + textStatus);
+        console.log(jqXHR);
+        update_project_assets();
+    });
+}
+
+
+function create_new_sheet(){
+    var sheet_title = $('.fsys-new-sheet-title').val();
+    var sheet_type = $('.fsys-new-sheet-select').val();
+    var sheet_desc = $('.fsys-new-sheet-desc').val();
+    var page_id = $('[name="page_id"]').val();
+    var project =  project_objects.current_project
+    if(page_id == undefined || page_id == null){
+        alert('Page Id Not Provided');
+    }else if(sheet_title != null && sheet_title.trim().length > 0 &&
+       sheet_type != null && sheet_type.trim().length > 0 &&
+       sheet_desc != null && sheet_desc.trim().length > 0){
+       var data = {
+            'title': sheet_title,
+            'type': sheet_type,
+            'description': sheet_desc,
+            'project': project,
+            'page_id': page_id
+       }
+
+       $.ajax({
+           type: "POST",
+           url: '/add_new_sheet/',
+           data: data,
+           success: function(data){
+               if(data.success == false){
+                  console.log('Request Failed', data.page_id);
+               }
+               update_project_assets();
+           }
+        }).fail(function(jqXHR, textStatus){
+            console.log("Request Failed: " + textStatus);
+            console.log(jqXHR);
+            add_new_page_btn($('fsys-div'));
+        });
+    }else{
+        alert('Not All Sheet Elements Not Specified');
+    }
+}
+
+
 function get_new_sheet(elmnt){
     var sheet_add_btn = $(elmnt);
+    var page_id = sheet_add_btn.parent().attr('id');
+    $('.fsys-new-sheet-div').remove();
     var np_div = $('<div>',{
                  class: 'fsys-new-sheet-div standard-grey-gradient shadow'});
     np_div.draggable();
+    var np_pageid = $('<input>', {
+                    type: 'hidden',
+                    name: 'page_id',
+                    value: page_id});
     var np_div_title = $('<div>',{
-                        class: 'fsys-new-page-title'});
+                        class: 'fsys-new-sheet-title'});
     np_div_title.html('New Sheet');
     np_div.append(np_div_title);
     var project_title = $('<input>',{
                         type: 'text',
-                        class: 'fsys-new-page-inpt form-control',
-                        placeholder: 'Page Title'});
+                        class: 'fsys-new-sheet-inpt form-control',
+                        placeholder: 'Sheet Title'});
     np_div.append(project_title);
 
-    var sheet_type = $('<select>',{
-        
-    });
+    var sheet_type_sel = $('<select>',{
+                           class: 'fsys-new-sheet-select'});
+    var css_opt = $('<option>', {id: 'css', value: 'CSS'});
+    css_opt.text('CSS')
+    sheet_type_sel.append(css_opt);
+    var js_opt = $('<option>', {id: 'js', value: 'JS'});
+    js_opt.text('JS')
+    sheet_type_sel.append(js_opt);
+    np_div.append(sheet_type_sel);
 
     var project_title = $('<textarea>', {
-                        class: 'fsys-new-page-desc',
-                        placeholder: 'Page Description'});
+                        class: 'fsys-new-sheet-desc form-control',
+                        placeholder: 'Sheet Description'});
     np_div.append(project_title);
     var np_div_sbmt = $('<button>', {
-                      class: 'btn btn-primary fsys-new-page-btn',
+                      class: 'btn btn-primary fsys-new-sheet-btn',
                       onclick: 'create_new_sheet();'});
-    np_div_sbmt.html('Create Page');
+    np_div_sbmt.html('Create Sheet');
     np_div.append(np_div_sbmt);
 
     var exit_btn_div = $('<div>',{
                     class: 'fsys-new-page-remove-div'});
     var exit_btn = $('<i>', {
-                    class: 'fa fa-times fsys-new-page-remove-btn',
+                    class: 'fa fa-times fsys-new-sgeet-remove-btn',
                     onclick: 'remove_new_page_div(this);'});
     exit_btn_div.append(exit_btn);
     np_div.append(exit_btn_div);
@@ -135,6 +261,7 @@ function remove_new_page_div(elmnt){
 
 
 function get_new_page(){
+    $('.fsys-new-page-div').remove();
     var np_div = $('<div>',{
                  class: 'fsys-new-page-div standard-grey-gradient shadow'});
     np_div.draggable();
@@ -221,6 +348,11 @@ function open_project_file_panel(project_id, project_title, pages){
     var pcdiv = $('.project-choice-div');
     if(pcdiv != undefined && pcdiv != null){
         pcdiv.remove();
+    }
+
+    var fsys_div = $('.fsys-div');
+    if(fsys_div != undefined && fsys_div != null){
+        fsys_div.remove();
     }
 
     //file system div

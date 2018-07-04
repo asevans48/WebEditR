@@ -7,6 +7,8 @@ var settings = {
 
 var project_objects = {
     current_project: null,
+    pname: 0,
+    project_title: null
 }
 
 

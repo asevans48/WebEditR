@@ -157,4 +157,62 @@ and (min-device-width: 1800px){
     .fsys-newsheet-btn-div i:hover{
         opacity: 0.5
     }
+
+    .fsys-new-sheet-div{
+        position: absolute;
+        top: 10px;
+        left: 400px;
+        width: 300px;
+        height: 300px;
+        color: white;
+        border-radius: 22px;
+    }
+
+    .fsys-new-sheet-title{
+        position: absolute;
+        left: 100px;
+        top: 4px;
+        font-size: 1.7em;
+        font-weight: bold;
+    }
+
+    .fsys-new-sheet-select{
+        position: absolute;
+        top: 70px;
+        left: 117px;
+    }
+
+    .fsys-new-sheet-inpt{
+        position: absolute;
+        left: 50px;
+        top: 30px;
+        width: 200px;
+    }
+
+    .fsys-new-sheet-desc{
+        position: absolute;
+        left: 50px;
+        width: 200px;
+        height: 120px;
+        top: 110px;
+    }
+
+    .fsys-new-sheet-btn{
+        position: absolute;
+        left: 105px;
+        top: 250px;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    .fsys-new-sheet-remove-div{
+        position: absolute;
+        font-size: 2em;
+        left: 260px;
+        top: 2px;
+    }
+
+    .fsys-new-sheet-remove-div i:hover{
+        opacity: 0.5;
+    }
 }
