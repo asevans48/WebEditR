@@ -14,6 +14,7 @@ function get_project_assets(elmnt){
             data: data,
             success: function(data){
                 if(data.success){
+                    project_objects.current_project = project_title;
                     open_project_file_panel(
                                             pname,
                                             project_title,
@@ -82,7 +83,14 @@ function submit_project(elmnt){
         console.log(jqXHR);
     });
     $('.project-add-div').remove();
+    get_starting_div();
 }
+
+
+function remove_project_add_div(elmnt){
+    $(elmnt).parent().parent().remove();
+}
+
 
 function create_new_project(){
 
@@ -127,6 +135,14 @@ function create_new_project(){
     sbmt_btn.html('Create')
     proj_div.append(sbmt_btn);
     proj_div.draggable();
+
+    var proj_remove_btn_div = $('<div>',{
+                              class: 'project-add-rem-btn-div'});
+    var proj_remove_btn = $('<i>', {
+                            class: 'fa fa-times project-add-rem-btn',
+                            onclick: 'remove_project_add_div(this);'});
+    proj_remove_btn_div.append(proj_remove_btn);
+    proj_div.append(proj_remove_btn_div);
     $('.editor').append(proj_div);
 }
 
@@ -134,6 +150,10 @@ function create_new_project(){
 //obtains working project
 function get_starting_div(){
     var body = $('.editor');
+    var pdiv = $('project-choice-div');
+    if(pdiv != undefined && pdiv != null){
+        pdiv.remove();
+    }
     var project_chooser = $('<div>', {
                             class: 'project-choice-div standard-grey-gradient'});
 

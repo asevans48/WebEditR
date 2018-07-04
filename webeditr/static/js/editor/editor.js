@@ -5,11 +5,8 @@ var settings = {
 }
 
 
-var project = {
-    projects: [],
-    project_assets: {},
+var project_objects = {
     current_project: null,
-    project_details: {},
 }
 
 

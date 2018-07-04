@@ -8,3 +8,9 @@
     background: linear-gradient(0deg, rgba(192,192,192,1) 0%, rgba(128,128,128,1) 100%); /* w3c */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#808080', endColorstr='#c0c0c0',GradientType=0 ); /* ie6-9 */
 }
+
+.shadow{
+  -webkit-box-shadow: 2px 1px 3px 3px #ccc;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+  -moz-box-shadow:    2px 1px 3px 3px #ccc;  /* Firefox 3.5 - 3.6 */
+  box-shadow:         2px 1px 3px 3px #ccc;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+}

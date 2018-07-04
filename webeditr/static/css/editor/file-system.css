@@ -9,7 +9,7 @@ and (min-device-width: 1800px){
         left: 200px;
         top: 50px;
         width: 175px;
-        height: 270px;
+        height: 310px;
         border-radius: 22px;
     }
 
@@ -27,8 +27,134 @@ and (min-device-width: 1800px){
         top: 40px;
         left: 14px;
         width: 150px;
-        height: 200px;
+        height: 260px;
         background-color: white;
         border-radius: 5px;
+    }
+
+    .fsys-new-page-div{
+        z-index: 16777271;
+    }
+
+    .fsys-new-sheet-div{
+        z-index: 16777271;
+    }
+
+    .fsys-root-folder-div{
+        position: relative;
+        font-size: 1.7em;
+        top: 2px;
+        font-color: black;
+        left: 1px;
+    }
+
+    .fsys-root-folder-div{
+        position: relative;
+        left: 10px;
+        color: black;
+    }
+
+    .fsys-root-slash-title{
+        position: relative;
+        left: 10px;
+    }
+
+    .fsys-pageadd-btn-div{
+        color: green;
+        position: relative;
+        left: 15px;
+        font-size: 2em;
+        font-weight: bold;
+        width: 100%;
+        height: 2em;
+    }
+
+    .fsys-pageadd-btn-div i:hover{
+        opacity: 0.5;
+    }
+
+    .fsys-new-page-div{
+        position: absolute;
+        top: 10px;
+        left: 400px;
+        width: 300px;
+        height: 250px;
+        color: white;
+        border-radius: 22px;
+    }
+
+    .fsys-new-page-title{
+        position: absolute;
+        left: 100px;
+        top: 4px;
+        font-size: 1.7em;
+        font-weight: bold;
+    }
+
+    .fsys-new-page-inpt{
+        position: absolute;
+        left: 50px;
+        top: 30px;
+        width: 200px;
+    }
+
+    .fsys-new-page-desc{
+        position: absolute;
+        left: 50px;
+        width: 200px;
+        height: 120px;
+        top: 70px;
+    }
+
+    .fsys-new-page-btn{
+        position: absolute;
+        left: 105px;
+        top: 200px;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    .fsys-new-page-remove-div{
+        position: absolute;
+        font-size: 2em;
+        left: 260px;
+        top: 2px;
+    }
+
+    .fsys-new-page-remove-div i:hover{
+        opacity: 0.5;
+    }
+
+    .fsys-page-div{
+        position: relative;
+        margin-left: 15px;
+    }
+
+    .fsys-page-title-txt{
+        float: left;
+        font-size: 1.2em;
+    }
+
+    .fsys-page-title-rem-btn-div{
+        postion: relative;
+        margin-left: 5px;
+        font-size: 1.5em;
+        font-weight: bold;
+        color: red;
+    }
+
+    .fsys-page-title-rem-btn-div i:hover{
+        opacity: 0.5;
+    }
+
+    .fsys-newsheet-btn-div{
+        color: green;
+        position: relative;
+        margin-left: 15px;
+        font-size: 1.8em;
+    }
+
+    .fsys-newsheet-btn-div i:hover{
+        opacity: 0.5
     }
 }

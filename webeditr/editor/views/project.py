@@ -49,13 +49,13 @@ def get_project_assets(request):
             page_list = []
             for page in pages:
                 page_dict = {
-                    'name': page.name,
-                    'description': page.description,
-                    'page_id': page.id}
+                    'name': page.page.name,
+                    'description': page.page.description,
+                    'page_id': page.page.id}
                 page_dict['sheets'] = assets.get_stylesheets_by_page_id(
-                                                                        page.id)
+                                                                        page.page.id)
                 page_dict['scripts'] = assets.get_scriptsheets_by_page_id(
-                                                                          page.id)
+                                                                          page.page.id)
                 pdict['pages'].append(page_dict)
             print(pdict)
             return JsonResponse({'success': True, 'pages': pdict})

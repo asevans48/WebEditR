@@ -7,3 +7,7 @@
 .page-background{
     z-index: -1;
 }
+
+.user-defined-background{
+    z-index: -2;
+}
