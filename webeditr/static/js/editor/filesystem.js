@@ -1,39 +1,30 @@
 
 function remove_sheet(elmnt){
-    var sheet_div = $(elmnt).parent()
+    var sheet_div = $(elmnt).parent().parent();
     var sheet_id = sheet_div.attr('id');
-    var sheet_name = sheet_id.find('.sheet-title').html();
-    var sheet_type = null;
-    if(sheet_name.endsWith("css")){
-        sheet_type = "css";
-    }else if(sheet_name.endsWith("js")){
-        sheet_type = "js";
-    }
-
+    var sheet_name = sheet_div.find('.fsys-page-sheet-title').html();
+    var sheet_type = sheet_div.find('.fsys-page-sheet-type').html();
     var data = {
         'sheet_id': sheet_id,
-        'sheet_type': sheet_type
+        'sheet_type': sheet_type.toLowerCase(),
+        'page_id': sheet_div.parent().parent().attr('id')
     }
 
+    console.log(data);
     $.ajax({
         type: 'POST',
         url: '/remove_sheet/',
         data: data,
         success: function(data){
-            if(data.success){
-                open_project_file_panel(
-                                        pname,
-                                        project_title,
-                                        data);
-            }else{
+            if(data.success == false){
                 alert(data.msg);
             }
+            update_project_assets()
         }
     }).fail(function(jqXHR, textStatus){
         console.log("Request Failed" + textStatus);
         console.log(jqXHR);
-    });
-
+    }).then(update_project_assets());
 }
 
 function update_project_assets(){
@@ -63,14 +54,25 @@ function update_project_assets(){
 
 
 function remove_page(elmnt){
+    var pname = project_objects.pname;
+    var project_title = project_objects.current_project;
     var page_rem_btn = $(elmnt);
-    var page_id = page_rem_btn.parent().attr('id');
+    var page_id = page_rem_btn.parent().parent().attr('id');
     var data = {
-        'page_id': page_id
+        'page_id': page_id,
+        'project_id': project_objects.pname
     }
 
     $.ajax({
-
+        type: 'POST',
+        url: '/remove_page/',
+        data: data,
+        success: function(data){
+            if(data.success == false){
+                alert(data.msg);
+            }
+            update_project_assets();
+        }
     }).fail(function(jqXHR, textStatus){
         console.log("Request Failed: " + textStatus);
         console.log(jqXHR);
@@ -80,11 +82,11 @@ function remove_page(elmnt){
 
 
 function create_new_sheet(){
-    var sheet_title = $('.fsys-new-sheet-title').val();
+    var sheet_title = $('.fsys-new-sheet-inpt').val();
     var sheet_type = $('.fsys-new-sheet-select').val();
     var sheet_desc = $('.fsys-new-sheet-desc').val();
     var page_id = $('[name="page_id"]').val();
-    var project =  project_objects.current_project
+    var project =  project_objects.current_project;
     if(page_id == undefined || page_id == null){
         alert('Page Id Not Provided');
     }else if(sheet_title != null && sheet_title.trim().length > 0 &&
@@ -97,7 +99,6 @@ function create_new_sheet(){
             'project': project,
             'page_id': page_id
        }
-
        $.ajax({
            type: "POST",
            url: '/add_new_sheet/',
@@ -106,13 +107,14 @@ function create_new_sheet(){
                if(data.success == false){
                   console.log('Request Failed', data.page_id);
                }
-               update_project_assets();
+               update_project_assets()
            }
         }).fail(function(jqXHR, textStatus){
             console.log("Request Failed: " + textStatus);
             console.log(jqXHR);
             add_new_page_btn($('fsys-div'));
-        });
+       }).then(update_project_assets());
+       $('.fsys-new-sheet-div').remove();
     }else{
         alert('Not All Sheet Elements Not Specified');
     }
@@ -121,7 +123,7 @@ function create_new_sheet(){
 
 function get_new_sheet(elmnt){
     var sheet_add_btn = $(elmnt);
-    var page_id = sheet_add_btn.parent().attr('id');
+    var page_id = sheet_add_btn.parent().parent().attr('id');
     $('.fsys-new-sheet-div').remove();
     var np_div = $('<div>',{
                  class: 'fsys-new-sheet-div standard-grey-gradient shadow'});
@@ -130,6 +132,8 @@ function get_new_sheet(elmnt){
                     type: 'hidden',
                     name: 'page_id',
                     value: page_id});
+    np_div.append(np_pageid);
+
     var np_div_title = $('<div>',{
                         class: 'fsys-new-sheet-title'});
     np_div_title.html('New Sheet');
@@ -163,7 +167,7 @@ function get_new_sheet(elmnt){
     var exit_btn_div = $('<div>',{
                     class: 'fsys-new-page-remove-div'});
     var exit_btn = $('<i>', {
-                    class: 'fa fa-times fsys-new-sgeet-remove-btn',
+                    class: 'fa fa-times fsys-new-sheet-remove-btn',
                     onclick: 'remove_new_page_div(this);'});
     exit_btn_div.append(exit_btn);
     np_div.append(exit_btn_div);
@@ -194,20 +198,45 @@ function add_new_page_btn(root_div){
 }
 
 
+function get_inner_sheet_div(sheet_type, sheet_title, sheet_id){
+    var sheet_div = $('<div>', {
+                    class: 'fsys-page-sheet-div',
+                    id: sheet_id});
+    var sheet_sep = $('<span>', {
+                    class: 'fsys-page-sheet-sep'});
+    sheet_sep.html('-');
+    sheet_div.append(sheet_sep);
+    var sheet_title_spn =  $('<span>',{
+        class: 'fsys-page-sheet-title'});
+    sheet_title_spn.append(sheet_title);
+    sheet_div.append(sheet_title_spn);
+    var sheet_type_spn = $('<span>',{
+                     class: 'fsys-page-sheet-type'});
+    sheet_type_spn.html(sheet_type);
+    sheet_div.append(sheet_type_spn);
+    var sheet_rem_btn_spn = $('<span>', {
+                            class: 'fsys-page-sheet-rem-spn'});
+    var sheet_rem_btn = $('<i>',{
+                        class: 'fsys-page-sheet-rem-btn fa fa-times',
+                        onclick: 'remove_sheet(this);'});
+    sheet_rem_btn_spn.append(sheet_rem_btn);
+    sheet_div.append(sheet_rem_btn_spn);
+    return sheet_div;
+}
+
+
 function add_new_page_to_fs(page_name, page_id, scripts=null, sheets=null){
     var fsys_div = $('<div>', {class: 'fsys-page-div', id: page_id});
+    var fsys_title_div = $('<div>');
+    fsys_div.append(fsys_title_div);
+    var page_sep_div = $('<div>', {
+                        class: 'fsys-page-title-sep'});
+    page_sep_div.html('/');
+    fsys_title_div.append(page_sep_div);
     var page_title = $('<div>',{
                      class: 'fsys-page-title-txt'});
-    page_title.html('/ '+page_name);
-    fsys_div.append(page_title);
-    if(scripts != null && Object.keys(scripts).length > 0){
-        //add scripts
-    }
-
-    if(sheets != null && Object.keys(sheets).length > 0){
-        //add sheets
-    }
-
+    page_title.html(page_name);
+    fsys_title_div.append(page_title);
     var page_min_btn_div = $('<div>', {
                             class: 'fsys-page-title-rem-btn-div'});
     var page_min_btn = $('<i>', {
@@ -215,6 +244,26 @@ function add_new_page_to_fs(page_name, page_id, scripts=null, sheets=null){
                         onclick: 'remove_page(this);'});
     page_min_btn_div.append(page_min_btn);
     fsys_div.append(page_min_btn_div);
+    var fsys_scripts_div = $('<div>');
+    if(scripts != null && Object.keys(scripts).length > 0){
+        //add scripts
+        $(Object.keys(scripts)).each(function(index, sheet_title){
+            var sheet_id = scripts[sheet_title].id;
+            var inner_div = get_inner_sheet_div('JS', sheet_title, sheet_id);
+            fsys_scripts_div.append(inner_div);
+        });
+    }
+
+    if(sheets != null && Object.keys(sheets).length > 0){
+        //add sheets
+        $(Object.keys(sheets)).each(function(index, sheet_title){
+            var sheet_id = sheets[sheet_title].id;
+            var inner_div = get_inner_sheet_div('CSS', sheet_title, sheet_id);
+            fsys_scripts_div.append(inner_div);
+        });
+    }
+
+    fsys_div.append(fsys_scripts_div);
     add_new_sheet_button(fsys_div);
     return fsys_div;
 }
@@ -237,22 +286,19 @@ function create_new_page(){
            data: data,
            success: function(data){
                if(data.success == false){
-                  var page_div = add_new_page_to_fs(page_name, data.page_id);
-                  $('.fsys-files-div').append(page_div);
-               }else{
                   console.log('Request Failed', data.page_id);
                }
-               add_new_page_btn($('.fsys-div'));
+               update_project_assets();
            }
         }).fail(function(jqXHR, textStatus){
             console.log("Request Failed: " + textStatus);
             console.log(jqXHR);
-            add_new_page_btn($('fsys-div'));
-        });
+        }).then(update_project_assets());
     }else{
         alert('Page Description and Title Must Be Provided');
     }
     $('.fsys-new-page-div').remove();
+    update_project_assets();
 }
 
 
@@ -319,13 +365,21 @@ function build_connector_div(){
 
 
 function display_file_system(fsysdiv_files, pages){
-    var page_arr = pages.pages.pages;
-    for(var i = 0; i < page_arr.length; i++){
-        var page = page_arr[i];
-        var page_name = page.name;
-        var page_id = page.page_id;
-        var page_div = add_new_page_to_fs(page_name, page_id, page.sheets, page.scripts);
-        fsysdiv_files.append(page_div);
+    try{
+        var page_arr = pages.pages.pages;
+        for(var i = 0; i < page_arr.length; i++){
+            var page = page_arr[i];
+            var page_name = page.name;
+            var page_id = page.page_id;
+            var page_div = add_new_page_to_fs(
+                                              page_name,
+                                              page_id,
+                                              page.scripts,
+                                              page.sheets);
+            fsysdiv_files.append(page_div);
+        }
+    }catch{
+
     }
     add_new_page_btn(fsysdiv_files);
 }

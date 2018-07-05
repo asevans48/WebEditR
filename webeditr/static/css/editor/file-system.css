@@ -130,15 +130,23 @@ and (min-device-width: 1800px){
         margin-left: 15px;
     }
 
+    .fsys-page-title-sep{
+        float: left;
+        font-weight: bold;
+        font-size: 1.3em;
+    }
+
     .fsys-page-title-txt{
+        position: relative;
         float: left;
         font-size: 1.2em;
+        margin-left: 2px;
     }
 
     .fsys-page-title-rem-btn-div{
         postion: relative;
         margin-left: 5px;
-        font-size: 1.5em;
+        font-size: 1.2em;
         font-weight: bold;
         color: red;
     }
@@ -213,6 +221,36 @@ and (min-device-width: 1800px){
     }
 
     .fsys-new-sheet-remove-div i:hover{
+        opacity: 0.5;
+    }
+
+    .fsys-page-sheet-sep{
+        position: relative;
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+
+    .fsys-page-sheet-title{
+        font-size: 1.2em;
+        position: relative;
+        margin-left: 5px;
+    }
+
+    .fsys-page-sheet-type{
+        font-size: 1.2em;
+        position: relative;
+        margin-left: 5px;
+    }
+
+    .fsys-page-sheet-rem-spn{
+        position:relative;
+        margin-left: 5px;
+        font-size: 1.2em;
+        color: red;
+    }
+
+    .fsys-page-sheet-rem-spn i:hover{
         opacity: 0.5;
     }
 }

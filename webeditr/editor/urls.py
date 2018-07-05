@@ -16,5 +16,7 @@ urlpatterns = [
     re_path('^get_page_scriptsheet', page.get_page_scriptsheets, name='get_page_scriptsheets'),
     re_path('^get_page_stylesheet', page.get_page_stylesheets, name='get_page_stylesheets'),
     re_path('^add_new_page/', page.add_new_page, name='add_new_page'),
-    re_path('^add_new_sheet/', page.add_new_sheet, name='add_new_sheet')
+    re_path('^remove_page', page.remove_page, name='remove_page'),
+    re_path('^add_new_sheet/', page.add_new_sheet, name='add_new_sheet'),
+    re_path('^remove_sheet', page.remove_sheet, name='remove_sheet')
 ]

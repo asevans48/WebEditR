@@ -2,11 +2,13 @@
 import traceback
 
 from django.http import JsonResponse
+from django.views.decorators.cache import never_cache
 
 from ..models import Project, PageProject
 from ..modules import assets
 
 
+@never_cache
 def submit_project(request):
     try:
         name = dict(request.POST)['project_name'][0]
@@ -24,6 +26,7 @@ def submit_project(request):
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
 
 
+@never_cache
 def get_projects(request):
     try:
         projects = Project.objects.all()
@@ -38,6 +41,7 @@ def get_projects(request):
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
 
 
+@never_cache
 def get_project_assets(request):
     try:
         rdict = dict(request.POST)
@@ -57,7 +61,6 @@ def get_project_assets(request):
                 page_dict['scripts'] = assets.get_scriptsheets_by_page_id(
                                                                           page.page.id)
                 pdict['pages'].append(page_dict)
-            print(pdict)
             return JsonResponse({'success': True, 'pages': pdict})
         else:
             return JsonResponse({'success': False, 'msg': 'No Project Name'})

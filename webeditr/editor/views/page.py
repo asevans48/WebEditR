@@ -2,11 +2,13 @@
 import traceback
 
 from django.http import JsonResponse
+from django.views.decorators.cache import never_cache
 
 from ..models import Page, Project, PageProject, ScriptSheet, StyleSheet, PageStylesheet, PageScriptSheet
 from ..modules.assets import get_stylesheets_by_page_id, get_scriptsheets_by_page_id, get_elements_by_page_id
 
 
+@never_cache
 def add_new_page(request):
     try:
         rdict = dict(request.POST)
@@ -17,8 +19,7 @@ def add_new_page(request):
         if project is not None:
             if page_name and page_description and len(page_name) > 0 and\
                     len(page_description) > 0:
-                page_object = Page()
-                page_object.name = page_name
+                page_object, created = Page.objects.get_or_create(name=page_name)
                 page_object.description = page_description
                 page_object.save()
                 page_project = PageProject()
@@ -36,12 +37,59 @@ def add_new_page(request):
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
 
 
+@never_cache
+def remove_page(request):
+    try:
+        rdict = dict(request.POST)
+        page_id = int(rdict['page_id'][0])
+        project_id = int(rdict['project_id'][0])
+        if page_id:
+            page_project = PageProject.objects.filter(page_id = page_id, project_id = project_id)
+            if page_project.count() > 0:
+                page_project.first().delete()
+                page_project = PageProject.objects.filter(page_id = page_id)
+                if page_project.count() is 0:
+                    page_script = PageScriptSheet.objects.filter(page_id=page_id)
+                    page_styles = PageStylesheet.objects.filter(page_id=page_id)
+                    page = Page.objects.filter(id=page_id)
+
+                    if page_script.count() > 0:
+                        for script in page_script:
+                            try:
+                                sheet = script.script_sheet
+                                script.delete()
+                                sheets = PageScriptSheet.objects.filter(script_sheet_id=sheet.id)
+                                if sheets.count() is 0:
+                                    sheet.delete()
+                            except Exception as e:
+                                raise e
+
+                    if page_styles.count() > 0:
+                        for style in page_styles:
+                            try:
+                                sheet = style.style_sheet
+                                style.delete()
+                                sheets = PageStylesheet.objects.filter(style_sheet_id=sheet.id)
+                                if sheets.count() is 0:
+                                    sheet.delete()
+                            except Exception as e:
+                                raise e
+
+                    if page.count() > 0:
+                        page.first().delete()
+        return JsonResponse({'success': True, 'page_id': page_id})
+    except Exception as e:
+        print(traceback.format_exc())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
+
+
+@never_cache
 def add_new_sheet(request):
     try:
         rdict = dict(request.POST)
         page_id = rdict['page_id'][0]
-        page = Page.objects.filter(id=page_id)
-        if page:
+        page = Page.objects.filter(id=int(page_id))
+        if page and page.count() > 0:
             page = page.first()
             title = rdict['title'][0]
             stype = rdict['type'][0]
@@ -49,19 +97,18 @@ def add_new_sheet(request):
             project = rdict['project'][0]
             if title and stype and desc and project:
                 if stype == 'CSS':
-                    sheet = StyleSheet()
-                    page_sheet = PageStylesheet()
+                    sheet, created = StyleSheet.objects.get_or_create(name=title)
                 elif stype == 'JS':
-                    sheet = ScriptSheet()
-                    page_sheet = PageScriptSheet()
+                    sheet, created = ScriptSheet.objects.get_or_create(name=title)
                 else:
                     return JsonResponse({'success': False, 'msg': 'Page Type Unknown'})
-                sheet.name = title
                 sheet.description = desc
                 sheet.save()
                 if stype == 'CSS':
+                    page_sheet, created = PageStylesheet.objects.get_or_create(style_sheet=sheet, page=page)
                     page_sheet.style_sheet = sheet
                 else:
+                    page_sheet, created = PageScriptSheet.objects.get_or_create(script_sheet=sheet, page=page)
                     page_sheet.script_sheet = sheet
                 page_sheet.save()
                 return JsonResponse({'success': True, 'sheet_id': sheet.id})
@@ -70,34 +117,50 @@ def add_new_sheet(request):
         else:
             return JsonResponse({'success': False, 'msg': 'Page Not Found'})
     except Exception as e:
-        print(traceback.extract_tb())
+        print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
 
 
-def remove_stylesheet(request):
+@never_cache
+def remove_sheet(request):
     try:
         rdict = dict(request.POST)
+        print(rdict)
         sheet_id = rdict['sheet_id'][0]
         sheet_type = rdict['sheet_type'][0]
+        page_id = rdict['page_id'][0]
         if sheet_type == "js":
-            page_script = PageScriptSheet.objects.filter(script_sheet_id=sheet_id)
-            if page_script:
+            page_script = PageScriptSheet.objects.filter(script_sheet_id=sheet_id, page_id=page_id)
+            if page_script.count() > 0:
                 page_script = page_script.first()
-                page_script.script_sheet.delete()
+                script = page_script.script_sheet
                 page_script.delete()
+                page_script = PageScriptSheet.objects.filter(script_sheet_id=sheet_id)
+                if page_script.count() is 0:
+                    script.delete()
+                return JsonResponse({'success': True, 'sheet_id': sheet_id})
+            else:
+                return JsonResponse({'success': False, 'msg': 'PageScript Not found'})
         elif sheet_type == "css":
-            page_sheet = PageStylesheet.objects.filter(style_sheet_id=sheet_id)
-            if page_sheet:
+            page_sheet  = PageStylesheet.objects.filter(style_sheet_id=sheet_id, page_id=page_id)
+            if page_sheet.count() > 0:
                 page_sheet = page_sheet.first()
-                page_sheet.style_sheet.delete()
+                sheet = page_sheet.style_sheet
                 page_sheet.delete()
-        return JsonResponse({'success': True, 'sheet_id': sheet_id})
+                page_sheet = PageStylesheet.objects.filter(style_sheet_id=sheet_id)
+                if page_sheet.count() is 0:
+                    sheet.delete()
+                return JsonResponse({'success': True, 'sheet_id': sheet_id})
+            else:
+                return JsonResponse({'success': False, 'msg': 'PageSheet Not Found'})
+        else:
+            return JsonResponse({'success': False, 'msg': 'Invalid Sheet Type'})
     except Exception as e:
         print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
 
 
-
+@never_cache
 def get_page_stylesheets(request):
     try:
         rdict = dict(request.POST)
@@ -109,6 +172,7 @@ def get_page_stylesheets(request):
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
 
 
+@never_cache
 def get_page_scriptsheets(request):
     try:
         rdict = dict(request.POST)
@@ -120,6 +184,7 @@ def get_page_scriptsheets(request):
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
 
 
+@never_cache
 def get_page_elements(request):
     try:
         rdict = dict(request.POST)
@@ -131,6 +196,7 @@ def get_page_elements(request):
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
 
 
+@never_cache
 def load_stylesheet(request):
     try:
         # returns textual representation of the stylesheet
@@ -140,6 +206,7 @@ def load_stylesheet(request):
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
 
 
+@never_cache
 def load_scriptsheet(request):
     try:
         # returns textual representation of the scriptsheet
