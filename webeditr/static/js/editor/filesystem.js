@@ -6,12 +6,13 @@ function remove_sheet(elmnt){
     var sheet_type = null;
     if(sheet_name.endsWith("css")){
         sheet_type = "css";
-    }else if(sheet_name.endsWith("js"))
+    }else if(sheet_name.endsWith("js")){
         sheet_type = "js";
     }
-    var data{
-        'sheet_id': sheet_id;
-        'sheet_type': sheet_type;
+
+    var data = {
+        'sheet_id': sheet_id,
+        'sheet_type': sheet_type
     }
 
     $.ajax({
@@ -65,7 +66,7 @@ function remove_page(elmnt){
     var page_rem_btn = $(elmnt);
     var page_id = page_rem_btn.parent().attr('id');
     var data = {
-        'page_id': page_id;
+        'page_id': page_id
     }
 
     $.ajax({
