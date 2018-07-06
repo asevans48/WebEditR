@@ -1,0 +1,73 @@
+
+.textedit-stylesheet-div{
+    position: absolute;
+    top: 20px;
+    left: 500px;
+    width: 400px;
+    height: 300px;
+    border-radius: 22px;
+}
+
+
+.textedit-stylesheet-title-div{
+   position: relative;
+   width: 400px;
+   text-align: center;
+   color: white;
+   font-size: 1.7em;
+   font-weight: bold;
+   margin-top: 5px;
+   z-index: 10;
+}
+
+
+.textedit-stylesheet-title-type{
+    margin-left: 10px;
+}
+
+
+.textedit-stylesheet-edit-area{
+    position: relative;
+    margin-left: 10px;
+    margin-top: 2px;
+    background-color: white;
+    height: 230px;
+    width: 380px;
+    overflow-y: scroll;
+}
+
+.textedit-stylesheet-btns{
+}
+
+.textedit-class-add-div{
+    float: left;
+    position:relative;
+    font-size: 2.5em;
+    font-weight: bold;
+    font-bold: weight;
+    color: white;
+    margin-left: 11px;
+    margin-top: 2px;
+}
+
+
+.textedit-class-add-div i:hover{
+    opacity: 0.5;
+}
+
+
+.textedit-stylesheet-sbmt-div{
+    float: left;
+    position:relative;
+    font-size: 2.5em;
+    font-weight: bold;
+    font-bold: weight;
+    color: white;
+    margin-left: 11px;
+    margin-top: 4px;
+}
+
+
+.textedit-stylesheet-sbmt-div i:hover{
+    opacity: 0.5;
+}

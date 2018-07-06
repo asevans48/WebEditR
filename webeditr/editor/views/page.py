@@ -13,6 +13,7 @@ from ..modules.assets import get_stylesheets_by_page_id, get_scriptsheets_by_pag
 def add_new_page(request):
     try:
         rdict = dict(request.POST)
+        print(rdict)
         page_name = escape(rdict['page_name'][0])
         page_description = escape(rdict['page_description'][0])
         project = escape(rdict['project'][0])
@@ -211,26 +212,6 @@ def get_page_elements(request):
         page_id = int(rdict['page_id'][0])
         elements = get_elements_by_page_id(page_id)
         return JsonResponse({'success': True, 'elements': elements})
-    except Exception as e:
-        print(traceback.format_exc())
-        return JsonResponse({'success': False, 'msg': 'Internal Error'})
-
-
-@never_cache
-def load_stylesheet(request):
-    try:
-        # returns textual representation of the stylesheet
-        pass
-    except Exception as e:
-        print(traceback.format_exc())
-        return JsonResponse({'success': False, 'msg': 'Internal Error'})
-
-
-@never_cache
-def load_scriptsheet(request):
-    try:
-        # returns textual representation of the scriptsheet
-        pass
     except Exception as e:
         print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
