@@ -3,6 +3,7 @@ import traceback
 
 from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
+from django.utils.html import escape
 
 from ..models import Page, Project, PageProject, ScriptSheet, StyleSheet, PageStylesheet, PageScriptSheet
 from ..modules.assets import get_stylesheets_by_page_id, get_scriptsheets_by_page_id, get_elements_by_page_id
@@ -12,9 +13,9 @@ from ..modules.assets import get_stylesheets_by_page_id, get_scriptsheets_by_pag
 def add_new_page(request):
     try:
         rdict = dict(request.POST)
-        page_name = rdict['page_name'][0]
-        page_description = rdict['page_description'][0]
-        project = rdict['project'][0]
+        page_name = escape(rdict['page_name'][0])
+        page_description = escape(rdict['page_description'][0])
+        project = escape(rdict['project'][0])
         project = Project.objects.filter(name=project)
         if project is not None:
             if page_name and page_description and len(page_name) > 0 and\
@@ -87,13 +88,13 @@ def remove_page(request):
 def add_new_sheet(request):
     try:
         rdict = dict(request.POST)
-        page_id = rdict['page_id'][0]
+        page_id = int(rdict['page_id'][0])
         page = Page.objects.filter(id=int(page_id))
         if page and page.count() > 0:
             page = page.first()
-            title = rdict['title'][0]
-            stype = rdict['type'][0]
-            desc = rdict['description'][0]
+            title = escape(rdict['title'][0])
+            stype = escape(rdict['type'][0])
+            desc = escape(rdict['description'][0])
             project = rdict['project'][0]
             if title and stype and desc and project:
                 if stype == 'CSS':
@@ -102,7 +103,8 @@ def add_new_sheet(request):
                     sheet, created = ScriptSheet.objects.get_or_create(name=title)
                 else:
                     return JsonResponse({'success': False, 'msg': 'Page Type Unknown'})
-                sheet.description = desc
+                if created is False:
+                    sheet.description = desc
                 sheet.save()
                 if stype == 'CSS':
                     page_sheet, created = PageStylesheet.objects.get_or_create(style_sheet=sheet, page=page)
@@ -125,10 +127,9 @@ def add_new_sheet(request):
 def remove_sheet(request):
     try:
         rdict = dict(request.POST)
-        print(rdict)
-        sheet_id = rdict['sheet_id'][0]
-        sheet_type = rdict['sheet_type'][0]
-        page_id = rdict['page_id'][0]
+        sheet_id = int(rdict['sheet_id'][0])
+        sheet_type = escape(rdict['sheet_type'][0])
+        page_id = int(rdict['page_id'][0])
         if sheet_type == "js":
             page_script = PageScriptSheet.objects.filter(script_sheet_id=sheet_id, page_id=page_id)
             if page_script.count() > 0:
@@ -164,7 +165,7 @@ def remove_sheet(request):
 def get_page_stylesheets(request):
     try:
         rdict = dict(request.POST)
-        page_id = rdict['page_id'][0]
+        page_id = int(rdict['page_id'][0])
         sheets = get_stylesheets_by_page_id(page_id)
         return JsonResponse({'success': True, 'sheets': sheets})
     except Exception as e:
@@ -188,7 +189,7 @@ def get_page_scriptsheets(request):
 def get_page_elements(request):
     try:
         rdict = dict(request.POST)
-        page_id = rdict['page_id'][0]
+        page_id = int(rdict['page_id'][0])
         elements = get_elements_by_page_id(page_id)
         return JsonResponse({'success': True, 'elements': elements})
     except Exception as e:

@@ -10,7 +10,6 @@ function remove_sheet(elmnt){
         'page_id': sheet_div.parent().parent().attr('id')
     }
 
-    console.log(data);
     $.ajax({
         type: 'POST',
         url: '/remove_sheet/',
@@ -90,8 +89,10 @@ function create_new_sheet(){
     if(page_id == undefined || page_id == null){
         alert('Page Id Not Provided');
     }else if(sheet_title != null && sheet_title.trim().length > 0 &&
-       sheet_type != null && sheet_type.trim().length > 0 &&
-       sheet_desc != null && sheet_desc.trim().length > 0){
+       sheet_type != null && sheet_type.trim().length > 0){
+       if(sheet_desc == undefined || sheet_desc == null){
+        sheet_desc = '';
+       }
        var data = {
             'title': sheet_title,
             'type': sheet_type,
@@ -199,6 +200,12 @@ function add_new_page_btn(root_div){
 
 
 function get_inner_sheet_div(sheet_type, sheet_title, sheet_id){
+    var func = null;
+    if(sheet_type.toLowerCase() == 'css'){
+        func = 'get_style_sheet_editor(this);';
+    }else if(sheet_type.toLowerCase() == 'js'){
+        func = 'get_script_sheet_editor(this);';
+    }
     var sheet_div = $('<div>', {
                     class: 'fsys-page-sheet-div',
                     id: sheet_id});
@@ -207,7 +214,8 @@ function get_inner_sheet_div(sheet_type, sheet_title, sheet_id){
     sheet_sep.html('-');
     sheet_div.append(sheet_sep);
     var sheet_title_spn =  $('<span>',{
-        class: 'fsys-page-sheet-title'});
+        class: 'fsys-page-sheet-title',
+        onclick: func});
     sheet_title_spn.append(sheet_title);
     sheet_div.append(sheet_title_spn);
     var sheet_type_spn = $('<span>',{

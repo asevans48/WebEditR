@@ -8,8 +8,8 @@ and (min-device-width: 1800px){
         position: absolute;
         left: 200px;
         top: 50px;
-        width: 175px;
-        height: 310px;
+        width: 250px;
+        height: 410px;
         border-radius: 22px;
     }
 
@@ -18,7 +18,7 @@ and (min-device-width: 1800px){
         font-size: 1.5em;
         font-weight: bold;
         color: white;
-        left: 45px;
+        left: 85px;
         top: 15px;
     }
 
@@ -26,8 +26,8 @@ and (min-device-width: 1800px){
         position: absolute;
         top: 40px;
         left: 14px;
-        width: 150px;
-        height: 260px;
+        width: 225px;
+        height: 360px;
         background-color: white;
         border-radius: 5px;
     }

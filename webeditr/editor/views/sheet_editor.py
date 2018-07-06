@@ -1,26 +1,44 @@
 
+import base64
 import traceback
 
-from pip.cmdoptions import no_cache
+from django.http import JsonResponse
+from django.views.decorators.cache import never_cache
 
 from ..models import ScriptFunc, ScriptSheet, StyleSheet
 
 
-@no_cache
+@never_cache
 def add_stylesheet_attribute(request):
-    pass
+    try:
+        pass
+    except Exception as e:
+        print(traceback.format_exc())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
 
 
-@no_cache
+@never_cache
 def add_scriptsheet_function(request):
-    pass
+    try:
+        pass
+    except Exception as e:
+        print(traceback.format_exc())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
 
 
-@no_cache
+@never_cache
 def remove_stylesheet_attribute(request):
-    pass
+    try:
+        pass
+    except Exception as e:
+        print(traceback.format_exc())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
 
 
-@no_cache
+@never_cache
 def remove_scriptsheet_function(request):
-    pass
+    try:
+        pass
+    except Exception as e:
+        print(traceback.format_exc())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
