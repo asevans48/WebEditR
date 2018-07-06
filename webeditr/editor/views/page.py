@@ -21,13 +21,32 @@ def add_new_page(request):
             if page_name and page_description and len(page_name) > 0 and\
                     len(page_description) > 0:
                 page_object, created = Page.objects.get_or_create(name=page_name)
-                page_object.description = page_description
-                page_object.save()
-                page_project = PageProject()
-                page_project.project = project.first()
-                page_project.page = page_object
-                page_project.save()
-                return JsonResponse({'success': True, 'page_id': page_object.id})
+                if created:
+                    page_object.description = page_description
+                    page_object.save()
+                    page_project = PageProject()
+                    page_project.project = project.first()
+                    page_project.page = page_object
+                    page_project.save()
+                    script, created = ScriptSheet.objects.get_or_create(name=page_name)
+                    if created:
+                        script.description = "Page JS"
+                    script.save()
+                    ps = PageScriptSheet()
+                    ps.script_sheet = script
+                    ps.page = page_object
+                    ps.save()
+                    style, created = StyleSheet.objects.get_or_create(name=page_name)
+                    if created:
+                        style.description = "Page CSS"
+                    style.save()
+                    ps = PageStylesheet()
+                    ps.page = page_object
+                    ps.style_sheet = style
+                    ps.save()
+                    return JsonResponse({'success': True, 'page_id': page_object.id})
+                else:
+                    return JsonResponse({'sucecss': False, 'msg': 'Page Exists'})
             else:
                 return JsonResponse({'success': False,
                                      'msg': 'Internal Error'})

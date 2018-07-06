@@ -242,7 +242,8 @@ function add_new_page_to_fs(page_name, page_id, scripts=null, sheets=null){
     page_sep_div.html('/');
     fsys_title_div.append(page_sep_div);
     var page_title = $('<div>',{
-                     class: 'fsys-page-title-txt'});
+                     class: 'fsys-page-title-txt',
+                     onclick: 'open_edit_panel(this);'});
     page_title.html(page_name);
     fsys_title_div.append(page_title);
     var page_min_btn_div = $('<div>', {
