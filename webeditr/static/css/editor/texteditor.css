@@ -1,4 +1,5 @@
 
+/* Stylesheet editor div */
 .textedit-stylesheet-div{
     position: absolute;
     top: 20px;
@@ -9,6 +10,7 @@
 }
 
 
+/* stylesheet editor title */
 .textedit-stylesheet-title-div{
    position: relative;
    width: 400px;
@@ -26,6 +28,17 @@
 }
 
 
+.textedit-stylesheet-title-exit{
+    font-size: 1em;
+    color: white;
+    margin-left: 5px;
+}
+
+.textedit-stylesheet-title-exit i:hover{
+    opacity: 0.5;
+}
+
+/* stylesheet editor edit area */
 .textedit-stylesheet-edit-area{
     position: relative;
     margin-left: 10px;
@@ -36,9 +49,8 @@
     overflow-y: scroll;
 }
 
-.textedit-stylesheet-btns{
-}
 
+/* stylesheet editor buttons */
 .textedit-class-add-div{
     float: left;
     position:relative;
@@ -71,3 +83,77 @@
 .textedit-stylesheet-sbmt-div i:hover{
     opacity: 0.5;
 }
+
+
+/* stylesheet class editor inputs */
+.textedit-stylesheet-class-div{
+    margin-top: 5px;
+}
+
+
+.textedit-class-name-inpt{
+    float: left;
+    width: 200px;
+    margin-left: 80px;
+}
+
+
+.textedit-class-sbmt{
+    color: green;
+    margin-left: 5px;
+    font-size: 1.2em;
+    margin-top: 2px;
+}
+
+
+.textedit-stylesheet-class-div i:hover{
+    opacity: 0.5;
+}
+
+
+/* stylesheet attribute editor inputs */
+.textedit-stylesheet-attr-div{
+    position: relative;
+    margin-left: 30px;
+    margin-top: 5px;
+}
+
+
+.textedit-stylesheet-attr-div i:hover{
+    opacity: 0.5;
+}
+
+
+.textedit-stylesheet-attr-edit{
+    position: relative;
+    width: 100px;
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
+
+.textedit-attr-name-inpt{
+    position: relative;
+    float: left;
+    width: 140px;
+}
+
+
+.textedit-attr-val-inpt{
+    position: relative;
+    float: left;
+    width: 140px;
+    margin-left: 10px;
+}
+
+
+.textedit-class-attr-sbmt{
+    font-size: 1.2em;
+    color: green;
+    position: relative;
+    float: left;
+    width: 30px;
+    margin-left: 10px;
+    margin-top: 2px;
+}
+
