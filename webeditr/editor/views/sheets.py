@@ -19,7 +19,6 @@ def get_style_sheet(request):
             sheet_classes = ClassesStylesheet.objects.filter(style_sheet_id=sheet.id)
             classes = []
             if sheet_classes.count() > 0:
-                sheet_classes = sheet_classes.first()
                 for sc in sheet_classes:
                     sheet_class = sc.classes
                     classes.append({

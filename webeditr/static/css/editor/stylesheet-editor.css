@@ -86,12 +86,61 @@
 
 
 /* stylesheet class editor inputs */
+.textedit-stylesheet-class-title{
+    position: relative;
+    font-size: 1.5em;
+    font-weight: bold;
+    position: relative;
+    margin-left: 10px;
+}
+
+
+.textedit-stylesheet-attr-val-name{
+
+}
+
+
+.textedit-stylesheet-attr-val{
+
+}
+
+
+.textedit-stylesheet-add-attr-btn{
+    position: relative;
+}
+
+
+.textedit-remove-attr-div{
+
+}
+
+
+.textedit-add-attr-div{
+    position: relative;
+    margin-top: 5px;
+    margin-left: 5px;
+    font-size: 1.2em;
+    color: green;
+}
+
+
+.textedit-add-attr-div i:hover{
+    opacity: 0.5;
+}
+
+
+.textedit-remove-attr-div i:hover{
+    opacity: 0.5;
+}
+
+
 .textedit-stylesheet-class-div{
     margin-top: 5px;
 }
 
 
 .textedit-class-name-inpt{
+    position:relative;
     float: left;
     width: 200px;
     margin-left: 80px;
@@ -111,16 +160,39 @@
 }
 
 
+.textedit-stylesheet-add-attr-div{
+    position: relative;
+    color: green;
+    font-size: 1.2em;
+    margin-top: 10px;
+    margin-left: 25px;
+}
+
+
+.textedit-stylesheet-add-attr-div i:hover{
+    opacity: 0.5;
+}
+
+
 /* stylesheet attribute editor inputs */
 .textedit-stylesheet-attr-div{
     position: relative;
-    margin-left: 30px;
+    margin-left: 20px;
     margin-top: 5px;
+    width: 500px;
+    overflow: hidden;
+    display: flow-root;
 }
 
 
 .textedit-stylesheet-attr-div i:hover{
     opacity: 0.5;
+}
+
+
+.textedit-stylesheet-rem-class-spn{
+    color: red;
+    margin-left: 5px;
 }
 
 
@@ -157,3 +229,21 @@
     margin-top: 2px;
 }
 
+
+.textedit-class-edit-inpt{
+    width: 150px;
+    float: left;
+}
+
+
+.textedit-stylesheet-attr-div{
+    position: relative;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+
+.textedit-stylesheet-attr-val-name{
+    position: relative;
+    margin-left: 27px;
+}

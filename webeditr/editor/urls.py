@@ -24,5 +24,7 @@ urlpatterns = [
     re_path('^remove_script_func/', sheet_editor.remove_scriptsheet_function, name='remove_scriptsheet_func'),
     re_path('^add_stylesheet_attribute/', sheet_editor.add_stylesheet_attribute, name='add_stylesheet_attribute'),
     re_path('^add_scriptsheet_function/', sheet_editor.add_script_function, name="add_scriptsheet_function"),
-    re_path('^submit_new_class/', sheet_editor.add_stylesheet_class, name="add_stylesheet_class")
+    re_path('^submit_new_class/', sheet_editor.add_stylesheet_class, name="add_stylesheet_class"),
+    re_path('^change_class_name', sheet_editor.change_stylesheet_class, name="change_stylesheet_class"),
+    re_path('^remove_stylesheet_class', sheet_editor.remove_stylesheet_class, name="remove_stylesheet_class")
 ]
