@@ -19,6 +19,11 @@ function add_function(){
 }
 
 
+function get_scrip_by_func_name(func_name){
+
+}
+
+
 function get_script_sheet_editor(elmnt){
     var text_edit = $('.textedit-scriptsheet-div');
     if(text_edit != undefined){

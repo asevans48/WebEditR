@@ -71,17 +71,6 @@ function exit_stylesheet_editor(elmnt){
 }
 
 
-function get_remove_attribute_btn(){
-    var attributes_btn_div = $('<div>', {
-                             class: 'textedit-remove-attr-div'});
-    var attributes_btn = $('<i>', {
-                         class: 'textedit-remove-attr-btn fa fa-times',
-                         onclick: 'remove_attr(this)'});
-    attributes_btn_div.append(attributes_btn);
-    return attributes_btn_div;
-}
-
-
 function on_change_class_title(elmnt){
     var title_inpt = $(elmnt);
     var title = title_inpt.val();
@@ -94,8 +83,6 @@ function on_change_class_title(elmnt){
             'new_class_name': class_name,
             'style_sheet_name': stylesheet_title
         }
-        console.log('Posting')
-        console.log(data);
         $.ajax({
             type: 'POST',
             url: '/change_class_name/',
@@ -144,9 +131,10 @@ function edit_class_title(elmnt){
 }
 
 
+
 function get_class_div(class_name, attrs){
     var class_div = $('<div>',{
-                    class: 'textedit-stylesheet-attr-div'});
+                    class: 'textedit-stylesheet-class-div'});
     var title_div = $('<div>', {
                     class: 'textedit-stylesheet-class-title'});
     var title_span = $('<span>', {
@@ -163,62 +151,56 @@ function get_class_div(class_name, attrs){
     for(var i = 0; i < attr_keys.length; i++){
        var attr_name = attr_keys[i];
        var attr_val = attrs[attr_name];
-       var attr_div = $('<div>', {
-                        class: 'textedit-stylesheet-attr-edit-div'});
-       var attr_val_name = $('<span>', {
-                            class: 'textedit-stylesheet-attr-val-name',
-                            ondblclick: 'on_select_edit_attr_name(this);'});
-       attr_val_name.html(attr_name);
-       attr_div.append(attr_val_name);
-       var attr_val_colon = $('<span>', {
-                             class: 'textedit-stylesheet-attr-colon'});
-       attr_val_colon.html(':');
-       attr_div.append(attr_val_colon);
-       var attr_val_spn = $('<span>', {
-                      class: 'textedit-stylesheet-attr-val',
-                      ondblclick: 'on_select_edit_attr_val(this);'});
-       attr_val_spn.html(attr_val);
-       attr_div.append(attr_val_spn);
+       var attr_div = create_attr_div(attr_name, attr_val);
        attrs_div.append(attr_div);
     }
-    attrs_div.append(get_add_attribute_btn())
     class_div.append(attrs_div);
+    class_div.append(get_add_attribute_btn());
     return class_div;
 }
 
 
-function create_attr_div(parent_el, attr_name, attr_val){
+function create_attr_div(attr_name, attr_val){
+    console.log('Creating ', attr_name, attr_val);
+    var attr_div = $('<div>',{
+                    class: 'textedit-stylesheet-attr-div'});
     var attr_val_name = $('<span>', {
                         class: 'textedit-stylesheet-attr-val-name',
                         ondblclick: 'on_select_edit_attr_name(this);'});
-    attr_val_name.append(attr_name);
-    parent_el.append(attr_val_name);
+    attr_val_name.html(attr_name);
+    attr_div.append(attr_val_name);
     var attr_val_colon = $('<span>', {
-                         class: 'textedit-stylesheet-attr-colon'});
+                          class: 'textedit-stylesheet-attr-colon'});
     attr_val_colon.html(':');
-    parent_el.append(attr_val_colon);
-    var val_spn = $('<span>', {
-                  class: 'textedit-stylesheet-attr-val',
-                  ondblclick: 'on_select_edit_attr_val(this);'});
-    val_spn.append(attr_val);
-    parent_el.append(val_spn);
-    return parent_el;
+    attr_div.append(attr_val_colon);
+    var attr_val_spn = $('<span>', {
+                   class: 'textedit-stylesheet-attr-val',
+                   ondblclick: 'on_select_edit_attr_val(this);'});
+    attr_val_spn.html(attr_val);
+    attr_div.append(attr_val_spn);
+    var rem_attr_spn = $('<span>', {
+                       class: 'textedit-stylesheet-remattr-spn'});
+    var rem_attr_btn = $('<i>', {
+                       class: 'textedit-stylesheet-remattr-btn fa fa-times',
+                       onclick: 'remove_attr(this)'});
+    rem_attr_spn.append(rem_attr_btn);
+    attr_div.append(rem_attr_spn);
+    return attr_div;
 }
 
 
 function remove_attr(elmnt){
-    var parent_el = elmnt.parent().parent();
+    var parent_el = $(elmnt).parent().parent();
     var name_el = parent_el.find('.textedit-stylesheet-attr-val-name').html();
     var val_el = parent_el.find('.textedit-stylesheet-attr-val').html();
-    var class_name = parent_el.find('.textedit-stylesheet-class-title').html();
-    var stylesheet_name = parent_el.parent().find('.textedit-stylsheet-title-txt').html();
+    var class_name = parent_el.parent().parent().find('.textedit-stylesheet-class-title-spn').html();
+    var stylesheet_name = $('.textedit-stylesheet-title-txt').html();
     var data = {
         'attribute_name': name_el,
-        'attribute_value': val_el,
         'class_name': class_name,
         'stylesheet_name': stylesheet_name
     }
-
+    console.log(data);
     $.ajax({
         type: 'POST',
         url: '/remove_stylesheet_attribute/',
@@ -228,7 +210,7 @@ function remove_attr(elmnt){
                 parent_el.remove();
             }else{
                 console.log('Failed to Remove', data);
-                alert('Failed to Remove Attribute');
+                alert(data.msg);
             }
         }
     }).fail(function(jqXHR, textStatus){
@@ -237,43 +219,6 @@ function remove_attr(elmnt){
         console.log('Failure', textStatus);
         console.log(jqXHR);
     });
-}
-
-
-function get_attrs(attrs, attrs_div){
-    if(attrs != undefined && attrs != null && attrs.length > 0){
-        for(var i = 0; i < attrs.length; i++){
-            var attribute = attrs[i];
-            var name = attribute['name'];
-            var val = attribute['value'];
-            var attr_div = $('<div>', {
-                           class: 'textedit-stylesheet-attr-div'});
-        }
-    }
-}
-
-
-function create_attr_div(class_name, attrs){
-    var attr_div = $('<div>', {
-                   class: 'textedit-stylesheet-attr-div'});
-    var title_span = $('<span>', {
-                     class: 'textedit-stylesheet-class-title'});
-    title_span.html(class_name);
-    attr_div.append(title_span);
-    var attrs_div = $('<div>', {
-                    class: 'textedit-stylesheet-attrs-div'});
-    if(attrs != undefined && attrs != null && attrs.length > 0){
-        attrs_div.append(get_attrs(attrs));
-    }
-    attr_div.append(attrs_div);
-    var attr_add_div = $('<div>', {
-                       class: 'textedit-stylesheet-sbmt-div'});
-    var attr_add_btn = $('<i>', {
-                       class: 'textedit-stylesheet-add glyphicon glyphicon-plus',
-                       onclick: 'add_attribute_inputs();'});
-    attr_add_div.append(attr_add_btn);
-    attr_div.append(attr_add_div);
-    return attr_div;
 }
 
 
@@ -294,8 +239,8 @@ function submit_new_class(elmnt){
            success: function(data){
                if(data.success){
                    parent_el.html('');
-                   var attr_div = get_class_div(class_name, {})
-                   parent_el.append(attr_div);
+                   var attr_div = get_class_div(class_name, {});
+                   $(parent_el).append(attr_div);
                }else{
                    console.log(data.msg);
                    alert(data.msg);
@@ -334,34 +279,16 @@ function submit_new_attribute(elmnt){
             url: '/add_stylesheet_attribute/',
             data: data,
             success: function(){
+                console.log(parent_el.html());
                 parent_el.html('');
-                var attr_val_name = $('<span>',{
-                                class: 'textedit-stylesheet-attr-val-name',
-                                ondblclick: 'on_select_edit_attr_name(this);'});
-                attr_val_name.append(new_name);
-                parent_el.append(attr_val_name);
-                var attr_val_colon = $('<span>', {
-                             class: 'textedit-stylesheet-attr-colon'});
-                attr_val_colon.html(':');
-                parent_el.append(attr_val_colon);
-                var val_spn = $('<span>', {
-                          class: 'textedit-stylesheet-attr-val',
-                          ondblclick: 'on_select_edit_attr_val(this);'});
-                parent_el.append(val_spn);
-                val_spn.html(val);
-                var remove_attr = $('<span>', {
-                                  class: 'textedit-remove-attr-spn'});
-                var remove_attr_btn = $('<i>', {
-                                      class: 'textedit-remove-attr-btn fa fa-times',
-                                      onclick: 'remove_attr(this);'});
-                parent_el.append(name_spn);
-                parent_el.append(colon_spn);
-                parent_el.append(val_spn);
+                var attr_div = create_attr_div(name, val)
+                $(parent_el).parent().find('.textedit-stylesheet-attrs-div').append(attr_div);
             }
         }).fail(function(jqXHR, textStatus){
             alert('Internal Error');
             console.log('Failure', textStatus);
             console.log(jqXHR);
+            parent_el.remove();
         });
     }else{
         alert('Name and Value Must Be Provided');
@@ -377,7 +304,6 @@ function add_attribute_inputs(){
         class: 'edit-inpt textedit-attr-name',
         placeholder: 'Attribute Name'});
     textedit_inputs_div.append(textedit_inputs_div);
-
     var textedit_attr_val = $('<input>', {
                             class: 'edit-inpt textedit-attr-val',
                             placeholder: 'Attribute Value'});
@@ -600,6 +526,12 @@ function add_class(elmnt){
     var sbmt_inpt = $('<i>', {
                 class: 'glyphicon glyphicon-plus textedit-class-sbmt',
                 onclick: 'submit_new_class(this);'});
+    name_inpt.keyup(function(e){
+        var key_pressed = e.keycode || e.which;
+        if(key_pressed == 13){
+            submit_new_class(name_inpt);
+        }
+    });
     class_div.append(sbmt_inpt);
     $('.textedit-stylesheet-edit-area').append(class_div);
 }
@@ -614,11 +546,18 @@ function add_attribute(elmnt){
     var val_inpt = $('<input>', {
                class: 'edit-inpt textedit-attr-val-inpt form-control'});
     attr_div.append(val_inpt);
+    val_inpt.keyup(function(e){
+        var key_pressed = e.keycode || e.which;
+        if(key_pressed == 13){
+            submit_new_attribute(val_inpt);
+        }
+    });
+
     var sbmt_inpt = $('<i>', {
                 class: 'glyphicon glyphicon-plus textedit-class-attr-sbmt',
                 onclick: 'submit_new_attribute(this);'});
     attr_div.append(sbmt_inpt);
-    $(elmnt).parent().parent().before(attr_div);
+    $(elmnt).parent().before(attr_div);
 }
 
 

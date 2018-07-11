@@ -16,6 +16,9 @@ function get_project_assets(elmnt){
                 if(data.success){
                     project_objects.current_project = project_title;
                     project_objects.pname = pname;
+                    open_project_dimensions_panel(
+                                                  pname,
+                                                  project_title);
                     open_project_file_panel(
                                             pname,
                                             project_title,

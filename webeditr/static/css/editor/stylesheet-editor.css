@@ -88,20 +88,10 @@
 /* stylesheet class editor inputs */
 .textedit-stylesheet-class-title{
     position: relative;
-    font-size: 1.5em;
+    font-size: 1.7em;
     font-weight: bold;
     position: relative;
     margin-left: 10px;
-}
-
-
-.textedit-stylesheet-attr-val-name{
-
-}
-
-
-.textedit-stylesheet-attr-val{
-
 }
 
 
@@ -175,7 +165,7 @@
 
 
 /* stylesheet attribute editor inputs */
-.textedit-stylesheet-attr-div{
+.textedit-stylesheet-class-div{
     position: relative;
     margin-left: 20px;
     margin-top: 5px;
@@ -185,7 +175,7 @@
 }
 
 
-.textedit-stylesheet-attr-div i:hover{
+.textedit-stylesheet-class-div i:hover{
     opacity: 0.5;
 }
 
@@ -240,10 +230,24 @@
     position: relative;
     font-size: 1.3em;
     font-weight: bold;
+    display: flow-root;
 }
 
 
 .textedit-stylesheet-attr-val-name{
     position: relative;
     margin-left: 27px;
+}
+
+
+.textedit-stylesheet-remattr-spn{
+    position: relative;
+    color: red;
+    font-size: 1.2em;
+    margin-left: 10px;
+}
+
+
+.textedit-stylesheet-remattr-spn i:hover{
+    opacity:0.5;
 }
