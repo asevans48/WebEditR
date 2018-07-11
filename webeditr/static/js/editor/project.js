@@ -19,6 +19,38 @@ function get_project_assets(elmnt){
                     open_project_dimensions_panel(
                                                   pname,
                                                   project_title);
+                    $(document).keyup(function(e){
+                        var key_pressed = e.keycode || e.which;
+                        if(key_pressed == 50){
+                            var dim_div = $('.dimensions-div');
+                            if(dim_div.html() == undefined || dim_div.html() == null){
+                                open_project_dimensions_panel(
+                                                              pname,
+                                                              project_title);
+                            }else{
+                                dim_div.remove();
+                            }
+                        }else if(key_pressed == 49){
+                            var fsys_div = $('.fsys-div');
+                            if(fsys_div.html() == undefined || fsys_div.html() == null){
+                                open_project_file_panel(
+                                                       pname,
+                                                       project_title,
+                                                       data);
+                            }else{
+                                fsys_div.remove();
+                            }
+                        }else if(key_pressed == 51){
+                            var pallet_div = $('.pallet-div');
+                            if(pallet_div.html() == undefined || pallet_div.html() == null){
+                                open_project_pallet(
+                                                    pname,
+                                                    project_title);
+                            }else{
+                                pallet_div.remove();
+                            }
+                        }
+                    });
                     open_project_file_panel(
                                             pname,
                                             project_title,

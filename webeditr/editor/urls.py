@@ -21,10 +21,14 @@ urlpatterns = [
     re_path('^remove_page', page.remove_page, name='remove_page'),
 
     #import handler
-
+    re_path('^get_imports_by_project/', imports.get_imports_by_project, name='get_imports_by_project'),
+    re_path('^add_imports_by_project/', imports.add_imports_by_project, name='add_imports_by_project'),
+    re_path('^remove_imports_by_project/', imports.remove_imports_by_project, name='remove_imports_by_project'),
 
     # dimension picker
-
+    re_path('^remove_dimension_by_project', dimensions.remove_dimension_by_project, name='remove_dimension_by_project'),
+    re_path('^get_dimensions_by_project', dimensions.get_dimensions_by_project, name='get_dimensions_by_project'),
+    re_path('^add_dimension_by_project', dimensions.add_dimension_by_project, name='add_dimension_by_project'),
 
     # stylesheet functions
     re_path('^add_new_sheet/', page.add_new_sheet, name='add_new_sheet'),
