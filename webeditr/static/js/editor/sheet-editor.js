@@ -15,7 +15,6 @@ function remove_class(elmnt){
     var class_name = rem_btn.parent().parent().find('.textedit-stylesheet-class-title-spn');
     class_name = class_name.html();
     var stylesheet = $('.textedit-stylesheet-title-txt').html();
-    console.log(stylesheet);
     if(class_name != undefined && stylesheet != undefined && class_name.trim().length > 0){
         var data = {
             'class_name': class_name,
@@ -89,7 +88,6 @@ function on_change_class_title(elmnt){
             data: data,
             success: function(data){
                 if(data.success){
-                    console.log('Re-obtaining Div');
                     var stylesheet = $('.textedit-stylesheet-title-txt').html();
                     get_stylesheet_editor_by_name(stylesheet);
                 }else{
@@ -112,7 +110,6 @@ function on_change_class_title(elmnt){
 function edit_class_title(elmnt){
     var title_el = $(elmnt);
     var title_val = title_el.html();
-    console.log('Title Element', title_val);
     title_el.html('');
     var edit_div = $('<input>', {
                    class: 'textedit-class-edit-inpt form-control',
@@ -124,7 +121,6 @@ function edit_class_title(elmnt){
             on_change_class_title(edit_div);
         }
     });
-    console.log(edit_div);
     var parent_el = $(elmnt).parent();
     elmnt.remove();
     parent_el.prepend(edit_div);
@@ -161,7 +157,6 @@ function get_class_div(class_name, attrs){
 
 
 function create_attr_div(attr_name, attr_val){
-    console.log('Creating ', attr_name, attr_val);
     var attr_div = $('<div>',{
                     class: 'textedit-stylesheet-attr-div'});
     var attr_val_name = $('<span>', {
@@ -200,7 +195,7 @@ function remove_attr(elmnt){
         'class_name': class_name,
         'stylesheet_name': stylesheet_name
     }
-    console.log(data);
+
     $.ajax({
         type: 'POST',
         url: '/remove_stylesheet_attribute/',

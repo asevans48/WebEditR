@@ -15,6 +15,11 @@ var project_objects = {
 }
 
 
+var script_editor = {
+    func_dict = {},
+}
+
+
 $(document).ready(function(){
     $('.background-dots').css('width', window.innerWidth);
     $('.background-dots').css('height', $(window).height());

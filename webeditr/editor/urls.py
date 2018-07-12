@@ -7,6 +7,8 @@ app_name = 'webeditr'
 
 urlpatterns = [
 
+    #djangofy
+
     #project attainment
     re_path('^$', editor.editor_home, name='index'),
     re_path('^submit_project/', project.submit_project, name='submit_project'),

@@ -1,3 +1,4 @@
+import base64
 import traceback
 
 from django.http import JsonResponse
@@ -63,7 +64,7 @@ def remove_scriptsheet_function(request):
         rdict = dict(request.POST)
         func_name = escape(rdict['function_name'][0])
         script_sheet_name = escape(rdict['scriptsheet_name'][0])
-        script = ScriptSheet.object.filter(name=script_sheet_name)
+        script = ScriptSheet.objects.filter(name=script_sheet_name)
         if script.count() > 0:
             func = ScriptFunc.objects.filter(name=func_name)
             if func.count() > 0:
@@ -76,4 +77,28 @@ def remove_scriptsheet_function(request):
                     func.delete()
     except Exception as e:
         print(traceback.format_exc()) # send to elastic apm
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
+
+
+@never_cache
+def load_scriptsheet(request):
+    try:
+        rdict = dict(request.POST)
+        script_name = escape(rdict['script_name'][0])
+        script = ScriptSheet.objects.filter(name=script_name)
+        if script.count() > 0:
+            scripts = ScriptScriptSheet.objects.filter(script_sheet_id=script.id)
+            if scripts.count() > 0:
+                functions = []
+                for func in scripts:
+                    fname = func.name
+                    func_script = base64.decodestring(func.func)
+                    functions.append({'name': fname, 'script': func_script})
+                return JsonResponse({'success': True, 'functions': functions})
+            else:
+                return JsonResponse({'success': False, 'msg': 'Functions Not Found'})
+        else:
+            return JsonResponse({'success': False, 'msg': 'Scriptsheet Not Found'})
+    except Exception as e:
+        print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})

@@ -10,7 +10,7 @@ function get_current_dimensions(){
 function set_default_dimensions(start_width, base_width, end_width){
     var data = {
         'start_width': start_width,
-        'base_width'; base_width,
+        'base_width': base_width,
         'end_width': end_width
     }
 
@@ -89,7 +89,7 @@ function add_new_dimensions(){
                 'base_dimension': parseInt(base_dimension),
                 'end_dimension': parseInt(end_dimension),
                 'project_name': parseInt(project_name),
-                'page_name': project_objects.current_page;
+                'page_name': project_objects.current_page,
             }
 
             $.ajax({

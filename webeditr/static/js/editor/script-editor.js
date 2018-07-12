@@ -19,8 +19,8 @@ function add_function(){
 }
 
 
-function get_scrip_by_func_name(func_name){
-
+function load_script_by_func_name(func_name){
+    script_editor
 }
 
 
@@ -40,18 +40,36 @@ function get_script_sheet_editor(elmnt){
             var edit_div = $('<div>',{
                             class: 'textedit-scriptsheet-div'});
             var title = elmnt.html();
-            var classes = data.classes;
-            if(classes != undefined && classes != null){
-                $(classes).each(function(index, class_obj){
-                    var class_name = class_obj.name;
-                    var attributes = class_obj.attributes;
-
-                });
+            var funcs = data.functions;
+            script_editor.func_dict = {};
+            if(funcs != undefined && funcs != null){
+                for(var i = 0; i < funcs.length; i++){
+                    var func_div = $('<div>', {
+                                   class: 'textedit-scriptsheet-func'});
+                    var funco = funcs[i];
+                    var name = funco.name;
+                    var script = funco.script;
+                    var fname_div = $('<div>', {
+                                    class: 'textedit-scriptsheet-funcname'});
+                    var fname_spn = $('<div>', {
+                                    class: 'textedit-scriptsheet-funcnamn-spn'});
+                    fname_spn.html(name);
+                    fname_div.append(fname_spn);
+                    var del_func_spn= $('<div>', {
+                                      class: 'textedit-scriptsheet-funcrem-spn'});
+                    var del_func_btn = $('<i>', {
+                                       class: 'textedit-scriptsheet-funcrem-btn fa fa-times',
+                                       onclick: 'remove_function(this);'});
+                    del_func_spn.append(del_func_btn);
+                    fname_div.append(del_func_spn);
+                    func_div.append(fname_div);
+                    script_editor.func_dict[name] = script;
+                }
             }
             $('.editor').append(edit_div);
         }
     }).fail(function(jqXHR, textStatus){
-        console.log('Failure', textStatus);
+        console.log('Failed to load Script Sheet', textStatus);
         console.log(jqXHR);
     });
 }
