@@ -9,16 +9,34 @@ function get_current_dimensions(){
 
 function remove_dimension(elmnt){
     var parent_el = $(elmnt).parent().parent();
-    var start_width = parent_el.find('.dimension-start-spn').val();
-    var base_width = parent_el.find('.dimension-base-spn').val();
-    var end_width = parent_el.find('.dimension-end-spn').val();
+    var start_width = parent_el.find('.dimensions-start-spn').html();
+    var base_width = parent_el.find('.dimensions-base-spn').html();
+    var end_width = parent_el.find('.dimensions-end-spn').html();
     var page_name = project_objects.current_page;
     var data = {
-        'start_width': start_width,
-        'base_width': base_width,
-        'end_width': end_width,
+        'start_width': parseInt(start_width),
+        'base_width': parseInt(base_width),
+        'end_width': parseInt(end_width),
         'page_name': page_name
     }
+
+    $.ajax({
+        type: 'POST',
+        url: '/remove_dimension_by_page/',
+        data: data,
+        success: function(data){
+            if(data.success){
+                setup_page_dimensions(project_objects.current_project, project_objects.current_page);
+            }else{
+                console.log(data.msg)
+                alert(data.msg)
+            }
+        }
+    }).fail(function(jqXHR, textStatus){
+        console.log('Failed to Remove Dimension', textStatus);
+        console.log(jqXHR);
+        alert('Internal Error')
+    });
 }
 
 
@@ -30,47 +48,50 @@ function setup_page_dimensions(project_title, current_page){
             'current_page': current_page
         }
 
+        var dim_div = $('.dimensions-existing-div');
+        if(dim_div != undefined && dim_div.html() != undefined){
+            dim_div.html('');
+        }
+
         $.ajax({
             type: 'POST',
             url: '/get_dimensions_by_page/',
             data: data,
             success: function(data){
-                    project_objects.page_dimensions = data.page_dimensions;
-                    if(project_objects.page_dimensions.length > 0){
-                        var def = project_objects.default_dimensions;
-                        var start_width = def.start_width;
-                        var base_width = def.base_width;
-                        var end_width = def.end_width;
-                        for(var i = 0; i < project_objects.page_dimensions.length; i++){
-                            var dimension = project_objects.page_dimensions[i];
-                            var start_width = dimension.start_width;
-                            var base_width = dimension.base_width;
-                            var end_width = dimension.end_width;
-                            var arrow_spn = $('<span>', {
-                                            class: 'dimensions-dash-spn dimensions-spn glyphicon glyphicon-arrow-right'});
-                            var dim_div = $('<div>', {
-                                           class: 'dimensions-dim-div'});
-                            var start_spn = $('<span>', {
-                                            class: 'dimensions-start-spn dimensions-spn'});
-                            start_spn.html(start_width);
-                            var base_spn = $('<span>', {
-                                             class: 'dimensions-base-spn dimensions-spn'});
-                            base_spn.html(base_width);
-                            var end_spn = $('<span>', {
-                                            class: 'dimensions-end-spn dimensions-spn'});
-                            end_spn.html(end_width);
-                            var rem_spn = $('<span>', {
-                                          class: 'dimensions-rem-spn dimensions-spn'});
-                            var rem_btn = $('<i>', {
-                                          class: 'dimensions-rem-btn fa fa-times',
-                                          onclick: 'remove_dimension(this);'});
-                            dim_div.append(start_spn);
-                            dim_div.append(arrow_spn);
-                            dim_div.append(base_spn);
-                            dim_div.append(arrow_spn);
-                            dim_div.append(end_spn);
-                            dim_div.append(rem_btn);
-                            $('.dimensions-existing-div').append(dim_div);
+                    if(data.success){
+                        project_objects.page_dimensions = data.page_dimensions;
+                        if(project_objects.page_dimensions.length > 0){
+                            for(var i = 0; i < project_objects.page_dimensions.length; i++){
+                                var dimension = project_objects.page_dimensions[i];
+                                var start_width = dimension.start_width;
+                                var base_width = dimension.base_width;
+                                var end_width = dimension.end_width;
+                                var arrow_spn = $('<span>', {
+                                                class: 'dimensions-dash-spn dimensions-spn glyphicon glyphicon-arrow-right'});
+                                var dim_div = $('<div>', {
+                                               class: 'dimensions-dim-div'});
+                                var start_spn = $('<span>', {
+                                                class: 'dimensions-start-spn dimensions-spn'});
+                                start_spn.html(start_width);
+                                var base_spn = $('<span>', {
+                                                 class: 'dimensions-base-spn dimensions-spn'});
+                                base_spn.html(base_width);
+                                var end_spn = $('<span>', {
+                                                class: 'dimensions-end-spn dimensions-spn'});
+                                end_spn.html(end_width);
+                                var rem_spn = $('<span>', {
+                                              class: 'dimensions-rem-spn dimensions-spn'});
+                                var rem_btn = $('<i>', {
+                                              class: 'dimensions-rem-btn fa fa-times',
+                                              onclick: 'remove_dimension(this);'});
+                                dim_div.append(start_spn);
+                                dim_div.append(arrow_spn);
+                                dim_div.append(base_spn);
+                                dim_div.append(arrow_spn.clone());
+                                dim_div.append(end_spn);
+                                dim_div.append(rem_btn);
+                                $('.dimensions-existing-div').append(dim_div);
+                            }
                         }
                     }else{
                         console.log('Failed to Get Project Dimensions');
@@ -85,7 +106,7 @@ function setup_page_dimensions(project_title, current_page){
                 project_objects.page_dimensions = null;
             });
     }else{
-        alert('Project Title Not Set!');
+        alert('Project Title or Current Page Not Set!');
     }
 }
 
@@ -96,14 +117,16 @@ function exit_dimensions(){
 
 
 function reset_dimension_inputs(){
-    $('.dimension-picker-start-inpt').val('');
-    $('.dimension-picker-base-inpt').val('');
-    $('.dimension-picker-end-inpt').val('');
+    $('.dimensions-picker-start-inpt').val('');
+    $('.dimensions-picker-base-inpt').val('');
+    $('.dimensions-picker-end-inpt').val('');
+    setup_page_dimensions(project_objects.current_project, project_objects.current_page);
 }
 
 
 function add_new_dimensions(){
     if(project_objects.current_page != null){
+        console.log($('.dimensions-picker-start-inpt').val());
         var start_dimension = $('.dimensions-picker-start-inpt').val();
         var base_dimension = $('.dimensions-picker-base-inpt').val();
         var end_dimension = $('.dimensions-picker-end-inpt').val();
@@ -124,11 +147,11 @@ function add_new_dimensions(){
                 url: '/add_dimension_by_page/',
                 data: data,
                 success: function(data){
-                    var project_title = project_objects.project_title;
+                    var project_title = project_objects.current_project;
                     var pname = project_objects.pname;
                     open_project_dimensions_panel(pname, project_title);
                     setup_page_dimensions(
-                                          project_objects.project_title,
+                                          project_objects.current_project,
                                           project_objects.current_page);
                 }
             }).fail(function(jqXHR, textStatus){
@@ -138,9 +161,11 @@ function add_new_dimensions(){
             }).then(reset_dimension_inputs());
         }else{
             alert('Not All Dimensions Supplied');
+            reset_dimension_inputs();
         }
     }else{
         alert('Page Not Selected');
+        reset_dimension_inputs();
     }
 }
 
@@ -171,7 +196,7 @@ function open_project_dimensions_panel(pid, project_title){
                               class: 'dimensions-picker-base-inpt form-control',
                               placeholder: 'Base Width'});
     var dimension_end_inpt = $('<input>', {
-                             class: 'dimension-picker-end-inpt form-control',
+                             class: 'dimensions-picker-end-inpt form-control',
                              placeholder: 'End Width'});
     var add_dimension_btn = $('<i>', {
                              class: 'dimension-picker-add-btn glyphicon glyphicon-plus',

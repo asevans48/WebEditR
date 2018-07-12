@@ -70,7 +70,7 @@ and (min-device-width: 1800px){
     }
 
 
-    .dimension-picker-end-inpt{
+    .dimensions-picker-end-inpt{
         float: left;
         width: 50px;
         margin-left: 10px;
@@ -80,6 +80,30 @@ and (min-device-width: 1800px){
     .dimension-picker-add-btn{
         color: white;
         font-size: 2em;
+        margin-left: 10px;
+    }
+
+
+    .dimensions-existing-div{
+        overflow: scroll;
+    }
+
+
+    .dimensions-dim-div{
+        position: relative;
+        margin-left: 55px;
+        color: white;
+        font-size: 1.5em;
+        margin-top: 5px;
+    }
+
+
+    .dimensions-dim-div i:hover{
+        opacity: 0.5;
+    }
+
+
+    .dimensions-rem-btn{
         margin-left: 10px;
     }
 }

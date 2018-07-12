@@ -1,22 +1,31 @@
 
 .pageinf-div{
-    width: 200px;
-    height: 200px;
+    position: absolute;
+    top: 10px;
+    left: 700px;
+    width: 300px;
+    height: 100px;
+    border-radius: 22px;
 }
 
 
 .pageinf-title-div{
+    position: relative;
     font-size: 2em;
     font-weight: bold;
-    margin-left: 100px;
+    width: 300px;
+    text-align: center;
+    margin-top: 5px;
     color: white;
 }
 
 
 .pageinf-page-div{
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-left: 20px;
+    font-size: 1.4em;
+    width: 300px;
+    text-align: center;
+    margin-top: 10px;
+    color: white;
 }
 
 

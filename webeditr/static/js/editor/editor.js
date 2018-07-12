@@ -8,7 +8,6 @@ var settings = {
 var project_objects = {
     current_project: null,
     pname: 0,
-    project_title: null,
     default_dimensions: null,
     page_dimensions: null,
     current_page: null

@@ -7,6 +7,7 @@ Handles dimensions panel requests
 import traceback
 
 from django.http import JsonResponse
+from django.utils.html import escape
 from django.views.decorators.cache import never_cache
 
 from ..models import PagePageWidthRange, Page, PageWidthRange
@@ -32,11 +33,14 @@ def remove_dimension_by_page(request):
                                         ref_width=base_width)
                 if wrange.count() > 0:
                     wrange = wrange.first()
-                    page_wrange = PagePageWidthRange(
-                                                page_id=page.id,
-                                                width_range_id=wrange.id)
+                    page_wrange = PagePageWidthRange\
+                                                .objects\
+                                                .filter(
+                                                    page_id=page.id,
+                                                    width_range_id=wrange.id)
                     if page_wrange.count() > 0:
                         page_wrange.delete()
+                    return JsonResponse({'success': True, 'range_id': wrange.id})
                 else:
                     return JsonResponse({'success': False, 'msg': 'Width Range Not Found'})
             else:
@@ -58,6 +62,7 @@ def add_dimension_by_page(request):
         page_name = escape(rdict['page_name'][0])
         page = Page.objects.filter(name=page_name)
         if page.count() > 0:
+            page = page.first()
             wrange, created = PageWidthRange\
                                 .objects\
                                 .get_or_create(
@@ -71,6 +76,7 @@ def add_dimension_by_page(request):
                                                         page_id=page.id,
                                                         width_range_id=wrange.id)
             page_range.save()
+            print(page_range)
             return JsonResponse({'success': True, 'range_id': wrange.id})
         else:
             return JsonResponse({'success': False, 'msg': 'Page Not Found'})
