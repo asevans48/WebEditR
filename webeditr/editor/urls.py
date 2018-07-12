@@ -47,7 +47,7 @@ urlpatterns = [
     re_path('^remove_script_function/', script_editor.remove_scriptsheet_function, name='remove_script_function'),
     re_path('^rename_script_function/', script_editor.rename_script_function, name='rename_script_function'),
     re_path('^rewrite_function', script_editor.rewrite_function, name="rewrite_function"),
-    re_path('^get_functions_by_script/', script_editor.get_functions_by_script, name="get_functions_by_script")
+    re_path('^load_script_sheet/', script_editor.load_scriptsheet, name="load_script_sheet")
 
     #TRY BY END OF TONIGHT PLEASE PLEASE PLEASE
     #blakes panel functions

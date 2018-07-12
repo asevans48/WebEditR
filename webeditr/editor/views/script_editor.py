@@ -11,7 +11,10 @@ from ..models import ScriptSheet, ScriptScriptSheet, ScriptFunc
 @never_cache
 def rewrite_function(request):
     try:
-        pass
+        rdict = dict(request.POST)
+        function_name = escape(rdict['function_name'][0])
+        new_script = escape(rdict['new_script'][0])
+        ScriptFunc.objects.filter(name=function_name).update(func=new_script)
     except Exception as e:
         print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
@@ -21,7 +24,9 @@ def rewrite_function(request):
 def rename_script_function(request):
     try:
         rdict = dict(request.POST)
-        function_name= escape(rdict['function_name'][0])
+        function_name = escape(rdict['function_name'][0])
+        new_name = escape(rdict['new_name'][0])
+        ScriptFunc.objects.filter(name=function_name).update(name=new_name)
     except Exception as e:
         print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
@@ -46,15 +51,6 @@ def add_script_function(request):
             return JsonResponse({'success': False, 'msg': 'Scriptsheet Not Found'})
     except Exception as e:
         print(traceback.format_exc()) # send to elastic apm
-        return JsonResponse({'success': False, 'msg': 'Internal Error'})
-
-
-@never_cache
-def get_functions_by_script(request):
-    try:
-        pass
-    except Exception as e:
-        print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
 
 
@@ -87,6 +83,7 @@ def load_scriptsheet(request):
         script_name = escape(rdict['script_name'][0])
         script = ScriptSheet.objects.filter(name=script_name)
         if script.count() > 0:
+            script = script.first()
             scripts = ScriptScriptSheet.objects.filter(script_sheet_id=script.id)
             if scripts.count() > 0:
                 functions = []

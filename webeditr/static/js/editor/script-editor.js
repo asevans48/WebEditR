@@ -85,7 +85,13 @@ function get_script_sheet_editor(elmnt){
         text_edit.remove();
     }
 
-    var data = {};
+    var script_name = $(elmnt).html();
+    console.log(script_name);
+
+    var data = {
+        'script_name': script_name,
+    };
+
     $.ajax({
         type: "POST",
         url: '/load_script_sheet/',
@@ -94,7 +100,7 @@ function get_script_sheet_editor(elmnt){
             console.log(data);
             var edit_div = $('<div>',{
                             class: 'textedit-scriptsheet-div'});
-            var title = elmnt.html();
+            var title = $(elmnt).html();
             var funcs = data.functions;
             script_editor.func_dict = {};
             var func_div = $('<div>', {
