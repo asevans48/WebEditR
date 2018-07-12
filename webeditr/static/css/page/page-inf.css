@@ -1,0 +1,30 @@
+
+.pageinf-div{
+    width: 200px;
+    height: 200px;
+}
+
+
+.pageinf-title-div{
+    font-size: 2em;
+    font-weight: bold;
+    margin-left: 100px;
+    color: white;
+}
+
+
+.pageinf-page-div{
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+
+.dimensions-spn{
+    margin-left: 10px;
+}
+
+
+.dimensions-rem-btn{
+    font-size: 1.3em;
+}

@@ -21,6 +21,7 @@ function get_project_assets(elmnt){
                 if(data.success){
                     project_objects.current_project = project_title;
                     project_objects.pname = pname;
+                    get_page_info_div();
                     //setup dimensions panel here so that key presses don't create
                     //a ton of errors
                     open_project_dimensions_panel(
@@ -56,6 +57,13 @@ function get_project_assets(elmnt){
                                                         project_title);
                                 }else{
                                     pallet_div.remove();
+                                }
+                            }else if(key_pressed == 51){
+                                var pageinf_div = $('.pageinf-div');
+                                if(pageinf_div.html() == undefined || pageinf_div.html() == null){
+                                    get_page_info_div();
+                                }else{
+                                    pageinf_div.remove();
                                 }
                             }else{
                                 keyo.ctl_key_pressed = false;

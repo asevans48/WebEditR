@@ -16,7 +16,7 @@ var project_objects = {
 
 
 var script_editor = {
-    func_dict = {},
+    func_dict: {},
 }
 
 

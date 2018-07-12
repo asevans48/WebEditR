@@ -127,8 +127,3 @@ class PageStylesheet(models.Model):
 class ScriptScriptSheet(models.Model):
     script_sheet = models.ForeignKey(ScriptSheet, on_delete=models.DO_NOTHING)
     func = models.ForeignKey(ScriptFunc, on_delete=models.DO_NOTHING)
-
-
-class DefaultPageWidthRange(models.Model):
-    style_sheet = models.ForeignKey(StyleSheet, on_delete=models.DO_NOTHING)
-    default_width_range = models.ForeignKey(PageWidthRange, on_delete=models.DO_NOTHING)

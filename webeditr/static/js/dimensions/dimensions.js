@@ -7,24 +7,18 @@ function get_current_dimensions(){
 }
 
 
-function set_default_dimensions(start_width, base_width, end_width){
+function remove_dimension(elmnt){
+    var parent_el = $(elmnt).parent().parent();
+    var start_width = parent_el.find('.dimension-start-spn').val();
+    var base_width = parent_el.find('.dimension-base-spn').val();
+    var end_width = parent_el.find('.dimension-end-spn').val();
+    var page_name = project_objects.current_page;
     var data = {
         'start_width': start_width,
         'base_width': base_width,
-        'end_width': end_width
+        'end_width': end_width,
+        'page_name': page_name
     }
-
-    $.ajax({
-        type: 'POST',
-        url: '/set_default_dimensions/',
-        data: data,
-        success: function(data){
-            console.log('Set Default Dimensions');
-        }
-    }).fail(function(jqXHR, textStatus){
-        console.log('Failed to Set Default Dimensions', textStatus);
-        console.log(jqXHR);
-    });
 }
 
 
@@ -38,24 +32,58 @@ function setup_page_dimensions(project_title, current_page){
 
         $.ajax({
             type: 'POST',
-            url: '/get_default_page_dimensions/',
+            url: '/get_dimensions_by_page/',
             data: data,
             success: function(data){
-                if(data.success == true){
-                    project_objects.default_dimensions = data.default_dimensions;
                     project_objects.page_dimensions = data.page_dimensions;
-                }else{
-                    console.log('Failed to Get Project Dimensions');
-                    alert(data.msg);
+                    if(project_objects.page_dimensions.length > 0){
+                        var def = project_objects.default_dimensions;
+                        var start_width = def.start_width;
+                        var base_width = def.base_width;
+                        var end_width = def.end_width;
+                        for(var i = 0; i < project_objects.page_dimensions.length; i++){
+                            var dimension = project_objects.page_dimensions[i];
+                            var start_width = dimension.start_width;
+                            var base_width = dimension.base_width;
+                            var end_width = dimension.end_width;
+                            var arrow_spn = $('<span>', {
+                                            class: 'dimensions-dash-spn dimensions-spn glyphicon glyphicon-arrow-right'});
+                            var dim_div = $('<div>', {
+                                           class: 'dimensions-dim-div'});
+                            var start_spn = $('<span>', {
+                                            class: 'dimensions-start-spn dimensions-spn'});
+                            start_spn.html(start_width);
+                            var base_spn = $('<span>', {
+                                             class: 'dimensions-base-spn dimensions-spn'});
+                            base_spn.html(base_width);
+                            var end_spn = $('<span>', {
+                                            class: 'dimensions-end-spn dimensions-spn'});
+                            end_spn.html(end_width);
+                            var rem_spn = $('<span>', {
+                                          class: 'dimensions-rem-spn dimensions-spn'});
+                            var rem_btn = $('<i>', {
+                                          class: 'dimensions-rem-btn fa fa-times',
+                                          onclick: 'remove_dimension(this);'});
+                            dim_div.append(start_spn);
+                            dim_div.append(arrow_spn);
+                            dim_div.append(base_spn);
+                            dim_div.append(arrow_spn);
+                            dim_div.append(end_spn);
+                            dim_div.append(rem_btn);
+                            $('.dimensions-existing-div').append(dim_div);
+                        }
+                    }else{
+                        console.log('Failed to Get Project Dimensions');
+                        alert(data.msg);
+                    }
                 }
-            }
-        }).fail(function(jqXHR, textStatus){
-            console.log('Failed to Get Project Dimensions', textStatus);
-            console.log(jqXHR);
-            alert('Internal Error');
-            project_objects.default_dimensions = null;
-            project_objects.page_dimensions = null;
-        });
+            }).fail(function(jqXHR, textStatus){
+                console.log('Failed to Get Project Dimensions', textStatus);
+                console.log(jqXHR);
+                alert('Internal Error');
+                project_objects.default_dimensions = null;
+                project_objects.page_dimensions = null;
+            });
     }else{
         alert('Project Title Not Set!');
     }
@@ -88,7 +116,6 @@ function add_new_dimensions(){
                 'start_dimension': parseInt(start_dimension),
                 'base_dimension': parseInt(base_dimension),
                 'end_dimension': parseInt(end_dimension),
-                'project_name': parseInt(project_name),
                 'page_name': project_objects.current_page,
             }
 
@@ -138,11 +165,14 @@ function open_project_dimensions_panel(pid, project_title){
     var dimension_picker = $('<div>', {
                             class: 'dimensions-picker-div'});
     var dimension_start_inpt = $('<input>', {
-                                class: 'dimensions-picker-start-inpt form-control'});
+                                class: 'dimensions-picker-start-inpt form-control',
+                                placeholder: 'Min Width'});
     var dimension_base_inpt = $('<input>', {
-                              class: 'dimensions-picker-base-inpt form-control'});
+                              class: 'dimensions-picker-base-inpt form-control',
+                              placeholder: 'Base Width'});
     var dimension_end_inpt = $('<input>', {
-                             class: 'dimension-picker-end-inpt form-control'});
+                             class: 'dimension-picker-end-inpt form-control',
+                             placeholder: 'End Width'});
     var add_dimension_btn = $('<i>', {
                              class: 'dimension-picker-add-btn glyphicon glyphicon-plus',
                              onclick: 'add_new_dimensions();'});
@@ -151,9 +181,9 @@ function open_project_dimensions_panel(pid, project_title){
     dimension_picker.append(dimension_end_inpt);
     dimension_picker.append(add_dimension_btn);
     dim_panel.append(dimension_picker);
-    var current_dimensions_div = $('<div>', {
+    var existing_dimensions_div = $('<div>', {
                              class: 'dimensions-existing-div'});
-    dim_panel.append(current_dimensions_div);
+    dim_panel.append(existing_dimensions_div);
     dim_panel.draggable();
     $('.editor').append(dim_panel);
 }

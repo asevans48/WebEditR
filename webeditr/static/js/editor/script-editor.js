@@ -29,10 +29,11 @@ function submit_script(elmnt){
             url: '/submit_script/',
             data: data,
             success: function(data){
-                
+
             }
         }).fail(function(jqXHR, textStatus){
-
+            console.log('Failed To Submit Script', textStatus);
+            console.log(jqXHR);
         });
     }else{
         alert('Not All Inputs Present');
@@ -96,20 +97,26 @@ function get_script_sheet_editor(elmnt){
             var title = elmnt.html();
             var funcs = data.functions;
             script_editor.func_dict = {};
+            var func_div = $('<div>', {
+                           class: 'textedit-scriptsheet-func'});
             if(funcs != undefined && funcs != null){
                 for(var i = 0; i < funcs.length; i++){
-                    var func_div = $('<div>', {
-                                   class: 'textedit-scriptsheet-func'});
                     var funco = funcs[i];
                     var name = funco.name;
                     var script = funco.script;
                     var fname_div = $('<div>', {
                                     class: 'textedit-scriptsheet-funcname'});
-                    var fname_spn = $('<div>', {
+                    var fname_spn = $('<span>', {
                                     class: 'textedit-scriptsheet-funcname-spn'});
                     fname_spn.html(name);
                     fname_div.append(fname_spn);
-                    var del_func_spn= $('<div>', {
+                    var edit_func_spn = $('<span>', {
+                                        class: 'textedit-scriptsheet-funcedit-spn'});
+                    var edit_func_btn = $('<i>', {
+                                        class: 'textedit-scriptsheet-funcedit-btn glyphicon glyphicon-pencil'});
+                    edit_func_spn.append(edit_func_btn);
+                    fname-div.append(edit_func_spn);
+                    var del_func_spn= $('<span>', {
                                       class: 'textedit-scriptsheet-funcrem-spn'});
                     var del_func_btn = $('<i>', {
                                        class: 'textedit-scriptsheet-funcrem-btn fa fa-times',
