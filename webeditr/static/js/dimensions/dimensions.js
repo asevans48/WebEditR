@@ -7,11 +7,30 @@ function get_current_dimensions(){
 }
 
 
-function get_page_dimensions(){
+function set_default_dimensions(start_width, base_width, end_width){
+    var data = {
+        'start_width': start_width,
+        'base_width'; base_width,
+        'end_width': end_width
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: '/set_default_dimensions/',
+        data: data,
+        success: function(data){
+            console.log('Set Default Dimensions');
+        }
+    }).fail(function(jqXHR, textStatus){
+        console.log('Failed to Set Default Dimensions', textStatus);
+        console.log(jqXHR);
+    });
+}
+
+
+function setup_page_dimensions(project_title, current_page){
     //by page as different page designs can get messy
-    var project_title = project_objects.current_project;
-    var current_page =
-    if(project_title != null){
+    if(project_title != null && current_page != null){
         var data = {
             'project_title': project_title,
             'current_page': current_page
@@ -43,54 +62,58 @@ function get_page_dimensions(){
 }
 
 
-function setup_dimensions_div(current_page_name){
-    
-}
-
-
-function unblock_project_dimensions_picker(){
-
-}
-
-
 function exit_dimensions(){
     $('.dimensions-div').remove();
 }
 
 
-function add_new_dimensions(){
-    var start_dimension = $('.dimensions-picker-start-inpt').val();
-    var base_dimension = $('.dimensions-picker-base-inpt').val();
-    var end_dimension = $('.dimensions-picker-end-inpt').val();
-    var project_name = $('.fsys-title-div').html();
-    if(start_dimension != null && start_dimension.length > 0
-       && base_dimension != null && base_dimension.length > 0
-       && end_dimension != null && end_dimension.length > 0){
-        var data = {
-            'start_dimension': parseInt(start_dimension),
-            'base_dimension': parseInt(base_dimension),
-            'end_dimension': parseInt(end_dimension),
-            'project_name': parseInt(project_name),
-            'page_name': project_objects.current_page;
-        }
+function reset_dimension_inputs(){
+    $('.dimension-picker-start-inpt').val('');
+    $('.dimension-picker-base-inpt').val('');
+    $('.dimension-picker-end-inpt').val('');
+}
 
-        $.ajax({
-            type: 'POST',
-            url: '/add_dimension_by_page/',
-            data: data,
-            success: function(data){
-                var project_title = project_objects.project_title;
-                var pname = project_objects.pname;
-                open_project_dimensions_panel(pname, project_title);
-                setup_dimensions_div(project_objects.current_page);
+
+function add_new_dimensions(){
+    if(project_objects.current_page != null){
+        var start_dimension = $('.dimensions-picker-start-inpt').val();
+        var base_dimension = $('.dimensions-picker-base-inpt').val();
+        var end_dimension = $('.dimensions-picker-end-inpt').val();
+        var project_name = $('.fsys-title-div').html();
+
+        if(start_dimension != null && start_dimension.length > 0
+           && base_dimension != null && base_dimension.length > 0
+           && end_dimension != null && end_dimension.length > 0){
+            var data = {
+                'start_dimension': parseInt(start_dimension),
+                'base_dimension': parseInt(base_dimension),
+                'end_dimension': parseInt(end_dimension),
+                'project_name': parseInt(project_name),
+                'page_name': project_objects.current_page;
             }
-        }).fail(function(jqXHR, textStatus){
-            console.log('Failed', textStatus);
-            console.log(jqXHR);
-            alert('Internal Error');
-        });
+
+            $.ajax({
+                type: 'POST',
+                url: '/add_dimension_by_page/',
+                data: data,
+                success: function(data){
+                    var project_title = project_objects.project_title;
+                    var pname = project_objects.pname;
+                    open_project_dimensions_panel(pname, project_title);
+                    setup_page_dimensions(
+                                          project_objects.project_title,
+                                          project_objects.current_page);
+                }
+            }).fail(function(jqXHR, textStatus){
+                console.log('Failed', textStatus);
+                console.log(jqXHR);
+                alert('Internal Error');
+            }).then(reset_dimension_inputs());
+        }else{
+            alert('Not All Dimensions Supplied');
+        }
     }else{
-        alert('Not All Dimensions Supplied');
+        alert('Page Not Selected');
     }
 }
 

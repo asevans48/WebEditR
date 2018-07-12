@@ -30,6 +30,7 @@ urlpatterns = [
     re_path('^get_dimensions_by_page/', dimensions.get_dimensions_by_page, name='get_dimensions_by_project'),
     re_path('^add_dimension_by_page/', dimensions.add_dimension_by_page, name='add_dimension_by_project'),
     re_path('^get_default_page_dimensions/', dimensions.get_default_page_dimensions, name='get_default_project_dimensions'),
+    re_path('^set_default_page_dimensions/', dimensions.set_default_page_dimensions, name='set_default_page_dimensions'),
 
     # stylesheet functions
     re_path('^add_new_sheet/', page.add_new_sheet, name='add_new_sheet'),

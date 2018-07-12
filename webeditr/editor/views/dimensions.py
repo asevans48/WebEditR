@@ -44,3 +44,12 @@ def get_default_page_dimensions(request):
     except Exception as e:
         print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
+
+
+@never_cache
+def set_default_page_dimensions():
+    try:
+        pass
+    except Exception as e:
+        print(traceback.format_exc())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
