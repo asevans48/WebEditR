@@ -1,4 +1,9 @@
 
+var keyo = {
+    ctl_key_pressed: false,
+}
+
+
 //get project information
 function get_project_assets(elmnt){
     var choice_div = $(elmnt);
@@ -16,38 +21,50 @@ function get_project_assets(elmnt){
                 if(data.success){
                     project_objects.current_project = project_title;
                     project_objects.pname = pname;
+                    //setup dimensions panel here so that key presses don't create
+                    //a ton of errors
                     open_project_dimensions_panel(
                                                   pname,
                                                   project_title);
                     $(document).keyup(function(e){
                         var key_pressed = e.keycode || e.which;
-                        if(key_pressed == 50){
-                            var dim_div = $('.dimensions-div');
-                            if(dim_div.html() == undefined || dim_div.html() == null){
-                                open_project_dimensions_panel(
-                                                              pname,
-                                                              project_title);
+                        if(key_pressed != 17 && keyo.ctl_key_pressed == true){
+                            if(key_pressed == 50){
+                                var dim_div = $('.dimensions-div');
+                                if(dim_div.html() == undefined || dim_div.html() == null){
+                                    open_project_dimensions_panel(
+                                                                  pname,
+                                                                  project_title);
+                                }else{
+                                    dim_div.remove();
+                                }
+                            }else if(key_pressed == 49){
+                                var fsys_div = $('.fsys-div');
+                                if(fsys_div.html() == undefined || fsys_div.html() == null){
+                                    open_project_file_panel(
+                                                           pname,
+                                                           project_title,
+                                                           data);
+                                }else{
+                                    fsys_div.remove();
+                                }
+                            }else if(key_pressed == 51){
+                                var pallet_div = $('.pallet-div');
+                                if(pallet_div.html() == undefined || pallet_div.html() == null){
+                                    open_project_pallet(
+                                                        pname,
+                                                        project_title);
+                                }else{
+                                    pallet_div.remove();
+                                }
                             }else{
-                                dim_div.remove();
+                                keyo.ctl_key_pressed = false;
                             }
-                        }else if(key_pressed == 49){
-                            var fsys_div = $('.fsys-div');
-                            if(fsys_div.html() == undefined || fsys_div.html() == null){
-                                open_project_file_panel(
-                                                       pname,
-                                                       project_title,
-                                                       data);
+                        }else{
+                            if(key_pressed == 17){
+                                keyo.ctl_key_pressed = true;
                             }else{
-                                fsys_div.remove();
-                            }
-                        }else if(key_pressed == 51){
-                            var pallet_div = $('.pallet-div');
-                            if(pallet_div.html() == undefined || pallet_div.html() == null){
-                                open_project_pallet(
-                                                    pname,
-                                                    project_title);
-                            }else{
-                                pallet_div.remove();
+                                keyo.ctl_key_pressed = false;
                             }
                         }
                     });
@@ -117,9 +134,7 @@ function submit_project(elmnt){
     }).fail(function(jqXHR, textStatus){
         console.log("Request Failed: " + textStatus);
         console.log(jqXHR);
-    });
-    $('.project-add-div').remove();
-    get_starting_div();
+    }).then(get_starting_div());
 }
 
 
@@ -185,6 +200,11 @@ function create_new_project(){
 
 //obtains working project
 function get_starting_div(){
+    var add_div = $('.project-add-div');
+    if(add_div != undefined && add_div != null){
+        add_div.remove();
+    }
+
     var body = $('.editor');
     var pdiv = $('project-choice-div');
     if(pdiv != undefined && pdiv != null){

@@ -13,11 +13,14 @@ and (min-device-width: 1800px){
 
 
     .dimensions-div-title{
+        display: flow-root;
+        width: 300px;
         position: relative;
         margin-top: 2px;
         font-size: 1.8em;
         color: white;
         font-weight: bold;
+        text-align: center;
     }
 
 
@@ -43,7 +46,40 @@ and (min-device-width: 1800px){
     }
 
 
-    .dimension_start_inpt{
-        
+    .dimensions-picker-div{
+        margin-left: 60px;
+        margin-top: 10px;
+    }
+
+
+    .dimensions-picker-div i:hover{
+        opacity: 0.5;
+    }
+
+
+    .dimensions-picker-start-inpt{
+        float: left;
+        width: 50px;
+    }
+
+
+    .dimensions-picker-base-inpt{
+        float: left;
+        width: 50px;
+        margin-left: 10px;
+    }
+
+
+    .dimension-picker-end-inpt{
+        float: left;
+        width: 50px;
+        margin-left: 10px;
+    }
+
+
+    .dimension-picker-add-btn{
+        color: white;
+        font-size: 2em;
+        margin-left: 10px;
     }
 }

@@ -18,7 +18,7 @@ urlpatterns = [
     re_path('^load_scriptsheet/', sheets.load_script_sheet, name='load_script_sheet'),
     re_path('^get_page_stylesheet', page.get_page_stylesheets, name='get_page_stylesheets'),
     re_path('^add_new_page/', page.add_new_page, name='add_new_page'),
-    re_path('^remove_page', page.remove_page, name='remove_page'),
+    re_path('^remove_page/', page.remove_page, name='remove_page'),
 
     #import handler
     re_path('^get_imports_by_project/', imports.get_imports_by_project, name='get_imports_by_project'),
@@ -26,9 +26,10 @@ urlpatterns = [
     re_path('^remove_imports_by_project/', imports.remove_imports_by_project, name='remove_imports_by_project'),
 
     # dimension picker
-    re_path('^remove_dimension_by_project', dimensions.remove_dimension_by_project, name='remove_dimension_by_project'),
-    re_path('^get_dimensions_by_project', dimensions.get_dimensions_by_project, name='get_dimensions_by_project'),
-    re_path('^add_dimension_by_project', dimensions.add_dimension_by_project, name='add_dimension_by_project'),
+    re_path('^remove_dimension_by_page/', dimensions.remove_dimension_by_page, name='remove_dimension_by_project'),
+    re_path('^get_dimensions_by_page/', dimensions.get_dimensions_by_page, name='get_dimensions_by_project'),
+    re_path('^add_dimension_by_page/', dimensions.add_dimension_by_page, name='add_dimension_by_project'),
+    re_path('^get_default_page_dimensions/', dimensions.get_default_page_dimensions, name='get_default_project_dimensions'),
 
     # stylesheet functions
     re_path('^add_new_sheet/', page.add_new_sheet, name='add_new_sheet'),
