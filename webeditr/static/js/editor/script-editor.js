@@ -14,13 +14,67 @@ function edit_function_name(){
 }
 
 
-function add_function(){
+function submit_script(elmnt){
+    var parent_el = $(elmnt).parent().parent();
+    var func_name = parent_el.find('.textedit-scriptsheet-scriptinpt-name').val();
+    var func_script = parent_el.find('.textedit-scriptsheet-scriptinpt-code').val();
+    if(func_name != null && func_name.length > 0 && func_script != null && func_script.length > 0){
+        var data = {
+            'script_name': func_name,
+            'script_code': func_script,
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/submit_script/',
+            data: data,
+            success: function(data){
+                
+            }
+        }).fail(function(jqXHR, textStatus){
+
+        });
+    }else{
+        alert('Not All Inputs Present');
+    }
+}
+
+
+function get_add_function_inputs(){
+    var script_inpt_div = $('<div>', {
+                      class: 'textedit-scriptsheet-scriptinpt-div'});
+    var script_name = $('<span>', {
+                      class: 'textedit-scriptsheet-scriptinpt-name',
+                      placeholder: 'Function Name'});
+    script_inpt_div.append(script_name);
+    var script_inpt = $('<textarea>', {
+                      class: 'textedit-scriptsheet-scriptinpt-code',
+                      placeholder: 'Function Code'});
+    script_inpt_div.append(script_inpt);
+    var script_inpt_sbmt_span = $('<span>',{
+                                class: 'textedit-scriptsheet-sbmt-spn'});
+    var script_inpt_sbmt_btn = $('<i>', {
+                                class: 'textedit-scriptsheet-sbmt-btn glyphicon glyphicon-plus',
+                                onclick: 'submit_script(this);'});
+    script_inpt_sbmt_span.append(script_inpt_sbmt_btn);
+    script_inpt_div.append(script_inpt_sbmt_span);
 
 }
 
 
-function load_script_by_func_name(func_name){
-    script_editor
+function unload_script(elmnt){
+    var parent_el = $(elmnt).parent().parent();
+    var script_el = parent_el.find('.textedit-scriptsheet-scriptdiv');
+    script_el.remove();
+}
+
+
+function load_script(elmnt){
+    var parent_el = $(elmnt).parent().parent();
+    var script_name = parent_el.find('.textedit-scriptsheet-funcname-spn').html();
+    var script_el = $('<div>', {
+                    class: 'textedit-scriptsheet-scriptdiv'});
+    script_el.html(script_editor.func_dict[name]);
 }
 
 
@@ -52,7 +106,7 @@ function get_script_sheet_editor(elmnt){
                     var fname_div = $('<div>', {
                                     class: 'textedit-scriptsheet-funcname'});
                     var fname_spn = $('<div>', {
-                                    class: 'textedit-scriptsheet-funcnamn-spn'});
+                                    class: 'textedit-scriptsheet-funcname-spn'});
                     fname_spn.html(name);
                     fname_div.append(fname_spn);
                     var del_func_spn= $('<div>', {
