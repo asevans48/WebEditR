@@ -9,12 +9,12 @@ from ..models import ScriptSheet, ScriptScriptSheet, ScriptFunc
 
 
 @never_cache
-def rewrite_function(request):
+def rewrite_script_function(request):
     try:
         rdict = dict(request.POST)
         function_name = escape(rdict['function_name'][0])
-        new_script = escape(rdict['new_script'][0])
-        ScriptFunc.objects.filter(name=function_name).update(func=new_script)
+        func_code = escape(rdict['func_code'][0])
+        ScriptFunc.objects.filter(name=function_name).update(func=func_code)
     except Exception as e:
         print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
@@ -85,15 +85,13 @@ def load_scriptsheet(request):
         if script.count() > 0:
             script = script.first()
             scripts = ScriptScriptSheet.objects.filter(script_sheet_id=script.id)
+            functions = []
             if scripts.count() > 0:
-                functions = []
                 for func in scripts:
                     fname = func.name
                     func_script = base64.decodestring(func.func)
                     functions.append({'name': fname, 'script': func_script})
-                return JsonResponse({'success': True, 'functions': functions})
-            else:
-                return JsonResponse({'success': False, 'msg': 'Functions Not Found'})
+            return JsonResponse({'success': True, 'functions': functions})
         else:
             return JsonResponse({'success': False, 'msg': 'Scriptsheet Not Found'})
     except Exception as e:

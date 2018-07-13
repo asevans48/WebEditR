@@ -1,0 +1,90 @@
+
+.textedit-scriptsheet-div{
+    position: absolute;
+    top: 400px;
+    left: 600px;
+    width: 400px;
+    height: 300px;
+    border-radius: 22px;
+}
+
+
+.textedit-scriptsheet-title-div{
+   position: relative;
+   width: 400px;
+   text-align: center;
+   color: white;
+   font-size: 1.7em;
+   font-weight: bold;
+   margin-top: 5px;
+   z-index: 10;
+}
+
+
+.textedit-scriptsheet-title-div i:hover{
+    opacity: 0.5;
+}
+
+
+.textedit-scriptsheet-rem-btn{
+    margin-left: 10px;
+}
+
+
+.textedit-scriptsheet-edit-area-div{
+    position: relative;
+    margin-left: 10px;
+    background-color: white;
+    height: 230px;
+    width: 380px;
+    overflow-y: scroll;
+}
+
+
+.textedit-scriptsheet-title-div{
+    color: white;
+
+}
+
+
+.textedit-scriptsheet-funcadd-div{
+    font-size: 2.5em;
+    color: white;
+    margin-left: 10px;
+    margin-top: 2px;
+}
+
+
+.textedit-scriptsheet-funcadd-div i:hover{
+    opacity: 0.5;
+}
+
+
+.textedit-scriptsheet-scriptinpt-div{
+    display: flow-root;
+    margin-top: 5px;
+    margin-left: 10px;
+}
+
+
+.textedit-scriptsheet-name-inpt{
+    width: 200px;
+}
+
+
+.textedit-scriptsheet-scriptinpt-code{
+    width: 200px;
+    margin-top: 5px;
+}
+
+
+.textedit-scriptsheet-sbmt-spn{
+    font-size: 1.5em;
+    color: green;
+    margin-left: 1px;
+}
+
+
+.textedit-scriptsheet-sbmt-spn i:hover{
+    opacity: 0.5;
+}
