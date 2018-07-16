@@ -88,3 +88,28 @@
 .textedit-scriptsheet-sbmt-spn i:hover{
     opacity: 0.5;
 }
+
+
+.textedit-scriptsheet-funcname{
+    font-size: 1.3em;
+    font-weight: bold;
+    display: flow-root;
+    margin-left: 5px;
+}
+
+
+.textedit-scriptsheet-funcscript-spn{
+    margin-left: 20px;
+}
+
+
+.textedit-scriptsheet-funcrem-spn{
+    position: relative;
+    color: red;
+    margin-left: 20px;
+}
+
+
+.textedit-scriptsheet-funcrem-spn i:hover{
+    opacity: 0.5;
+}

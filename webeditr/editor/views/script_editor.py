@@ -14,7 +14,8 @@ def rewrite_script_function(request):
         rdict = dict(request.POST)
         function_name = escape(rdict['function_name'][0])
         func_code = escape(rdict['func_code'][0])
-        ScriptFunc.objects.filter(name=function_name).update(func=func_code)
+        ScriptFunc.objects.filter(name=function_name).update(func_base64=func_code)
+        return JsonResponse({'success': True, 'func_name': function_name})
     except Exception as e:
         print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
@@ -27,6 +28,7 @@ def rename_script_function(request):
         function_name = escape(rdict['function_name'][0])
         new_name = escape(rdict['new_name'][0])
         ScriptFunc.objects.filter(name=function_name).update(name=new_name)
+        return JsonResponse({'success': True, 'func_name': function_name})
     except Exception as e:
         print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
@@ -37,16 +39,17 @@ def add_script_function(request):
     try:
         rdict = dict(request.POST)
         scriptsheet_name = escape(rdict['scriptsheet_name'][0])
-        func_name = escape(rdict['scriptsheet_name'][0])
-        func_script = rdict['scriptsheet_script'][0]
-        func_description = escape(rdict['scriptsheet_script'][0])
-        sheet = ScriptSheet(name=scriptsheet_name)
+        func_name = escape(rdict['func_name'][0])
+        func_script = rdict['func_script'][0]
+        func_description = ''
+        sheet = ScriptSheet.objects.filter(name=scriptsheet_name)
         if sheet.count() > 0:
             sheet = sheet.first()
-            func, created = ScriptFunc.objects.get_or_create(name=func_name, description=func_description, func=func_script)
+            func, created = ScriptFunc.objects.get_or_create(name=func_name, description=func_description, func_base64=func_script)
             func.save()
             script_func, created = ScriptScriptSheet.objects.get_or_create(script_sheet_id=sheet.id, func_id=func.id)
             script_func.save()
+            return JsonResponse({'Success': True, 'func_id': script_func.id})
         else:
             return JsonResponse({'success': False, 'msg': 'Scriptsheet Not Found'})
     except Exception as e:
@@ -65,11 +68,11 @@ def remove_scriptsheet_function(request):
             func = ScriptFunc.objects.filter(name=func_name)
             if func.count() > 0:
                 func = func.first()
-                script = ScriptScriptSheet.object.filters(script_sheet_id=script.first().id, func_id=func.id)
+                script = ScriptScriptSheet.objects.filter(script_sheet_id=script.first().id, func_id=func.id)
                 if script.count() > 0:
                     script.delete()
                 script = ScriptScriptSheet.objects.filter(func_id=func.id)
-                if script.count() is 0 and func.count() > 0:
+                if script.count():
                     func.delete()
     except Exception as e:
         print(traceback.format_exc()) # send to elastic apm
@@ -88,8 +91,8 @@ def load_scriptsheet(request):
             functions = []
             if scripts.count() > 0:
                 for func in scripts:
-                    fname = func.name
-                    func_script = base64.decodestring(func.func)
+                    fname = func.func.name
+                    func_script = func.func.func_base64.decode()
                     functions.append({'name': fname, 'script': func_script})
             return JsonResponse({'success': True, 'functions': functions})
         else:

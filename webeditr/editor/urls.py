@@ -43,7 +43,7 @@ urlpatterns = [
     re_path('^remove_stylesheet_class', sheet_editor.remove_stylesheet_class, name="remove_stylesheet_class"),
 
     #scriptsheet functions
-    re_path('^add_function/', script_editor.add_script_function, name='add_script_function'),
+    re_path('^submit_function/', script_editor.add_script_function, name='submit_script_function'),
     re_path('^remove_script_function/', script_editor.remove_scriptsheet_function, name='remove_script_function'),
     re_path('^rename_script_function/', script_editor.rename_script_function, name='rename_script_function'),
     re_path('^rewrite_script_function', script_editor.rewrite_script_function, name="rewrite_script_function"),
