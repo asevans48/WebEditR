@@ -18,7 +18,7 @@ function remove_sheet(elmnt){
             if(data.success == false){
                 alert(data.msg);
             }
-            update_project_assets()
+            update_project_assets();
         }
     }).fail(function(jqXHR, textStatus){
         console.log("Request Failed" + textStatus);
@@ -99,7 +99,7 @@ function create_new_sheet(){
             'description': sheet_desc,
             'project': project,
             'page_id': page_id
-       }
+       };
        $.ajax({
            type: "POST",
            url: '/add_new_sheet/',
@@ -108,7 +108,7 @@ function create_new_sheet(){
                if(data.success == false){
                   console.log('Request Failed', data.page_id);
                }
-               update_project_assets()
+               update_project_assets();
            }
         }).fail(function(jqXHR, textStatus){
             console.log("Request Failed: " + textStatus);
@@ -153,11 +153,17 @@ function get_new_sheet(elmnt){
     var js_opt = $('<option>', {id: 'js', value: 'JS'});
     js_opt.text('JS')
     sheet_type_sel.append(js_opt);
+    var ext_js = $('<option>', {id: 'ext_js', value: 'EJS'});
+    ext_js = ext_js.append('External JS');
+    sheet_type_sel.append(ext_js);
+    var ext_css = $('<option>', {id: 'ext_css', value: 'ECSS'});
+    ext_css = ext_css.append('External CSS');
+    sheet_type_sel.append(ext_css);
     np_div.append(sheet_type_sel);
 
     var project_title = $('<textarea>', {
                         class: 'fsys-new-sheet-desc form-control',
-                        placeholder: 'Sheet Description'});
+                        placeholder: 'Sheet Description or URL'});
     np_div.append(project_title);
     var np_div_sbmt = $('<button>', {
                       class: 'btn btn-primary fsys-new-sheet-btn',
@@ -165,7 +171,7 @@ function get_new_sheet(elmnt){
     np_div_sbmt.html('Create Sheet');
     np_div.append(np_div_sbmt);
 
-    var exit_btn_div = $('<div>',{
+    var exit_btn_div = $('<div>', {
                     class: 'fsys-new-page-remove-div'});
     var exit_btn = $('<i>', {
                     class: 'fa fa-times fsys-new-sheet-remove-btn',
@@ -201,11 +207,16 @@ function add_new_page_btn(root_div){
 
 function get_inner_sheet_div(sheet_type, sheet_title, sheet_id){
     var func = null;
-    if(sheet_type.toLowerCase() == 'css'){
+    if(sheet_type.toLowerCase().trim() == 'css'){
         func = 'get_style_sheet_editor(this);';
-    }else if(sheet_type.toLowerCase() == 'js'){
+    }else if(sheet_type.toLowerCase().trim() == 'js'){
         func = 'get_script_sheet_editor(this);';
+    }else if(sheet_type.toLowerCase().trim() == 'ejs'){
+        func = 'get_ext_script_sheet_editor(this)';
+    }else if(sheet_type.toLowerCase().trim() == 'ecss'){
+        func = 'get_ext_style_sheet_editor(this)';
     }
+
     var sheet_div = $('<div>', {
                     class: 'fsys-page-sheet-div',
                     id: sheet_id});
@@ -233,7 +244,7 @@ function get_inner_sheet_div(sheet_type, sheet_title, sheet_id){
 }
 
 
-function add_new_page_to_fs(page_name, page_id, scripts=null, sheets=null){
+function add_new_page_to_fs(page_name, page_id, scripts=null, sheets=null, ext_scripts=null, ext_sheets=null){
     var fsys_div = $('<div>', {class: 'fsys-page-div', id: page_id});
     var fsys_title_div = $('<div>');
     fsys_div.append(fsys_title_div);
@@ -268,6 +279,24 @@ function add_new_page_to_fs(page_name, page_id, scripts=null, sheets=null){
         $(Object.keys(sheets)).each(function(index, sheet_title){
             var sheet_id = sheets[sheet_title].id;
             var inner_div = get_inner_sheet_div('CSS', sheet_title, sheet_id);
+            fsys_scripts_div.append(inner_div);
+        });
+    }
+
+    if(ext_scripts != null && Objects.keys(ext_sheets).length > 0){
+        $(Object.keys(ext_scripts)).each(function(index, script_title){
+           var url = ext_sheets[script_title].url;
+           var script_id = ext_sheets[script_title].id;
+           var inner_div = get_inner_sheet_div('EJS', url, script_id);
+           fsys_scripts_div.append(inner_div);
+        });
+    }
+
+    if(ext_sheets != null && Objects.keys(ext_sheets).length > 0){
+        $(Object.keys(ext_sheets)).each(function(index, sheet_title){
+            var url = ext_sheets[sheet_title].url;
+            var sheet_id = ext_sheets[sheet_title].id;
+            var inner_div = get_inner_sheet_div('ECSS', url, sheet_id);
             fsys_scripts_div.append(inner_div);
         });
     }

@@ -103,6 +103,7 @@ function get_projects(){
             var projects = data.projects;
             var project_select = $('.project-choice-sel');
             if(projects != undefined && projects != null){
+                project_select.html('');
                 for(var i = 0; i < projects.length; i++){
                     var name = projects[i].name;
                     var id = projects[i].id;
@@ -137,6 +138,8 @@ function submit_project(elmnt){
         if(data.success == false){
             console.log('Project Submit Failed '+data.msg);
             alert(data.msg);
+        }else{
+            get_projects();
         }
        }
     }).fail(function(jqXHR, textStatus){

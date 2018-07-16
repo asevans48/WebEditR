@@ -187,7 +187,8 @@ and (min-device-width: 1800px){
     .fsys-new-sheet-select{
         position: absolute;
         top: 70px;
-        left: 117px;
+        left: 90px;
+        text-align: center;
     }
 
     .fsys-new-sheet-inpt{

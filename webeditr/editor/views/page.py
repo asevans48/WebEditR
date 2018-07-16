@@ -5,8 +5,10 @@ from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
 from django.utils.html import escape
 
-from ..models import Page, Project, PageProject, ScriptSheet, StyleSheet, PageStylesheet, PageScriptSheet
-from ..modules.assets import get_stylesheets_by_page_id, get_scriptsheets_by_page_id, get_elements_by_page_id
+from ..models import Page, Project, PageProject, ScriptSheet, StyleSheet, PageStylesheet, PageScriptSheet, \
+    ExternalStyleSheet, ExternalScriptSheet, PageExternalStylesheet, PageExternalScriptSheet
+from ..modules.assets import get_stylesheets_by_page_id, get_scriptsheets_by_page_id, get_elements_by_page_id, \
+    get_external_stylesheets_by_page_id, get_external_scriptsheets_by_page_id
 
 
 @never_cache
@@ -118,9 +120,21 @@ def add_new_sheet(request):
             project = rdict['project'][0]
             if title and stype and desc and project:
                 if stype == 'CSS':
-                    sheet, created = StyleSheet.objects.get_or_create(name=title)
+                    sheet, created = StyleSheet.objects.get_or_create(
+                                                                    name=title,
+                                                                    description=desc)
                 elif stype == 'JS':
-                    sheet, created = ScriptSheet.objects.get_or_create(name=title)
+                    sheet, created = ScriptSheet.objects.get_or_create(
+                                                                    name=title,
+                                                                    description=desc)
+                elif stype == 'ECSS':
+                    sheet, created = ExternalStyleSheet.objects.get_or_create(
+                                                                            name=title,
+                                                                            url=desc)
+                elif stype == 'EJS':
+                    sheet, created = ExternalScriptSheet.objects.get_or_create(
+                                                                            name=title,
+                                                                            url=desc)
                 else:
                     return JsonResponse({'success': False, 'msg': 'Page Type Unknown'})
                 if created is False:
@@ -128,10 +142,12 @@ def add_new_sheet(request):
                 sheet.save()
                 if stype == 'CSS':
                     page_sheet, created = PageStylesheet.objects.get_or_create(style_sheet=sheet, page=page)
-                    page_sheet.style_sheet = sheet
-                else:
+                elif stype == 'JS':
                     page_sheet, created = PageScriptSheet.objects.get_or_create(script_sheet=sheet, page=page)
-                    page_sheet.script_sheet = sheet
+                elif stype == 'ECSS':
+                    page_sheet, created = PageExternalStylesheet.objects.get_or_create(style_sheet=sheet, page=page)
+                elif stype == 'EJS':
+                    page_sheet, created = PageExternalScriptSheet.objects.get_or_create(script_sheet=sheet, page=page)
                 page_sheet.save()
                 return JsonResponse({'success': True, 'sheet_id': sheet.id})
             else:
@@ -214,4 +230,28 @@ def get_page_elements(request):
         return JsonResponse({'success': True, 'elements': elements})
     except Exception as e:
         print(traceback.format_exc())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
+
+
+@never_cache
+def get_page_external_scriptsheets(request):
+    try:
+        rdict = dict(request.POST)
+        page_id = int(rdict['page_id'][0])
+        sheets = get_external_scriptsheets_by_page_id(page_id)
+        return JsonResponse({'success': True, 'sheets': sheets})
+    except Exception as e:
+        print(traceback.extract_tb())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
+
+
+@never_cache
+def get_page_external_stylesheets(request):
+    try:
+        rdict = dict(request.POST)
+        page_id = int(rdict['page_id'][0])
+        sheets = get_external_stylesheets_by_page_id(page_id)
+        return JsonResponse({'success': False, 'msg': sheets})
+    except Exception as e:
+        print(traceback.extract_tb())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})

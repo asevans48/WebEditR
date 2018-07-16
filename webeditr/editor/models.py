@@ -69,10 +69,20 @@ class ScriptSheet(models.Model):
     description = models.TextField()
 
 
+class ExternalScriptSheet(models.Model):
+    name = models.CharField(max_length=512, null=False, db_index=True)
+    url = models.URLField()
+
+
 class StyleSheet(models.Model):
     name = models.CharField(max_length=512, null=False, db_index=True)
     file = models.FileField(storage=style_storage)
     description = models.TextField()
+
+
+class ExternalStyleSheet(models.Model):
+    name = models.CharField(max_length=512, null=False, db_index=True)
+    url = models.URLField()
 
 
 # lookup tables
@@ -124,6 +134,17 @@ class PageStylesheet(models.Model):
     style_sheet = models.ForeignKey(StyleSheet, on_delete=models.DO_NOTHING)
 
 
+class PageExternalStylesheet(models.Model):
+    page = models.ForeignKey(Page, on_delete=models.DO_NOTHING)
+    style_sheet = models.ForeignKey(ExternalStyleSheet, on_delete=models.DO_NOTHING)
+
+
+class PageExternalScriptSheet(models.Model):
+    page = models.ForeignKey(Page, on_delete=models.DO_NOTHING)
+    script_sheet = models.ForeignKey(ExternalScriptSheet, on_delete=models.DO_NOTHING)
+
+
 class ScriptScriptSheet(models.Model):
     script_sheet = models.ForeignKey(ScriptSheet, on_delete=models.DO_NOTHING)
     func = models.ForeignKey(ScriptFunc, on_delete=models.DO_NOTHING)
+

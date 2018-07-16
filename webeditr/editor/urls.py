@@ -1,7 +1,7 @@
 
 from django.urls import re_path
 
-from .views import dimensions, editor, imports, page, project, script_editor, sheet_editor, sheets
+from .views import dimensions, editor, page, project, script_editor, sheet_editor, sheets
 
 app_name = 'webeditr'
 
@@ -21,11 +21,6 @@ urlpatterns = [
     re_path('^get_page_stylesheet', page.get_page_stylesheets, name='get_page_stylesheets'),
     re_path('^add_new_page/', page.add_new_page, name='add_new_page'),
     re_path('^remove_page/', page.remove_page, name='remove_page'),
-
-    #import handler
-    re_path('^get_imports_by_project/', imports.get_imports_by_project, name='get_imports_by_project'),
-    re_path('^add_imports_by_project/', imports.add_imports_by_project, name='add_imports_by_project'),
-    re_path('^remove_imports_by_project/', imports.remove_imports_by_project, name='remove_imports_by_project'),
 
     # dimension picker
     re_path('^remove_dimension_by_page/', dimensions.remove_dimension_by_page, name='remove_dimension_by_project'),
