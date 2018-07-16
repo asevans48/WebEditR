@@ -4,13 +4,8 @@ var keyo = {
 }
 
 
-//get project information
-function get_project_assets(elmnt){
-    var choice_div = $(elmnt);
-    var sel_div = $('.project-choice-sel');
-    if(sel_div != undefined && sel_div != null){
-        var pname = sel_div.val();
-        var project_title = sel_div.text();
+//load project information
+function load_project_assets(pname, project_title){
         var data = {
                     'project_id': pname};
         $.ajax({
@@ -80,6 +75,7 @@ function get_project_assets(elmnt){
                                             pname,
                                             project_title,
                                             data);
+                    check_and_get_current_page();
                 }else{
                     alert(data.msg);
                 }
@@ -88,6 +84,17 @@ function get_project_assets(elmnt){
             console.log("Request Failed" + textStatus);
             console.log(jqXHR);
         });
+}
+
+
+//get project information
+function get_project_assets(elmnt){
+    var choice_div = $(elmnt);
+    var sel_div = $('.project-choice-sel');
+    if(sel_div != undefined && sel_div != null){
+        var pname = sel_div.val();
+        var project_title = sel_div.text();
+        load_project_assets(pname, project_title);
     }
 }
 
@@ -155,7 +162,6 @@ function remove_project_add_div(elmnt){
 
 
 function create_new_project(){
-
     var adiv = $('.project-add-div');
     if(adiv != undefined && adiv != null){
         adiv.remove();

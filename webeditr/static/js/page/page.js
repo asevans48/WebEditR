@@ -18,8 +18,10 @@ function get_page_info_div(){
     }
     page_info_div = $('<div>', {
                     class: 'pageinf-div standard-grey-gradient shadow'});
+    var pname = project_objects.pname;
     var title_div = $('<div>', {
-                    class: 'pageinf-title-div'});
+                    class: 'pageinf-title-div',
+                    id: pname});
     if(project_objects.current_project != null){
         title_div.html(project_objects.current_project);
     }
@@ -36,9 +38,7 @@ function get_page_info_div(){
 }
 
 
-function setup_page(elmnt){
-    //called on dblclick of page title
-    var page_name = $(elmnt).html();
+function load_page(page_name){
     var pageinf_div = $('.pageinf-page-div');
     if(pageinf_div != undefined && pageinf_div.html() != undefined){
         pageinf_div.html('Current Page: ', page_name);
@@ -48,4 +48,24 @@ function setup_page(elmnt){
     setup_page_dimensions(project_objects.current_project, page_name);
     //get_page_elements();
     //clear_editor_elements();
+}
+
+
+function setup_page(elmnt){
+    //called on dblclick of page title
+    var page_name = $(elmnt).html();
+    load_page(page_name);
+}
+
+
+function check_and_get_current_page(){
+    var href = window.location.href;
+    var regex = new RegeExp('[?&]page(=([^&#]*)|&|#|$)')
+    var par = regex.exec(href);
+    if(par && par[2]){
+        var page_name = decodeURIComponent(par[2].replace(/\+/g,' '));
+        if(page_name.trim().length > 0){
+            load_page(page_name);
+        }
+    }
 }
