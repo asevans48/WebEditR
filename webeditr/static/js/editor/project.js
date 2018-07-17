@@ -4,6 +4,14 @@ var keyo = {
 }
 
 
+function reload_project(){
+    $('.editor').html('');
+    var title = project_objects.current_project;
+    var pname = project_objects.pname;
+    load_project_assets(pname, title);
+}
+
+
 //load project information
 function load_project_assets(pname, project_title){
         var data = {

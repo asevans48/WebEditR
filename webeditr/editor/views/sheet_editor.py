@@ -11,7 +11,7 @@ from django.http import JsonResponse
 from django.utils.html import escape
 from django.views.decorators.cache import never_cache
 
-from ..models import ScriptFunc, ScriptSheet, StyleSheet, ClassesStylesheet, Classes, ScriptScriptSheet
+from ..models import StyleSheet, ClassesStylesheet, Classes
 
 
 @never_cache

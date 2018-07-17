@@ -1,7 +1,7 @@
 
 from django.urls import re_path
 
-from .views import dimensions, editor, page, project, script_editor, sheet_editor, sheets
+from .views import dimensions, editor, page, project, script_editor, sheet_editor, sheets, external_script_editor, external_sheet_editor
 
 app_name = 'webeditr'
 
@@ -42,7 +42,13 @@ urlpatterns = [
     re_path('^remove_script_function/', script_editor.remove_scriptsheet_function, name='remove_script_function'),
     re_path('^rename_script_function/', script_editor.rename_script_function, name='rename_script_function'),
     re_path('^rewrite_script_function', script_editor.rewrite_script_function, name="rewrite_script_function"),
-    re_path('^load_script_sheet/', script_editor.load_scriptsheet, name="load_script_sheet")
+    re_path('^load_script_sheet/', script_editor.load_scriptsheet, name="load_script_sheet"),
+
+    #external script editor
+    re_path('^edit_ext_script/', external_script_editor.edit_script, name='edit_ext_script'),
+
+    #external stype editor
+    re_path('^edit_ext_sheet/', external_sheet_editor.edit_sheet, name='edit_ext_sheet')
 
     #TRY BY END OF TONIGHT PLEASE PLEASE PLEASE
     #blakes panel functions

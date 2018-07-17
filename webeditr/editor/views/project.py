@@ -60,7 +60,7 @@ def get_project_assets(request):
                                                                         page.page.id)
                 page_dict['scripts'] = assets.get_scriptsheets_by_page_id(
                                                                           page.page.id)
-                page_dict['ext_sheets'] = assets.get_external_scriptsheets_by_page_id(
+                page_dict['ext_sheets'] = assets.get_external_stylesheets_by_page_id(
                                                                                     page.page_id)
                 page_dict['ext_scripts'] = assets.get_external_scriptsheets_by_page_id(
                                                                                     page.page_id)

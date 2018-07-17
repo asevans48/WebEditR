@@ -205,16 +205,16 @@ function add_new_page_btn(root_div){
 }
 
 
-function get_inner_sheet_div(sheet_type, sheet_title, sheet_id){
+function get_inner_sheet_div(sheet_type, sheet_title, sheet_id, url=null){
     var func = null;
     if(sheet_type.toLowerCase().trim() == 'css'){
         func = 'get_style_sheet_editor(this);';
     }else if(sheet_type.toLowerCase().trim() == 'js'){
         func = 'get_script_sheet_editor(this);';
     }else if(sheet_type.toLowerCase().trim() == 'ejs'){
-        func = 'get_ext_script_sheet_editor(this)';
+        func = 'get_ext_script_sheet_editor(this, "' + sheet_title + '", "'+ url +'")';
     }else if(sheet_type.toLowerCase().trim() == 'ecss'){
-        func = 'get_ext_style_sheet_editor(this)';
+        func = 'get_ext_style_sheet_editor(this, "' + sheet_title + '", "'+ url +'")';
     }
 
     var sheet_div = $('<div>', {
@@ -269,7 +269,7 @@ function add_new_page_to_fs(page_name, page_id, scripts=null, sheets=null, ext_s
         //add scripts
         $(Object.keys(scripts)).each(function(index, sheet_title){
             var sheet_id = scripts[sheet_title].id;
-            var inner_div = get_inner_sheet_div('JS', sheet_title, sheet_id);
+            var inner_div = get_inner_sheet_div('JS', sheet_title, sheet_id, null);
             fsys_scripts_div.append(inner_div);
         });
     }
@@ -278,25 +278,28 @@ function add_new_page_to_fs(page_name, page_id, scripts=null, sheets=null, ext_s
         //add sheets
         $(Object.keys(sheets)).each(function(index, sheet_title){
             var sheet_id = sheets[sheet_title].id;
-            var inner_div = get_inner_sheet_div('CSS', sheet_title, sheet_id);
+            var inner_div = get_inner_sheet_div('CSS', sheet_title, sheet_id, null);
             fsys_scripts_div.append(inner_div);
         });
     }
 
-    if(ext_scripts != null && Objects.keys(ext_sheets).length > 0){
+
+    if(ext_scripts != null && Object.keys(ext_sheets).length > 0){
+        //add external js
         $(Object.keys(ext_scripts)).each(function(index, script_title){
            var url = ext_sheets[script_title].url;
            var script_id = ext_sheets[script_title].id;
-           var inner_div = get_inner_sheet_div('EJS', url, script_id);
+           var inner_div = get_inner_sheet_div('EJS', script_title, script_id, url);
            fsys_scripts_div.append(inner_div);
         });
     }
 
-    if(ext_sheets != null && Objects.keys(ext_sheets).length > 0){
+    if(ext_sheets != null && Object.keys(ext_sheets).length > 0){
+        //add external css
         $(Object.keys(ext_sheets)).each(function(index, sheet_title){
             var url = ext_sheets[sheet_title].url;
             var sheet_id = ext_sheets[sheet_title].id;
-            var inner_div = get_inner_sheet_div('ECSS', url, sheet_id);
+            var inner_div = get_inner_sheet_div('ECSS', sheet_title, sheet_id, url);
             fsys_scripts_div.append(inner_div);
         });
     }
@@ -413,7 +416,9 @@ function display_file_system(fsysdiv_files, pages){
                                               page_name,
                                               page_id,
                                               page.scripts,
-                                              page.sheets);
+                                              page.sheets,
+                                              page.ext_scripts,
+                                              page.ext_sheets);
             fsysdiv_files.append(page_div);
         }
     }catch{

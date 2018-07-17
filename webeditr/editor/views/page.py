@@ -137,9 +137,11 @@ def add_new_sheet(request):
                                                                             url=desc)
                 else:
                     return JsonResponse({'success': False, 'msg': 'Page Type Unknown'})
+
                 if created is False:
                     sheet.description = desc
                 sheet.save()
+                page_sheet = None
                 if stype == 'CSS':
                     page_sheet, created = PageStylesheet.objects.get_or_create(style_sheet=sheet, page=page)
                 elif stype == 'JS':

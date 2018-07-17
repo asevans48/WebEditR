@@ -10,6 +10,7 @@ function close_script_editor(){
     if(editor != undefined && editor.html() != undefined){
         editor.remove();
     }
+    reload_project();
 }
 
 
