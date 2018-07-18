@@ -469,7 +469,6 @@ function open_project_file_panel(project_id, project_title, pages){
     var fsysdiv_files = $('<div>', {
                     class: 'fsys-files-div'});
     add_root_folder(fsysdiv_files);
-    console.log(pages);
     display_file_system(fsysdiv_files, pages);
     $('.editor').append(fsysdiv);
     fsysdiv.append(fsysdiv_files);

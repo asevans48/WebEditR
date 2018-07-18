@@ -5,8 +5,8 @@ from django.http import JsonResponse
 from django.utils.html import escape
 from django.views.decorators.cache import never_cache
 
-from ..models import Page, PageScriptSheet, ScriptScriptSheet, PageExternalScriptSheet, ExternalScriptSheet, \
-    PageStylesheet, ClassesStylesheet, PageExternalStylesheet, ExternalStyleSheet
+from ..models import Page, PageScriptSheet, ScriptScriptSheet, PageExternalScriptSheet, \
+    PageStylesheet, ClassesStylesheet, PageExternalStylesheet
 
 
 @never_cache

@@ -5,10 +5,25 @@ var keyo = {
 
 
 function reload_project(){
-    $('.editor').html('');
-    var title = project_objects.current_project;
-    var pname = project_objects.pname;
-    load_project_assets(pname, title);
+    $('.editor').html('')
+    var js = $('.dynamic-js');
+    if(js != undefined && js.length > 0){
+        //reload entire page
+        var current_project = project_objects.current_project;
+        var current_page = project_objects.current_page;
+        var url = "/?project="+encodeURIComponent(current_project);
+        url += "&page="+encodeURIComponent(current_page);
+        url += "&pname="+project_objects.pname;
+        window.location.assign(url);
+    }else{
+        var current_page = project_objects.current_page;
+        var title = project_objects.current_project;
+        var pname = project_objects.pname;
+        load_project_assets(pname, title);
+        if(current_page != null && current_page.trim().length > 0){
+            load_page(page_name);
+        }
+    }
 }
 
 

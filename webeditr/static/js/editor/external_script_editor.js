@@ -23,7 +23,7 @@ function submit_ext_script_edit(elmnt){
     }).fail(function(jqXHR, textStatus){
         console.log('Failed to Edit Script', textStatus);
         console.log(jqXHR);
-    }).then(reload_project());
+    });
 }
 
 

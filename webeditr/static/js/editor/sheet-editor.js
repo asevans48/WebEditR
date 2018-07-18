@@ -67,7 +67,6 @@ function get_add_attribute_btn(){
 
 function exit_stylesheet_editor(elmnt){
     $(elmnt).parent().parent().parent().remove();
-    reload_project();
 }
 
 

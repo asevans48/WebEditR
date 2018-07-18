@@ -23,7 +23,7 @@ function submit_ext_style_edit(elmnt){
     }).fail(function(jqXHR, textStatus){
         console.log('Failed to Edit sheet', textStatus);
         console.log(jqXHR);
-    }).then(reload_project());
+    });
 }
 
 

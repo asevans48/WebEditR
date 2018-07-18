@@ -37,3 +37,17 @@
 .dimensions-rem-btn{
     font-size: 1.3em;
 }
+
+
+.reload-project-div{
+    width: 300px;
+    text-align: center;
+    font-size: 2em;
+}
+
+
+.reload-project-btn{
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: .7em;
+}

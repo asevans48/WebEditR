@@ -106,7 +106,7 @@ function load_ext_style_content(page_name){
                     url: sheets[sheet_name],
                     success: function(data){
                         var style_tag = $('<style>', {
-                                        class: 'dynamic-style external-css',
+                                        class: 'dynamic-css external-css',
                                         name: sheet_name});
                        style_tag.prop('disabled', false);
                        style_tag.html(data);
@@ -157,7 +157,7 @@ function load_sheet_content(page_name){
                             }
                         });
                         var style_tag = $('<style>', {
-                                        class: 'dynamic-style custom-css',
+                                        class: 'dynamic-css custom-css',
                                         name: value});
                         var css_str = class_strings.join('\n');
                         style_tag.append(css_str);
@@ -208,12 +208,23 @@ function get_page_info_div(){
         current_page_div.html(ptitle);
     }
     page_info_div.append(current_page_div);
+    var reload_project_div = $('<div>', {
+                              class: 'reload-project-div'});
+    var reload_project_btn = $('<button>', {
+                            class: 'reload-project-btn btn btn-primary',
+                            onclick: 'reload_project();'});
+    reload_project_btn.append('Reload Project');
+    reload_project_div.append(reload_project_btn);
+    reload_project_div.append(reload_project_div);
+    page_info_div.append(reload_project_div);
     page_info_div.draggable();
     $('.editor').append(page_info_div);
 }
 
 
 function load_page(page_name){
+    $('.dynamic-css').remove();
+    $('.dynamic-js').remove();
     var pageinf_div = $('.pageinf-page-div');
     if(pageinf_div != undefined && pageinf_div.html() != undefined){
         pageinf_div.html('Current Page: ', page_name);

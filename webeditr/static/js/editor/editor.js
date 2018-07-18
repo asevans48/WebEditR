@@ -29,9 +29,10 @@ $(document).ready(function(){
     var href = window.location.href;
     var regex = new RegExp('[?&]project(=([^&#]*)|&|#|$)');
     var par = regex.exec(href);
-
+    var regex = new RegExp('[?&]pname(=([^&#]*)|&|#|$)')
+    var pname = regex.exec(href);
     //get project or project select
-    if(par && par[2] && pname && pname[2]){
+    if(par != null && par[2] && pname && pname[2]){
         var project_title = decodeURIComponent(par[2].replace(/\+/g,' '));
         var pname = decodeURIComponent(pname[2].replace(/\+/g, ' '));
         pname = parseInt(pname.trim());
