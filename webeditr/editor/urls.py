@@ -1,9 +1,12 @@
 
 from django.urls import re_path
 
-from .views import dimensions, editor, page, project, script_editor, sheet_editor, sheets, external_script_editor, external_sheet_editor
+
+from .views import assets, dimensions, editor, page, project, script_editor, sheet_editor, sheets, external_script_editor, external_sheet_editor
+
 
 app_name = 'webeditr'
+
 
 urlpatterns = [
 
@@ -15,6 +18,10 @@ urlpatterns = [
     re_path('^get_projects/', project.get_projects, name='get_projects'),
 
     # asset loader
+    re_path('^get_script_by_page/', assets.get_script_by_page, name='get_script_by_page'),
+    re_path('^get_style_by_page/', assets.get_style_by_page, name='get_style_by_page'),
+    re_path('^get_ext_script_by_page/', assets.get_ext_script_by_page, name='get_ext_script_by_page'),
+    re_path('^get_ext_Style_by_page/', assets.get_ext_style_by_page, name='get_ext_style_by_page'),
     re_path('^get_project_assets/', project.get_project_assets, name='get_project_details'),
     re_path('^load_stylesheet/', sheets.load_style_sheet, name='load_page_stylesheet'),
     re_path('^load_scriptsheet/', sheets.load_script_sheet, name='load_script_sheet'),

@@ -1,3 +1,4 @@
+import re
 import traceback
 
 from django.http import JsonResponse
@@ -50,12 +51,12 @@ def get_style_by_page(request):
                         sheet = style.style_sheet
                         if sheet.name not in styles:
                             styles[sheet.name] = {}
-                        sheet_classes = ClassesStylesheet.objects.filter(sheet_id=sheet.id)
+                        sheet_classes = ClassesStylesheet.objects.filter(style_sheet_id=sheet.id)
                         classes = {}
                         if sheet_classes.count() > 0:
-                            for classes in sheet_classes:
-                                name = classes.name
-                                attr = classes.attributes
+                            for sclass in sheet_classes:
+                                name = sclass.classes.name
+                                attr = sclass.classes.attributes
                                 classes[name] = attr
                         styles[sheet.name] = classes
                 return JsonResponse({'success': False, 'sheets': styles})
@@ -77,7 +78,7 @@ def get_ext_script_by_page(request):
             pages = Page.objects.filter(name=page_name)
             if pages.count() > 0:
                 page = pages.first()
-                page_scripts = PageExternalScriptSheet.objects.filter(page_name=page.name)
+                page_scripts = PageExternalScriptSheet.objects.filter(page_id=page.id)
                 scripts = {}
                 if page_scripts.count() > 0:
                     page_script = page_scripts.first()
@@ -109,12 +110,12 @@ def get_script_by_page(request):
                     script = page_script.script_sheet
                     if script.name not in scripts:
                         scripts[script.name] = {}
-                    funcs = ScriptScriptSheet.objects.filter(sheet_id=script.id)
+                    funcs = ScriptScriptSheet.objects.filter(script_sheet_id=script.id)
                     if funcs.count() > 0:
                         fdict = {}
                         for func in funcs:
-                            fname = func.name
-                            fscript = func.func
+                            fname = func.func.name
+                            fscript = str(func.func.func_base64.decode('ascii'))
                             fdict[fname] = fscript
                         scripts[script.name] = fdict
             return JsonResponse({'success': True, 'scripts': scripts})

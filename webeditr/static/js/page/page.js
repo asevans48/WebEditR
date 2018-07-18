@@ -57,12 +57,14 @@ function load_script_content(page_name){
                 $(Object.keys(scripts)).each(function(index, script_name){
                     var code = "";
                     var funcs = scripts[script_name];
-                    $(Object.keys(funcs).each(function(index, fname)){
+                    $(Object.keys(funcs)).each(function(index, fname){
                         var func = funcs[fname];
-                        code += fname+"{"+func+"};";
+                        if(func.length > 0){
+                            code += func + ' ';
+                        }
                     });
                     var stag = $('<script>', {
-                                type: 'text/javascript'
+                                type: 'text/javascript',
                                 class: 'dynamic-js custom-js',
                                 name: script_name});
                     stag.append(code);
@@ -80,7 +82,7 @@ function load_script_content(page_name){
 }
 
 
-function load_scripts(page_name){
+function load_page_scripts(page_name){
     //load existing scripts
     load_script_content(page_name);
     load_ext_script_content(page_name);
@@ -101,7 +103,7 @@ function load_ext_style_content(page_name){
             $(object.keys(sheets)).each(function(index, sheet_name){
                $.ajax({
                     type: 'GET',
-                    url: sheets[sheet_name];
+                    url: sheets[sheet_name],
                     success: function(data){
                         var style_tag = $('<style>', {
                                         class: 'dynamic-style external-css',
@@ -151,6 +153,7 @@ function load_sheet_content(page_name){
                                     classname += ';';
                                 })
                                 class_string += '}';
+                                console.log(class_string);
                                 class_strings.push(class_string);
                             }
                         });
@@ -174,7 +177,7 @@ function load_sheet_content(page_name){
 }
 
 
-function load_styles(page_name){
+function load_page_styles(page_name){
     load_sheet_content(page_name);
     load_ext_sheet_content(page_name);
 }
@@ -220,6 +223,7 @@ function load_page(page_name){
     get_page_info_div();
     setup_page_dimensions(project_objects.current_project, page_name);
     load_page_scripts(page_name);
+    load_page_styles(page_name);
     //get_page_elements();
     //clear_editor_elements();
 }
