@@ -63,10 +63,12 @@ function create_lower_button_div(){
                            class: 'pallet pallet-gradient-sel-btn fa fa-palette'});
     gradient_sel_div.append(gradient_sel_btn);
     panel_area.append(row_a);
+    return panel_area;
 }
 
 
 function open_project_pallet(pid, project_title){
+    $('.pallet-div').remove();
     var pallet_div = $('<div>', {
                     class: 'pallet pallet-div standard-grey-gradient shadow',
                     name: project_title});
@@ -79,6 +81,5 @@ function open_project_pallet(pid, project_title){
     var panel_area = create_lower_button_div();
     pallet_div.append(panel_area);
     pallet_div.draggable();
-    console.log(pallet_div);
     $('.editor').append(pallet_div);
 }
