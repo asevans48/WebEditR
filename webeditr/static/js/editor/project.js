@@ -1,6 +1,7 @@
 
 var keyo = {
     ctl_key_pressed: false,
+    is_editor_hidden: false,
 }
 
 
@@ -83,6 +84,14 @@ function load_project_assets(pname, project_title){
                                 }else{
                                     pageinf_div.remove();
                                 }
+                            }else if(key_pressed == 52){
+                                if(keyo.is_editor_hidden == false){
+                                    $('.pallet').hide();
+                                    keyo.is_editor_hidden = true;
+                                }else{
+                                    $('.pallet').show();
+                                    keyo.is_editor_hidden = false;
+                                }
                             }else{
                                 keyo.ctl_key_pressed = false;
                             }
@@ -98,6 +107,9 @@ function load_project_assets(pname, project_title){
                                             pname,
                                             project_title,
                                             data);
+                    open_project_pallet(
+                                            pname,
+                                            project_title);
                     check_and_get_current_page();
                 }else{
                     alert(data.msg);

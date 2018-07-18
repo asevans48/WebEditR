@@ -1,0 +1,15 @@
+
+.pallet-div{
+    position: absolute;
+    left: 50px;
+    top: 200px;
+    width: 250px;
+    height: 410px;
+}
+
+
+.pallet-title-div{
+    font-size: 2em;
+    color: white;
+    font-weight: bold;
+}
