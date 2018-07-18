@@ -53,8 +53,9 @@ urlpatterns = [
 
     #external stype editor
     re_path('^edit_ext_sheet/', external_sheet_editor.edit_sheet, name='edit_ext_sheet')
+    
+    #panels
 
-    #TRY BY END OF TONIGHT PLEASE PLEASE PLEASE
     #blakes panel functions
 
     #blakes page styling functions

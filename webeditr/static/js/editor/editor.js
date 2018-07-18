@@ -37,6 +37,7 @@ $(document).ready(function(){
         var pname = decodeURIComponent(pname[2].replace(/\+/g, ' '));
         pname = parseInt(pname.trim());
         load_project_assets(pname, project_title);
+        open_project_pallet(pname, project_title);
     }else{
         get_starting_div();
     }
