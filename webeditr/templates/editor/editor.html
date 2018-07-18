@@ -3,8 +3,11 @@
     <head>
         {% load static %}
         {% load staticfiles %}
-        {% load fontawesome %}
-        {% fontawesome_stylesheet %}
+
+        <!-- fontawesome 5.1 -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/fontawesome/all.css' %}"/>
+        <!-- fontawesome-free-5.1.1-web/js/fontawesome.min.js -->
+        <script src="{% static 'js/fontawesome/all.js' %}"></script>
 
         <!-- glyphicons -->
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/material-icons.css' %}"/>
@@ -39,9 +42,6 @@
         <!-- gradients css -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/gradients/gradients.css' %}"/>
 
-        <!-- texteditor css -->
-        <link rel="stylesheet" type="text/css" href="{% static 'css/editor/texteditor.css' %}"/>
-
         <!-- sheet editor css -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/editor/stylesheet-editor.css' %}"/>
 
@@ -54,6 +54,9 @@
 
         <!-- dimension editor css -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/dimensions/dimensions.css' %}"/>
+
+        <!-- dimension pallet css -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/pallet/pallet.css' %}"/>
 
 
         <!-- script editor css -->

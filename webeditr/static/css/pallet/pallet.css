@@ -1,10 +1,14 @@
+svg :hover{
+    opacity: 0.5;
+}
 
 .pallet-div{
     position: absolute;
-    left: 50px;
-    top: 200px;
-    width: 400px;
-    height: 200px;
+    left: 750px;
+    top: 140px;
+    height: 70px;
+    width: 200px;
+    border-radius: 10px;
 }
 
 
@@ -12,4 +16,43 @@
     font-size: 2em;
     color: white;
     font-weight: bold;
+    width: 200px;
+    text-align: center;
+}
+
+
+.pallet-btn{
+    color: white;
+    font-size: 2em;
+    margin-left: 15px;
+}
+
+
+.pallet-btn-row i:hover{
+    opacity: 0.5;
+}
+
+
+.pallet-sel-obj-div{
+    float: left;
+}
+
+
+.pallet-create-obj-div{
+    float: left;
+}
+
+
+.pallet-sel-bg-div{
+    float: left;
+}
+
+
+.pallet-create-fill-div{
+    float: left;
+}
+
+
+.pallet-gradient-sel-div{
+    float: left;
 }

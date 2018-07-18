@@ -46,7 +46,8 @@ urlpatterns = [
     re_path('^submit_function/', script_editor.add_script_function, name='submit_script_function'),
     re_path('^remove_script_function/', script_editor.remove_scriptsheet_function, name='remove_script_function'),
     re_path('^rename_script_function/', script_editor.rename_script_function, name='rename_script_function'),
-    re_path('^rewrite_script_function', script_editor.rewrite_script_function, name="rewrite_script_function"),
+    re_path('^rewrite_script_function/', script_editor.rewrite_script_function, name="rewrite_script_function"),
+    re_path('^load_script_sheet/', script_editor.load_scriptsheet, name='load_script_sheet'),
 
     #external script editor
     re_path('^edit_ext_script/', external_script_editor.edit_script, name='edit_ext_script'),
