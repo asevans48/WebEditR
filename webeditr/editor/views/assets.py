@@ -22,8 +22,8 @@ def get_ext_style_by_page(request):
                 sheets = {}
                 if ext_sheets.count() > 0:
                     for sheet in ext_sheets:
-                        name = sheet.name
-                        url = sheet.url
+                        name = sheet.style_sheet.name
+                        url = sheet.style_sheet.url
                         sheets[name] = url
                 return JsonResponse({'success': True, 'sheets': sheets})
             else:
@@ -40,6 +40,7 @@ def get_style_by_page(request):
     try:
         rdict = dict(request.POST)
         page_name = escape(rdict['page_name'][0])
+        print(rdict)
         if page_name:
             pages = Page.objects.filter(name=page_name)
             if pages.count()  > 0:
@@ -59,7 +60,7 @@ def get_style_by_page(request):
                                 attr = sclass.classes.attributes
                                 classes[name] = attr
                         styles[sheet.name] = classes
-                return JsonResponse({'success': False, 'sheets': styles})
+                return JsonResponse({'success': True, 'sheets': styles})
             else:
                 return JsonResponse({'success': False, 'msg': 'Page Not Found'})
         else:

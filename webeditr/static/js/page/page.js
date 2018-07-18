@@ -100,7 +100,7 @@ function load_ext_style_content(page_name){
         data: data,
         success: function(data){
             var sheets = data.sheets;
-            $(object.keys(sheets)).each(function(index, sheet_name){
+            $(Object.keys(sheets)).each(function(index, sheet_name){
                $.ajax({
                     type: 'GET',
                     url: sheets[sheet_name],
@@ -179,7 +179,7 @@ function load_sheet_content(page_name){
 
 function load_page_styles(page_name){
     load_sheet_content(page_name);
-    load_ext_sheet_content(page_name);
+    load_ext_style_content(page_name);
 }
 
 
