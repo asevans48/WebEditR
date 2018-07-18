@@ -23,8 +23,6 @@ urlpatterns = [
     re_path('^get_ext_script_by_page/', assets.get_ext_script_by_page, name='get_ext_script_by_page'),
     re_path('^get_ext_style_by_page/', assets.get_ext_style_by_page, name='get_ext_style_by_page'),
     re_path('^get_project_assets/', project.get_project_assets, name='get_project_details'),
-    re_path('^load_stylesheet/', sheets.load_style_sheet, name='load_page_stylesheet'),
-    re_path('^load_scriptsheet/', sheets.load_script_sheet, name='load_script_sheet'),
     re_path('^get_page_stylesheet', page.get_page_stylesheets, name='get_page_stylesheets'),
     re_path('^add_new_page/', page.add_new_page, name='add_new_page'),
     re_path('^remove_page/', page.remove_page, name='remove_page'),
@@ -49,7 +47,6 @@ urlpatterns = [
     re_path('^remove_script_function/', script_editor.remove_scriptsheet_function, name='remove_script_function'),
     re_path('^rename_script_function/', script_editor.rename_script_function, name='rename_script_function'),
     re_path('^rewrite_script_function', script_editor.rewrite_script_function, name="rewrite_script_function"),
-    re_path('^load_script_sheet/', script_editor.load_scriptsheet, name="load_script_sheet"),
 
     #external script editor
     re_path('^edit_ext_script/', external_script_editor.edit_script, name='edit_ext_script'),

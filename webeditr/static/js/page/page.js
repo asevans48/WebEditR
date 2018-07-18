@@ -138,22 +138,21 @@ function load_sheet_content(page_name){
             //add styles to page
             if(data.success){
                 var sheets = data.sheets;
-                if(sheets.length > 0){
+                if($(Object.keys(sheets)).length > 0){
                     $(Object.keys(sheets)).each(function(index, value){
                         var classes = sheets[value];
                         var class_strings = [];
-                        $(objects.keys(classes)).each(function(index, classname){
+                        $(Object.keys(classes)).each(function(index, classname){
                             var attributes = classes[classname];
-                            if(attributes != undefined && attributes.length > 0){
+                            if(attributes != undefined && Object.keys(attributes).length > 0){
                                 var class_string = classname+'{';
-                                $(objects.keys(attributes)).each(function(index, attr){
-                                    classname += attr;
-                                    classname += ':';
-                                    classname += attributes[attr];
-                                    classname += ';';
+                                $(Object.keys(attributes)).each(function(index, attr){
+                                    class_string += attr;
+                                    class_string += ':';
+                                    class_string += attributes[attr];
+                                    class_string += ';';
                                 })
                                 class_string += '}';
-                                console.log(class_string);
                                 class_strings.push(class_string);
                             }
                         });

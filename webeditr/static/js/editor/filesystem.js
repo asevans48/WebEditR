@@ -284,11 +284,12 @@ function add_new_page_to_fs(page_name, page_id, scripts=null, sheets=null, ext_s
     }
 
 
-    if(ext_scripts != null && Object.keys(ext_sheets).length > 0){
+    if(ext_scripts != null && Object.keys(ext_scripts).length > 0){
         //add external js
+        console.log(ext_scripts);
         $(Object.keys(ext_scripts)).each(function(index, script_title){
-           var url = ext_sheets[script_title].url;
-           var script_id = ext_sheets[script_title].id;
+           var url = ext_scripts[script_title].url;
+           var script_id = ext_scripts[script_title].id;
            var inner_div = get_inner_sheet_div('EJS', script_title, script_id, url);
            fsys_scripts_div.append(inner_div);
         });
@@ -468,6 +469,7 @@ function open_project_file_panel(project_id, project_title, pages){
     var fsysdiv_files = $('<div>', {
                     class: 'fsys-files-div'});
     add_root_folder(fsysdiv_files);
+    console.log(pages);
     display_file_system(fsysdiv_files, pages);
     $('.editor').append(fsysdiv);
     fsysdiv.append(fsysdiv_files);

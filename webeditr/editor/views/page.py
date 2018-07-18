@@ -165,10 +165,13 @@ def add_new_sheet(request):
 def remove_sheet(request):
     try:
         rdict = dict(request.POST)
+        print(rdict)
         sheet_id = int(rdict['sheet_id'][0])
         sheet_type = escape(rdict['sheet_type'][0])
         page_id = int(rdict['page_id'][0])
-        if sheet_type == "js":
+        page_sheet=None
+        page_script=None
+        if sheet_type.upper().strip() == "JS":
             page_script = PageScriptSheet.objects.filter(script_sheet_id=sheet_id, page_id=page_id)
             if page_script.count() > 0:
                 page_script = page_script.first()
@@ -180,7 +183,7 @@ def remove_sheet(request):
                 return JsonResponse({'success': True, 'sheet_id': sheet_id})
             else:
                 return JsonResponse({'success': False, 'msg': 'PageScript Not found'})
-        elif sheet_type == "css":
+        elif sheet_type.upper().strip() == "css":
             page_sheet  = PageStylesheet.objects.filter(style_sheet_id=sheet_id, page_id=page_id)
             if page_sheet.count() > 0:
                 page_sheet = page_sheet.first()
@@ -192,6 +195,31 @@ def remove_sheet(request):
                 return JsonResponse({'success': True, 'sheet_id': sheet_id})
             else:
                 return JsonResponse({'success': False, 'msg': 'PageSheet Not Found'})
+        elif sheet_type.upper().strip() == 'ECSS':
+            page_sheet = PageExternalStylesheet.objects.filter(style_sheet_id=sheet_id)
+            if page_sheet.count() > 0:
+                page_sheet = page_sheet.first()
+                sheet = page_sheet.style_sheet
+                page_sheet.delete()
+                page_sheet = PageExternalStylesheet.objects.filter(style_sheet_id=sheet_id)
+                if page_sheet.count()  is 0:
+                    sheet.delete()
+                return JsonResponse({'success': True, 'sheet_id': sheet.id})
+            else:
+                return JsonResponse({'success': False, 'msg': 'Sheet Not Found'})
+        elif sheet_type.upper().strip() == "EJS":
+            page_script = PageExternalScriptSheet.objects.filter(script_sheet_id=sheet_id)
+            if page_script.count() > 0:
+                page_script = page_script.first()
+                sheet = page_script.script_sheet
+                page_script.delete()
+                page_script = PageExternalScriptSheet.objects.filter(script_sheet_id=sheet_id)
+                if page_script.count() is 0:
+                    sheet.delete()
+                return JsonResponse({'success': True, 'sheet_id': sheet.id})
+            else:
+                return JsonResponse({'success': False, 'msg': 'Sheet Not Found'})
+
         else:
             return JsonResponse({'success': False, 'msg': 'Invalid Sheet Type'})
     except Exception as e:

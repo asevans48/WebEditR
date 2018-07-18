@@ -54,13 +54,3 @@ def get_script_sheet(request):
     except Exception as e:
         print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
-
-
-@never_cache
-def load_script_sheet(request):
-    pass
-
-
-@never_cache
-def load_style_sheet(request):
-    pass

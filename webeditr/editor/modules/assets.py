@@ -4,6 +4,7 @@ from ..models import PageStylesheet, PageScriptSheet, PageElement, PageExternalS
 
 
 def get_elements_by_page_id(project_id, elements=[]):
+    els = None
     els = PageElement.objects.all().filter(page=project_id)
     sheets = {}
     if els.count() > 0:
@@ -13,6 +14,7 @@ def get_elements_by_page_id(project_id, elements=[]):
 
 
 def get_scriptsheets_by_page_id(project_id, scripts={}):
+    els = None
     els = PageScriptSheet.objects.all().filter(page=project_id)
     scripts = {}
     if els.count() > 0:
@@ -25,6 +27,7 @@ def get_scriptsheets_by_page_id(project_id, scripts={}):
 
 
 def get_stylesheets_by_page_id(project_id, sheets={}):
+    els = None
     els = PageStylesheet.objects.all().filter(page=project_id)
     sheets = {}
     if els.count() > 0:
@@ -37,6 +40,7 @@ def get_stylesheets_by_page_id(project_id, sheets={}):
 
 
 def get_external_scriptsheets_by_page_id(page_id):
+    els = None
     els = PageExternalScriptSheet.objects.filter(page_id=page_id)
     sheets = {}
     if els.count() > 0:
@@ -50,6 +54,7 @@ def get_external_scriptsheets_by_page_id(page_id):
 
 
 def get_external_stylesheets_by_page_id(page_id):
+    els = None
     els = PageExternalStylesheet.objects.filter(page_id=page_id)
     sheets = {}
     if els.count() > 0:
