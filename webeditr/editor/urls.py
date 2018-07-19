@@ -57,6 +57,8 @@ urlpatterns = [
 
     #panels
 
+    #creators
+
     #blakes panel functions
 
     #blakes page styling functions

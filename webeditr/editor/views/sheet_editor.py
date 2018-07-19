@@ -11,7 +11,7 @@ from django.http import JsonResponse
 from django.utils.html import escape
 from django.views.decorators.cache import never_cache
 
-from ..models import StyleSheet, ClassesStylesheet, Classes
+from ..models import StyleSheet, ClassesStylesheet, Classes, Page, PageExternalStylesheet
 
 
 @never_cache
@@ -166,4 +166,32 @@ def remove_stylesheet_attribute(request):
             return JsonResponse({'success': False, 'msg': 'Stylesheet Not Found'})
     except Exception as e:
         print(traceback.format_exc()) # send to elastic apm
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
+
+
+@never_cache
+def get_potential_classes_by_page(request):
+    try:
+        rdict = dict(request.POST)
+        page_name = escape(rdict['page_name'][0])
+        page = Page.objects.filter(name=page_name)
+        if page.count() > 0:
+            page = page.first()
+            page_sheet = PageExternalStylesheet.object.filter(page_id=page.id)
+            if page_sheet.count() > 0:
+                class_names = []
+                for psheet in page_sheet:
+                    sheet = psheet.first().style_sheet
+                    classes = ClassesStylesheet.objects.filter(style_sheet_id=sheet.id)
+                    if classes.count > 0:
+                        for css_class in classes:
+                            if css_class.name not in class_names:
+                                class_names.append(css_class.name)
+                return JsonResponse({'success': True, 'class_names': class_names})
+            else:
+                return JsonResponse({'success': False, 'msg': 'Sheet Not Found'})
+        else:
+            return JsonResponse({'success': False, 'msg': 'Page Not Found'})
+    except Exception as e:
+        print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})

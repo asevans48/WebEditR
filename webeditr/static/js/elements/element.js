@@ -30,11 +30,6 @@ function get_object_editor(){
 }
 
 
-function get_object_creator(){
-
-}
-
-
 function delete_object(){
 
 }
