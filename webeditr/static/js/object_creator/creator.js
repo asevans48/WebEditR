@@ -12,7 +12,7 @@ var creator = {
                     'attributes': 'Attributes',
                     'perc_page_height': 'Percent Page Height',
                     'perc_page_width': 'Percent Page Width',
-                    'contnet': 'Inner HTML'},
+                    'content': 'Inner HTML'},
 }
 
 
@@ -141,13 +141,15 @@ function submit_object_attrs(oname){
         var el = $(elmnt);
         var name = el.attr('name');
         var val = el.val();
+        console.log(name, val);
         if(val != creator.attr_name_map[name]){
             data[name] = val;
         }else{
             data[name] = null;
         }
     })
-
+    data['project_id'] = project_objects.pname;
+    data['project_name'] = project_objects.current_project;
     $.ajax({
         type: 'POST',
         url: '/create_or_edit_object/',
@@ -169,7 +171,7 @@ function submit_object_attrs(oname){
                     if(contains_name == false){
                         var opt = $('<option>', {
                                   class: 'objecteditor-opt'});
-                        opt.val(name);
+                        opt.append(name);
                         $('.objecteditor-selector-list').prepend(opt);
                     }
                 }
@@ -254,24 +256,31 @@ function append_attribute(key_name, editor_div=$('.objectattr-editor-inputs-div'
     var inpt_div = $('<div>', {
                    class: 'objectattr-inpt-div'});
     var attr_inpt = null;
-    if(key_name != 'tag_name'){
+    if(key_name != 'tag_name' && key_name != 'content'){
         attr_inpt = $('<input>', {
                     class: 'objectattr-inpt form-control',
                     name: key_name});
+        attr_inpt.val(attr_name);
+    }else if(key_name == 'content'){
+        attr_inpt = $('<textarea>', {
+            class: 'objectattr-tarea form-control',
+            name: key_name,
+        });
+        attr_inpt.append('Inner HTML');
     }else{
         attr_inpt = $('<select>', {
-                    class: 'object-attr-inpt form-control',
-                    name: key_name});
-        var opts = ['input', 'iframe', 'div', 'img', 'p', 'span', 'address', 'embed', 'article', 'aside', 'audio', 'svg', 'blockquote', 'button', 'i', 'cite', 'table', 'em', 'picture', 'pre', 'section', 'select', 'ul', 'ol']
+                    class: 'objectattr-inpt form-control',
+                    name: key_name,
+                    placeholder: 'Tag Name'});
+        var opts = ['div', 'input', 'iframe', 'img', 'p', 'span', 'address', 'embed', 'article', 'aside', 'audio', 'svg', 'blockquote', 'button', 'i', 'cite', 'table', 'em', 'picture', 'pre', 'section', 'select', 'ul', 'ol']
         $(opts).each(function(index, tag_name){
             var opt = $('<option>', {
                       class: 'object-attr-option'});
-            opt.val(tag_name);
+            opt.append(tag_name);
             attr_inpt.append(opt);
         });
         attr_inpt.change(tag_name_handler(attr_inpt));
     }
-    attr_inpt.val(attr_name);
     inpt_div.append(attr_inpt);
     editor_div.append(inpt_div);
     return editor_div;
@@ -320,7 +329,6 @@ function get_project_elements(object_selector_list){
         'project_name': project_objects.current_project,
         'project_id': project_objects.pname,
     }
-
     $.ajax({
         type: 'POST',
         url : '/get_element_names_by_project_id/',
@@ -332,7 +340,8 @@ function get_project_elements(object_selector_list){
                     $(element_names).each(function(index, value){
                         var opt = $('<option>', {
                                   class: 'objecteditor-opt'});
-                        opt.val(value);
+                        opt.append(value);
+                        object_selector_list.append(opt);
                     });
                 }
             }else{

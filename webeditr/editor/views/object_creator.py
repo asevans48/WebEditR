@@ -5,13 +5,14 @@ from django.http import JsonResponse
 from django.utils.html import escape
 from django.views.decorators.cache import never_cache
 
-from ..models import Element, Classes, ElementClasses, ElementContent
+from ..models import Element, Classes, ElementClasses, ElementContent, ProjectElement
 
 
 @never_cache
 def create_or_edit_object(request):
     try:
         rdict = dict(request.POST)
+        project_id = int(escape(str(rdict['project_id'][0])))
         name = escape(rdict['name'][0])
         id_attr = escape(rdict['id_attr'][0])
         name_attr = escape(rdict['name_attr'][0])
@@ -19,9 +20,23 @@ def create_or_edit_object(request):
         class_name = escape(rdict['class_name'][0])
         description = escape(rdict['description'][0])
         attributes = escape(rdict['attributes'][0])
-        perc_page_height = escape(rdict.get('per_page_height', [.1,])[0])
-        perc_page_width = escape(rdict.get('perc_page_width', [.1,])[0])
-        el = Element.objects.get_or_create(name=name)
+        perc_page_height = rdict.get('per_page_height', None)
+        perc_page_width = rdict.get('perc_page_width', None)
+        if perc_page_height is None or len(perc_page_height[0].strip()) is 0:
+            perc_page_height = .1
+        else:
+            perc_page_height = float(escape(str(perc_page_height)))
+        if perc_page_width is None or len(perc_page_width[0].strip()) is 0:
+            perc_page_width = .1
+        else:
+            perc_page_width = float(escape(str(perc_page_width)))
+        perc_page_height = float(perc_page_height)
+        perc_page_width = float(perc_page_width)
+        el = Element.objects.filter(name=name)
+        if el.count() > 0:
+            el = el.first()
+        else:
+            el = Element(name=name)
         el.id_attr = id_attr
         el.name_attr = name_attr
         el.tag_name = tag_name
@@ -31,6 +46,15 @@ def create_or_edit_object(request):
         el.perc_page_height = perc_page_height
         el.perc_page_width = perc_page_width
         el.save()
+
+        content = rdict.get('content', None)
+        if content:
+            content = escape(content[0])
+            el_content, created = ElementContent.objects.get_or_create(element=el, cotnent=content)
+            el_content.save()
+        el_proj = ProjectElement(project_id=project_id, element=el)
+        el_proj.save()
+        return JsonResponse({'success': True, 'el_id': el.id})
     except Exception as e:
         print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
@@ -130,7 +154,8 @@ def get_object_details(request):
 
             # get any element content
             el_content = ElementContent.objects.filter(element_id=el.id)
-            
+            if el_content.count() > 0:
+                el_dict['content'] = el_content.first().content
             return JsonResponse({'success': True, 'el_dict': el_dict})
         else:
             return JsonResponse({'success': False, 'msg': 'Element Not Found'})

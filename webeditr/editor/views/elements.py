@@ -40,7 +40,7 @@ def get_element_names_by_project_id(request):
             el_names = []
             if elements.count() > 0:
                 for element in elements:
-                    el_name = element.name
+                    el_name = element.element.name
                     el_names.append(el_name)
             return JsonResponse({'success': True, 'elements': el_names})
         else:
