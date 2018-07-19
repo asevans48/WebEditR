@@ -25,8 +25,50 @@ function delete_object(){
 }
 
 
-function save_object_attrs(oname){
+function remove_object_creator(){
+    $('.objecteditor').remove();
+}
 
+
+function remove_attr_editor(){
+    $('.object-editor-div').remove();
+}
+
+
+function save_object_attrs(oname){
+    var inputs = $('.objectattr-inpt');
+    var data = {}
+    $(inputs).each(function(index, elmnt){
+        var el = $(elmnt);
+        var name = el.attr('name');
+        var val = el.val();
+        if(val != creator.attr_name_map[name]){
+            data[name] = val;
+        }else{
+            data[name] = null;
+        }
+    })
+
+    $.ajax({
+        type: 'POST',
+        url: '/create_or_edit_object/',
+        data: data,
+        success: function(data){
+            if(data.success == false){
+                console.log(data.msg);
+                alert(data.msg);
+            }else{
+                var name = $('input[name="name"]').val();
+                if(name != 'Object Name'){
+                    $('.objecteditor-opt')
+                }
+            }
+        }
+    }).fail(function(jqXHR, textStatus){
+        console.log('Failed to Create or Edit Object', textStatus);
+        console.log(jqXHR);
+        alert('Internal Error');
+    }).then(remove_attr_editor());
 }
 
 
@@ -129,7 +171,16 @@ function get_object_creator(){
     //object title div
     var title_div = $('<div>', {
                     class: 'objecteditor-title-div'});
-    title_div.append('Object Editor');
+    var title_spn = $('<span>', {
+                    class: 'objecteditor-title-spn'});
+    title_spn.append('Object Editor');
+    title_div.append(title_spn);
+    var rem_spn = $('<span>', {
+                  class: 'objecteditor-rem-spn'});
+    var rem_creator_btn = $('<i>', {
+                          class: 'fa fa-times objecteditor-rem-btn'});
+    rem_spn.append(rem_creator_btn);
+    title_div.append(rem_spn);
     object_creator.append(title_div);
 
     //object selector div
