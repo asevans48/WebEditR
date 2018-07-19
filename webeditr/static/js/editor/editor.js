@@ -22,6 +22,8 @@ var script_editor = {
 //starting point
 $(document).ready(function(){
     //load background dots
+    $('.element-area').css('width', window.innerWidth);
+    $('.element-area').css('height', $(window).height());
     $('.background-dots').css('width', window.innerWidth);
     $('.background-dots').css('height', $(window).height());
 

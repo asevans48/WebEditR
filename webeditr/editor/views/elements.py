@@ -12,7 +12,7 @@ from ..models import Element, ElementClasses, ProjectElement
 def get_element_classes(request):
     try:
         rdict = dict(request.POST)
-        obj_name = escape(rdict['obj_name'][0])
+        obj_name = escape(rdict['object_name'][0])
         el = Element.objects.filter(name=obj_name)
         if el.count() > 0:
             el = el.first()

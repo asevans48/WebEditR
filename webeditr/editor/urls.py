@@ -66,11 +66,15 @@ urlpatterns = [
     re_path('^get_element_classes/', elements.get_element_classes, name='get_element_classes'),
     re_path('^get_element_names_by_project_id', elements.get_element_names_by_project_id, name='get_element_names_by_project_id')
 
-    #panels
+    #select
 
-    #blakes panel functions
+    #resize
 
-    #blakes page styling functions
+    #reposition
 
-    #blakes element functions
+    #fill
+
+    #gradient
+
+    #background
 ]

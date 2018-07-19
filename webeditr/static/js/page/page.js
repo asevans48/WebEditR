@@ -235,7 +235,7 @@ function load_page(page_name){
     load_page_scripts(page_name);
     load_page_styles(page_name);
     //get_page_elements();
-    //clear_editor_elements();
+    $('.pallet').show();
 }
 
 
@@ -255,5 +255,7 @@ function check_and_get_current_page(){
         if(page_name.trim().length > 0){
             load_page(page_name);
         }
+    }else{
+        $('.pallet').hide();
     }
 }

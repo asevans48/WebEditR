@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.utils.html import escape
 from django.views.decorators.cache import never_cache
 
-from ..models import Element, Classes, ElementClasses
+from ..models import Element, Classes, ElementClasses, ElementContent
 
 
 @never_cache
@@ -55,7 +55,7 @@ def check_object_existance(request):
 def set_object_classes(request):
     try:
         rdict = dict(request.POST)
-        name = escape(rdict['name'][0])
+        name = escape(rdict['object_name'][0])
         classes = escape(rdict['classes'][0])
         if classes and len(classes) > 0:
             el = Element.objects.filter(name=name)
@@ -125,7 +125,12 @@ def get_object_details(request):
         object_name = escape(rdict['object_name'][0])
         el = Element.objects.filter(name=object_name)
         if el.count() > 0:
-            el_dict = el.first().to_dict()
+            el = el.first()
+            el_dict = el.to_dict()
+
+            # get any element content
+            el_content = ElementContent.objects.filter(element_id=el.id)
+            
             return JsonResponse({'success': True, 'el_dict': el_dict})
         else:
             return JsonResponse({'success': False, 'msg': 'Element Not Found'})

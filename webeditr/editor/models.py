@@ -108,6 +108,11 @@ class ElementClasses(models.Model):
     element = models.ForeignKey(Element, on_delete=models.DO_NOTHING)
 
 
+class ElementContent(models.Model):
+    element = models.ForeignKey(Element, on_delete=models.DO_NOTHING)
+    content = models.TextField()
+
+
 class PageElement(models.Model):
     element = models.ForeignKey(Element, on_delete=models.DO_NOTHING)
     page = models.ForeignKey(Page, on_delete=models.DO_NOTHING)
@@ -153,4 +158,3 @@ class ProjectElement(models.Model):
 class ScriptScriptSheet(models.Model):
     script_sheet = models.ForeignKey(ScriptSheet, on_delete=models.DO_NOTHING)
     func = models.ForeignKey(ScriptFunc, on_delete=models.DO_NOTHING)
-

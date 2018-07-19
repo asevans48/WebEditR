@@ -1,0 +1,127 @@
+
+.objecteditor{
+    position: absolute;
+    width: 500px;
+    height: 300px;
+    left: 600px;
+    top: 250px;
+    border-radius: 22px;
+}
+
+
+.objecteditor-title-div{
+    margin-top: 10px;
+    width: 500px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 2em;
+    color: white;
+}
+
+
+.objecteditor-selector-div{
+    display: flow-root;
+}
+
+
+.objecteditor-selector-div i:hover{
+    opacity: 0.5;
+}
+
+
+.objecteditor-rem-btn{
+    margin-left: 10px;
+    margin-top: 1px;
+}
+
+
+.objecteditor-selector-list-span{
+    float: left;
+}
+
+
+.objecteditor-selector-new-spn{
+    float: left;
+    margin-top: 20px;
+    margin-left: 15px;
+    font-size: 1.5em;
+    color: white;
+}
+
+
+.objecteditor-edit-spn{
+    float: left;
+    margin-left: 15px;
+    margin-top: 20px;
+    font-size: 1.5em;
+    color: white;
+}
+
+
+.objecteditor-selector-list{
+    width: 150px;
+    margin-top: 20px;
+    margin-left: 140px;
+}
+
+
+.objecteditor-sbmt-div{
+    margin-left: 170px;
+    margin-top: 20px;
+    border-radius: 15px;
+    font-size: 1.5em;
+}
+
+
+.objecteditor-sbmt-btn{
+    width: 70px;
+    height: 35px;
+    font-size: 1em;
+    text-align: center;
+    border-radius: 15px;
+}
+
+
+.objecteditor-del-btn{
+    width: 70px;
+    height: 35px;
+    font-size: 1em;
+    margin-left: 25px;
+    text-align: center;
+    border-radius: 15px;
+}
+
+
+.objectattr-editor-div{
+    position: absolute;
+    top: 200px;
+    left: 500px;
+    width: 200px;
+    height: 300px;
+    border-radius: 15px;
+}
+
+
+.objectattr-inpt-div{
+    margin-top: 5px;
+    margin-left: 25px;
+}
+
+
+.objectattr-inpt{
+    width: 150px;
+}
+
+
+.objectattr-editor-sbmt-div{
+    margin-top: 5px;
+    margin-left: 60px;
+}
+
+
+.objectattr-editor-sbmt-btn{
+    width: 65px;
+    height: 25px;
+    font-size: 1.2em;
+    border-radius: 15px;
+}
