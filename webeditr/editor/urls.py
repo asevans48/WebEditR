@@ -1,7 +1,7 @@
 
 from django.urls import re_path
 
-
+from .views import object_creator, elements
 from .views import assets, dimensions, editor, page, project, script_editor, sheet_editor, sheets, external_script_editor, external_sheet_editor
 
 
@@ -9,8 +9,6 @@ app_name = 'webeditr'
 
 
 urlpatterns = [
-
-    #djangofy
 
     #project attainment
     re_path('^$', editor.editor_home, name='index'),
@@ -39,8 +37,9 @@ urlpatterns = [
     re_path('^remove_stylesheet_attribute/', sheet_editor.remove_stylesheet_attribute, name='remove_stylesheet_attribute'),
     re_path('^add_stylesheet_attribute/', sheet_editor.add_stylesheet_attribute, name='add_stylesheet_attribute'),
     re_path('^submit_new_class/', sheet_editor.add_stylesheet_class, name="add_stylesheet_class"),
-    re_path('^change_class_name', sheet_editor.change_stylesheet_class, name="change_stylesheet_class"),
-    re_path('^remove_stylesheet_class', sheet_editor.remove_stylesheet_class, name="remove_stylesheet_class"),
+    re_path('^change_class_name/', sheet_editor.change_stylesheet_class, name="change_stylesheet_class"),
+    re_path('^remove_stylesheet_class/', sheet_editor.remove_stylesheet_class, name="remove_stylesheet_class"),
+    re_path('^get_classes_by_page/', sheet_editor.get_classes_by_page, name='get_classes_by_page'),
 
     #scriptsheet functions
     re_path('^submit_function/', script_editor.add_script_function, name='submit_script_function'),
@@ -53,11 +52,20 @@ urlpatterns = [
     re_path('^edit_ext_script/', external_script_editor.edit_script, name='edit_ext_script'),
 
     #external stype editor
-    re_path('^edit_ext_sheet/', external_sheet_editor.edit_sheet, name='edit_ext_sheet')
+    re_path('^edit_ext_sheet/', external_sheet_editor.edit_sheet, name='edit_ext_sheet'),
+
+    #object creator
+    re_path('^create_or_edit_object/', object_creator.create_or_edit_object, name='create_or_edit_object'),
+    re_path('^check_object_existance/', object_creator.check_object_existance, name='check_object_existance'),
+    re_path('^set_object_classes/', object_creator.set_object_classes, name='set_object_classes'),
+    re_path('^remove_object_class/', object_creator.remove_object_class, name='remove_object_class'),
+    re_path('^remove_object/', object_creator.remove_object, name='remove_object'),
+    re_path('^get_object_details/', object_creator.get_object_details, name='get_object_details'),
+
+    #elements
+    re_path('^get_element_classes/', elements.get_element_classes, name='get_element_classes'),
 
     #panels
-
-    #creators
 
     #blakes panel functions
 

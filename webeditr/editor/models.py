@@ -38,6 +38,7 @@ class Element(models.Model):
         return {
             'name': self.name,
             'id_attr': self.id_attr,
+            'name_attr': self.name_attr,
             'tag_name': self.tag_name,
             'class_name': self.class_name,
             'description': self.description,
@@ -142,6 +143,11 @@ class PageExternalStylesheet(models.Model):
 class PageExternalScriptSheet(models.Model):
     page = models.ForeignKey(Page, on_delete=models.DO_NOTHING)
     script_sheet = models.ForeignKey(ExternalScriptSheet, on_delete=models.DO_NOTHING)
+
+
+class ProjectElement(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
+    element = models.ForeignKey(Element, on_delete=models.DO_NOTHING)
 
 
 class ScriptScriptSheet(models.Model):

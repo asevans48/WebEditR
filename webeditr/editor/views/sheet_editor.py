@@ -170,7 +170,7 @@ def remove_stylesheet_attribute(request):
 
 
 @never_cache
-def get_potential_classes_by_page(request):
+def get_classes_by_page(request):
     try:
         rdict = dict(request.POST)
         page_name = escape(rdict['page_name'][0])

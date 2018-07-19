@@ -20,17 +20,17 @@ def add_new_page(request):
         page_description = escape(rdict['page_description'][0])
         project = escape(rdict['project'][0])
         project = Project.objects.filter(name=project)
-        if project is not None:
+        if project.count() > 0:
+            project = project.first()
             if page_name and page_description and len(page_name) > 0 and\
                     len(page_description) > 0:
                 page_object, created = Page.objects.get_or_create(name=page_name)
                 if created:
                     page_object.description = page_description
                     page_object.save()
-                    page_project = PageProject()
-                    page_project.project = project.first()
-                    page_project.page = page_object
-                    page_project.save()
+                    page_project, created = PageProject.objects.get_or_create(
+                                                                        page=page_object,
+                                                                        project=project)
                     script, created = ScriptSheet.objects.get_or_create(name=page_name)
                     if created:
                         script.description = "Page JS"

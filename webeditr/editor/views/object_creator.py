@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.utils.html import escape
 from django.views.decorators.cache import never_cache
 
-from ..models import Element
+from ..models import Element, Classes, ElementClasses
 
 
 @never_cache
@@ -40,8 +40,8 @@ def create_or_edit_object(request):
 def check_object_existance(request):
     try:
         rdict = dict(request.POST)
-        name = rdict['name'][0]
-        el = Element.objects.filter(name=name)
+        object_name = rdict['object_name'][0]
+        el = Element.objects.filter(name=object_name)
         if el.count() > 0:
             return JsonResponse({'success': True, 'exists': True})
         else:
@@ -54,7 +54,22 @@ def check_object_existance(request):
 @never_cache
 def set_object_classes(request):
     try:
-        pass
+        rdict = dict(request.POST)
+        name = escape(rdict['name'][0])
+        classes = escape(rdict['classes'][0])
+        if classes and len(classes) > 0:
+            el = Element.objects.filter(name=name)
+            if el.count() > 0:
+                el = el.first()
+                for class_name in classes:
+                    classes = Classes.objects.filter(name=el.name)
+                    if classes.count() > 0:
+                        el_class, created = ElementClasses.objects.get_or_create(
+                                                                            element_id=el.id,
+                                                                            classes_id=classes.id)
+            return JsonResponse({'success': True, 'num_clases': len(classes)})
+        else:
+            return JsonResponse({'success': True, 'num_classes': 0})
     except Exception as e:
         print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
@@ -63,7 +78,25 @@ def set_object_classes(request):
 @never_cache
 def remove_object_class(request):
     try:
-        pass
+        rdict = dict(request.POST)
+        object_name = escape(rdict['class_name'][0])
+        class_name = escape(rdict['object_name'][0])
+        el = Element.objects.filter(name=object_name)
+        classo = Classes.objects.filter(name=class_name)
+        if el.count() > 0 and classo.count() > 0:
+            el = el.first()
+            classo = classo.first()
+            classes = ElementClasses.objects.filter(
+                                                element_id=el.id,
+                                                classes_id=classo.id)
+            if classes.count() > 0:
+                classes = classes.first()
+                classes.delete()
+                return JsonResponse({'success': True, 'classes_id': classes.id})
+            else:
+                return JsonResponse({'success': False, 'msg': 'ElementClass Not Found'})
+        else:
+            return JsonResponse({'success': False, 'msg': 'Element or Class Not Found'})
     except Exception as e:
         print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
@@ -72,7 +105,30 @@ def remove_object_class(request):
 @never_cache
 def remove_object(request):
     try:
-        pass
+        rdict = dict(request.POST)
+        object_name = escape(rdict['object_name'][0])
+        el = Element.objects.filter(name=object_name)
+        if el.count():
+            el.first().delete()
+            return JsonResponse({'success': True, 'el_id': el.id})
+        else:
+            return JsonResponse({'success': False, 'msg': 'Element Does Not Existe'})
+    except Exception as e:
+        print(traceback.format_exc())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
+
+
+@never_cache
+def get_object_details(request):
+    try:
+        rdict = dict(request.POST)
+        object_name = escape(rdict['object_name'][0])
+        el = Element.objects.filter(name=object_name)
+        if el.count() > 0:
+            el_dict = el.first().to_dict()
+            return JsonResponse({'success': True, 'el_dict': el_dict})
+        else:
+            return JsonResponse({'success': False, 'msg': 'Element Not Found'})
     except Exception as e:
         print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
