@@ -10,6 +10,16 @@ var element = {
 }
 
 
+function delete_object(){
+
+}
+
+
+function remove_element_from_page(){
+
+}
+
+
 function save_object(){
 
 }
@@ -26,11 +36,6 @@ function resize_object(){
 
 
 function get_object_editor(){
-
-}
-
-
-function delete_object(){
 
 }
 

@@ -15,32 +15,17 @@ var creator = {
 }
 
 
-function get_similar_objects(){
+function save_object(){
 
 }
 
 
-function validate_new_object(){
+function delete_object(){
 
 }
 
 
-function get_object_details(){
-
-}
-
-
-function populate_class_names(){
-
-}
-
-
-function get_element_classes(){
-
-}
-
-
-function save_object(oname){
+function save_object_attrs(oname){
 
 }
 
@@ -55,7 +40,8 @@ function append_attribute(key_name, editor_div=$('.objectattr-editor-inputs-div'
     var inpt_div = $('<div>', {
                    class: 'objectattr-inpt-div'});
     var attr_inpt = $('<input>', {
-                    class: 'objectattr-inpt'});
+                    class: 'objectattr-inpt',
+                    name: key_name});
     attr_inpt.val(attr_name);
     inpt_div.append(attr_inpt);
     editor_div.append(inpt_div);
@@ -64,9 +50,13 @@ function append_attribute(key_name, editor_div=$('.objectattr-editor-inputs-div'
 
 
 function open_object_attr_editor(){
+    var object_attr_editor_div = $('.object-editor-div');
+    if(object_attr_editor_div != undefined){
+        object_attr_editor_div.remove();
+    }
     var oname = $('.objecteditor-selector-list').val();
-    var object_attr_editor_div = $('<div>', {
-                                 class: 'objectattr-editor-div'});
+    object_attr_editor_div = $('<div>', {
+                             class: 'objectattr-editor-div'});
 
     //title
     var object_attr_title_div = $('<div>', {
@@ -95,14 +85,46 @@ function open_object_attr_editor(){
 }
 
 
-function get_page_elements(){
+function get_project_elements(object_selector_list){
+    var data = {
+        'project_name': project_objects.current_project,
+        'project_id': project_objects.pname,
+    }
 
+    $.ajax({
+        type: 'POST',
+        url : '/get_element_names_by_project_id/',
+        data: data,
+        success: function(data){
+            if(data.success = true){
+                var element_names = data.elements;
+                if(element_names && element_names != null){
+                    $(element_names).each(function(index, value){
+                        var opt = $('<option>', {
+                                  class: 'objecteditor-opt'});
+                        opt.val(value);
+                    });
+                }
+            }else{
+                console.log(data.msg);
+                alert(data.msg);
+            }
+        }
+    }).fail(function(jqXHR, textStatus){
+        console.log('Failed to Get Project Elements ', textStatus);
+        console.log(jqXHR);
+        alert('Internal Error');
+    });
 }
 
 
 function get_object_creator(){
-    var object_creator = $('<div>', {
-                        class: 'objecteditor'});
+    var object_creator = $('.objecteditor');
+    if(object_creator != undefined){
+        object_creator.remove();
+    }
+    object_creator = $('<div>', {
+                     class: 'objecteditor'});
 
     //object title div
     var title_div = $('<div>', {
@@ -121,6 +143,7 @@ function get_object_creator(){
                   class: 'objecteditor-opt'});
     def_opt.append('Object Name');
     object_selector_list.append(def_opt);
+    get_project_elements(object_selector_list);
     object_selector_div.append(object_selector_list);
     var object_new_spn = $('<span>', {
                          class: 'objecteditor-selector-new-spn'});
@@ -161,7 +184,13 @@ function get_object_creator(){
     var object_sbtm_div = $('<div>', {
                           class: 'objectedit-sbmt-div'});
     var object_sbmt_btn = $('<button>', {
-                          class: 'btn btn-primary'});
+                          class: 'btn btn-primary objectedit-sbmt-btn',
+                          onclick: 'save_object();'});
+    object_sbmt_btn.append('Save');
+    var object_del_btn = $('<button>', {
+                         class: 'btn btn-primary objectedit-del-btn',
+                         onclick: 'delete_object();'});
+    object_del_btn.append('Delete');
     object_sbmt_div.append(object_sbmt_btn);
     object_creator.append(object_sbmt_div);
     $('.editor').append(object_creator);

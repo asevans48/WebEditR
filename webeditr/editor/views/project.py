@@ -2,6 +2,7 @@
 import traceback
 
 from django.http import JsonResponse
+from django.utils.html import escape
 from django.views.decorators.cache import never_cache
 
 from ..models import Project, PageProject
@@ -45,7 +46,7 @@ def get_projects(request):
 def get_project_assets(request):
     try:
         rdict = dict(request.POST)
-        project_id = rdict['project_id'][0]
+        project_id = int(escape(str(rdict['project_id'][0])))
         if project_id:
             pdict = {}
             pdict['pages'] = []
