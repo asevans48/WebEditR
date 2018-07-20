@@ -14,6 +14,9 @@ urlpatterns = [
     re_path('^$', editor.editor_home, name='index'),
     re_path('^submit_project/', project.submit_project, name='submit_project'),
     re_path('^get_projects/', project.get_projects, name='get_projects'),
+    re_path('^get_class_names_by_project_id',
+            project.get_class_names_by_project_id,
+            name='get_class_names_by_project_id'),
 
     # asset loader
     re_path('^get_script_by_page/', assets.get_script_by_page, name='get_script_by_page'),
@@ -34,7 +37,10 @@ urlpatterns = [
     re_path('^add_new_sheet/', page.add_new_sheet, name='add_new_sheet'),
     re_path('^remove_sheet', page.remove_sheet, name='remove_sheet'),
     re_path('^get_stylesheet_dict/', sheets.get_style_sheet, name='get_style_sheet_dict'),
-    re_path('^remove_stylesheet_attribute/', sheet_editor.remove_stylesheet_attribute, name='remove_stylesheet_attribute'),
+    re_path(
+        '^remove_stylesheet_attribute/',
+        sheet_editor.remove_stylesheet_attribute,
+        name='remove_stylesheet_attribute'),
     re_path('^add_stylesheet_attribute/', sheet_editor.add_stylesheet_attribute, name='add_stylesheet_attribute'),
     re_path('^submit_new_class/', sheet_editor.add_stylesheet_class, name="add_stylesheet_class"),
     re_path('^change_class_name/', sheet_editor.change_stylesheet_class, name="change_stylesheet_class"),
@@ -64,7 +70,11 @@ urlpatterns = [
 
     #elements
     re_path('^get_element_classes/', elements.get_element_classes, name='get_element_classes'),
-    re_path('^get_element_names_by_project_id/', elements.get_element_names_by_project_id, name='get_element_names_by_project_id')
+    re_path(
+        '^get_element_names_by_project_id/',
+        elements.get_element_names_by_project_id,
+        name='get_element_names_by_project_id'),
+    re_path('^add_class_to_element/', elements.add_class_to_element, name='add_class_to_element'),
 
     #select
 

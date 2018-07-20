@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.utils.html import escape
 from django.views.decorators.cache import never_cache
 
-from ..models import Element, Classes, ElementClasses, ElementContent, ProjectElement
+from ..models import Element, Classes, ElementClasses, ElementContent, ProjectElement, Page, PageElement
 
 
 @never_cache
@@ -13,6 +13,7 @@ def create_or_edit_object(request):
     try:
         rdict = dict(request.POST)
         project_id = int(escape(str(rdict['project_id'][0])))
+        page_name = escape(rdict['page_name'][0])
         name = escape(rdict['name'][0])
         id_attr = escape(rdict['id_attr'][0])
         name_attr = escape(rdict['name_attr'][0])
@@ -25,17 +26,19 @@ def create_or_edit_object(request):
         if perc_page_height is None or len(perc_page_height[0].strip()) is 0:
             perc_page_height = .1
         else:
-            perc_page_height = float(escape(str(perc_page_height)))
+            perc_page_height = float(escape(str(perc_page_height[0])))
         if perc_page_width is None or len(perc_page_width[0].strip()) is 0:
             perc_page_width = .1
         else:
-            perc_page_width = float(escape(str(perc_page_width)))
+            perc_page_width = float(escape(str(perc_page_width[0])))
         perc_page_height = float(perc_page_height)
         perc_page_width = float(perc_page_width)
         el = Element.objects.filter(name=name)
+        created = False
         if el.count() > 0:
-            el = el.first()
+            el =el.first()
         else:
+            created = True
             el = Element(name=name)
         el.id_attr = id_attr
         el.name_attr = name_attr
@@ -52,8 +55,9 @@ def create_or_edit_object(request):
             content = escape(content[0])
             el_content, created = ElementContent.objects.get_or_create(element=el, cotnent=content)
             el_content.save()
-        el_proj = ProjectElement(project_id=project_id, element=el)
-        el_proj.save()
+        if created:
+            el_proj = ProjectElement(project_id=project_id, element=el)
+            el_proj.save()
         return JsonResponse({'success': True, 'el_id': el.id})
     except Exception as e:
         print(traceback.format_exc())
@@ -133,7 +137,12 @@ def remove_object(request):
         object_name = escape(rdict['object_name'][0])
         el = Element.objects.filter(name=object_name)
         if el.count():
-            el.first().delete()
+            el = el.first()
+            proj_el = ProjectElement.objects.filter(element=el)
+            if proj_el.count() > 0:
+                for pel in proj_el:
+                    pel.delete()
+            el.delete()
             return JsonResponse({'success': True, 'el_id': el.id})
         else:
             return JsonResponse({'success': False, 'msg': 'Element Does Not Existe'})
@@ -156,6 +165,8 @@ def get_object_details(request):
             el_content = ElementContent.objects.filter(element_id=el.id)
             if el_content.count() > 0:
                 el_dict['content'] = el_content.first().content
+            else:
+                el_dict['content'] = None
             return JsonResponse({'success': True, 'el_dict': el_dict})
         else:
             return JsonResponse({'success': False, 'msg': 'Element Not Found'})

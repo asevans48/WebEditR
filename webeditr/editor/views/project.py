@@ -53,9 +53,9 @@ def get_project_assets(request):
             pages = list(PageProject.objects.filter(project=project_id))
             for page in pages:
                 page_dict = {
-                    'name': page.page.name,
-                    'description': page.page.description,
-                    'page_id': page.page.id}
+                        'name': page.page.name,
+                        'description': page.page.description,
+                        'page_id': page.page.id}
                 page_dict['sheets'] = assets.get_stylesheets_by_page_id(
                                                                         page.page.id)
                 page_dict['scripts'] = assets.get_scriptsheets_by_page_id(

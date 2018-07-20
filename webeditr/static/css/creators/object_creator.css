@@ -131,3 +131,25 @@
     width: 150px;
     height: 50px;
 }
+
+
+.objecteditor-class-sel-div{
+    display: flow-root;
+}
+
+
+.objecteditor-class-sel-div i:hover{
+    opacity: 0.5;
+}
+
+
+.objecteditor-class-sel-spn{
+    float: left;
+}
+
+
+.objecteditor-class-sel{
+    width: 150px;
+    margin-top: 20px;
+    margin-left: 140px;
+}

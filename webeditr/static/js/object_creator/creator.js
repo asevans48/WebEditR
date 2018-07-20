@@ -16,12 +16,17 @@ var creator = {
 }
 
 
-function handle_select_name(){
-    var selected = $('.objecteditor-selector-list')
-    var sel_val = selected.val()
-    creator.current_object_name = sel_val;
-    get_object_attributes();
-    build_class_list()
+function handle_object_select(){
+    var sel_list = $('.objecteditor-selector-list');
+    var obj_name = sel_list.find(':selected').text();
+    if(obj_name != undefined && obj_name != 'Object Name'){
+        creator.current_object_name = obj_name;
+        get_object_attributes();
+        build_class_list();
+    }else{
+        creator.current_object_name = null;
+        creator.current_object_attributes = {};
+    }
 }
 
 
@@ -41,6 +46,7 @@ function get_object_attributes(){
                 }else{
                     console.log(data.msg);
                     alert(data.msg);
+                    creator.current_object_attributes = {};
                 }
             }
         }).fail(function(jqXHR, textStatus){
@@ -52,11 +58,43 @@ function get_object_attributes(){
 }
 
 
+function add_class_to_object(){
+    var class_name = $('.objecteditor-class-sel').find(':selected').text();
+    if(creator.current_object_name != null && creator.current_object_name != 'Object Name'){
+        var data = {
+                   'object_name': creator.current_object_name,
+                   'class_name': class_name,
+                   'project_name': project_objects.current_project,
+                   'project_id': project_objects.pname,
+                   'page_name': project_objects.current_page};
+        console.log(data);
+        $.ajax({
+            type: 'POST',
+            url: '/add_class_to_element/',
+            data: data,
+            success: function(data){
+                if(data.success){
+                    // add to class list
+                    build_class_list();
+                }else{
+                    console.log(data.msg);
+                    alert(data.msg);
+                }
+            }
+        }).fail(function(jqXHR, textStatus){
+            console.log('Add Class To Element', textStatus);
+            console.log(jqXHR);
+            alert('Internal Error');
+        });
+    }
+}
+
+
 function build_class_list(class_list_div=$('.objectedit-class-list')){
     class_list_div.html('');
+    console.log(class_list_div);
     var obj_name = creator.current_object_name;
-    if(obj_name != undefined && obj_name.html() != undefined){
-        obj_name = obj_name.val();
+    if(obj_name != undefined && obj_name != null){
         if(obj_name != 'Object Name'){
             var data = {
                 'object_name': obj_name,
@@ -71,8 +109,17 @@ function build_class_list(class_list_div=$('.objectedit-class-list')){
                         var classes = data.class_names;
                         $(classes).each(function(index, value){
                             var class_div = $('<div>', {
-                                            class: 'objecteditor-class-list-div'});
-                            class_div.append(value);
+                                            class: 'objecteditor-class-div'});
+                            var class_div_spn = $('<span>', {
+                                                 class: 'objecteditor-class-name-spn'});
+                            class_div_spn.append(value);
+                            class_div.append(class_div_spn);
+                            var class_rem_spn = $('<span>', {
+                                                class: 'objecteditor-class-rem-spn'});
+                            var class_rem_btn = $('<i>', {
+                                                class: 'objecteditor-class-rem-btn fa fa-times'});
+                            class_rem_spn.append(class_rem_btn);
+                            class_div.append(class_rem_spn);
                             $(class_list_div).append(class_div);
                         });
                     }else{
@@ -90,7 +137,7 @@ function build_class_list(class_list_div=$('.objectedit-class-list')){
 }
 
 
-function submit_object_classes(oname){
+function submit_object_classes(obj_name){
     if(obj_name != 'Object Name'){
         var class_list = $('.class-list');
         var classes = [];
@@ -133,7 +180,7 @@ function save_object(){
 }
 
 
-function submit_object_attrs(oname){
+function submit_object_attrs(oname, append=true){
     var inputs = $('.objectattr-inpt');
     var data = {}
     $(inputs).each(function(index, elmnt){
@@ -148,20 +195,22 @@ function submit_object_attrs(oname){
     })
     data['project_id'] = project_objects.pname;
     data['project_name'] = project_objects.current_project;
+    data['page_name'] = project_objects.current_page;
     $.ajax({
         type: 'POST',
         url: '/create_or_edit_object/',
         data: data,
-        success: function(data){
-            if(data.success == false){
-                console.log(data.msg);
-                alert(data.msg);
+        success: function(rdata){
+            if(rdata.success == false){
+                console.log(rdata.msg);
+                alert(rdata.msg);
             }else{
-                var name = $('input[name="name"]').val();
+                console.log(data);
+                var name = data['name'];
                 if(name != 'Object Name'){
                     var contains_name = false;
                     $('.objecteditor-opt').each(function(){
-                        if($(this).val() == name){
+                        if($(this).text() == name){
                             contains_name = true;
                         }
                     });
@@ -169,7 +218,8 @@ function submit_object_attrs(oname){
                     if(contains_name == false){
                         var opt = $('<option>', {
                                   class: 'objecteditor-opt'});
-                        opt.append(name);
+                        opt.append(name)
+                        opt.val(name);
                         $('.objecteditor-selector-list').prepend(opt);
                     }
                 }
@@ -187,9 +237,10 @@ function edit_object(){
     try{
         var obj_name = $('input[name="name"]').val();
         if(obj_name != 'Object Name'){
-            submit_object_attrs(obj_name);
+            submit_object_attrs(obj_name, false);
         }
     }catch(err){
+        console.log('Failed to Edit Object Attrs')
         alert(err.message);
     }
     $('.objectattr-editor-div').remove();
@@ -198,15 +249,14 @@ function edit_object(){
 
 function delete_object(){
     var obj_name = creator.current_object_name;
-    if(obj_name != undefined && obj_name.html() != undefined){
-        obj_name = obj_name.val();
+    if(obj_name != undefined && obj_name != null){
         if(obj_name != 'Object Name'){
             var data = {
                 'project_id': project_objects.pname,
                 'project_name': project_objects.current_project,
                 'object_name': obj_name,
             }
-
+            console.log(data);
             $.ajax({
                 type: 'POST',
                 url: '/remove_object/',
@@ -214,6 +264,8 @@ function delete_object(){
                 success: function(data){
                     if(data.success == true){
                         $('option[value="'+obj_name+'"]').remove();
+                        creator.current_object_name = null;
+                        creator.current_object_attributes = {};
                     }else{
                         console.log(data.msg);
                         alert(data.msg);
@@ -244,7 +296,7 @@ function tag_name_handler(elmnt){
 }
 
 
-function build_project_class_list(){
+function build_project_class_list(project_class_list){
     var proj_name = project_objects.current_project;
     var pname = project_objects.pname;
     var data = {
@@ -254,8 +306,31 @@ function build_project_class_list(){
 
     $.ajax({
         type: 'POST',
-        url: '/get_project_classes/'
-    })
+        url: '/get_class_names_by_project_id/',
+        data: data,
+        success: function(data){
+            if(data.success){
+                var pclasses = data.class_names;
+                if(pclasses != undefined && pclasses != null){
+                    $(pclasses).each(function(index, name){
+                        var opt = $('<option>', {
+                                   class: 'project-class-list-opt'});
+                        opt.val(name);
+                        opt.append(name);
+                        project_class_list.append(opt);
+                    });
+                }
+            }else{
+                console.log(data.msg);
+                alert(data.msg);
+            }
+        }
+    }).fail(function(jqXHR, textStatus){
+        console.log('Failed to Get Project Classes', textStatus)
+        console.log(jqXHR);
+        alert('Internal Error');
+    });
+    return project_class_list;
 }
 
 
@@ -289,6 +364,7 @@ function append_attribute(key_name, editor_div=$('.objectattr-editor-inputs-div'
         $(opts).each(function(index, tag_name){
             var opt = $('<option>', {
                       class: 'object-attr-option'});
+            opt.val(tag_name);
             opt.append(tag_name);
             attr_inpt.append(opt);
         });
@@ -353,6 +429,7 @@ function get_project_elements(object_selector_list){
                     $(element_names).each(function(index, value){
                         var opt = $('<option>', {
                                   class: 'objecteditor-opt'});
+                        opt.val(value);
                         opt.append(value);
                         object_selector_list.append(opt);
                     });
@@ -404,11 +481,13 @@ function get_object_creator(){
                                    class: 'objecteditor-selector-list form-control'});
         var def_opt = $('<option>', {
                       class: 'objecteditor-opt'});
+        def_opt.val('Object Name');
         def_opt.append('Object Name');
         object_selector_list.append(def_opt);
         get_project_elements(object_selector_list);
         object_selector_spn.append(object_selector_list);
         object_selector_div.append(object_selector_spn);
+        object_selector_list.change(handle_object_select);
         var object_new_spn = $('<span>', {
                              class: 'objecteditor-selector-new-spn'});
         var object_new_btn = $('<i>', {
@@ -427,21 +506,23 @@ function get_object_creator(){
 
 
         var project_class_div = $('<div>', {
-                                class: 'objecteditor-class-sel;-div'});
+                                class: 'objecteditor-class-sel-div'});
         var project_class_list_spn = $('<span>', {
                                      class: 'objecteditor-class-sel-spn'});
         var project_class_list = $('<select>', {
-                                 class: 'objecteditor-class-sel'});
+                                 class: 'objecteditor-class-sel form-control'});
         project_class_list = build_project_class_list(project_class_list);
         project_class_list_spn.append(project_class_list);
         project_class_div.append(project_class_list_spn);
 
-        var add_class_btn_spn = $('<span>', {
-                                class: 'objecteditor-add-class-btn-spn'});
-        var add_class_btn = $('<span>', {
-                            class: 'objecteditor-add-class-btn'});
-        add_class_btn_spn.append(add_class_btn);
-        project_class_div.append(add_class_btn_spn);
+        var object_new_spn = $('<span>', {
+                             class: 'objecteditor-selector-new-spn'});
+        var object_new_btn = $('<i>', {
+                             class: 'objecteditor-selector-new-btn glyphicon glyphicon-plus',
+                             onclick: 'add_class_to_object();'});
+        object_new_spn.append(object_new_btn);
+        project_class_div.append(object_new_spn);
+
         object_creator.append(project_class_div);
 
         //object bottom div
@@ -455,6 +536,7 @@ function get_object_creator(){
         build_class_list(class_list_div);
         object_btm_left_div.append(class_list_div);
         object_btm_div.append(object_btm_left_div);
+        object_creator.append(object_btm_left_div);
 
         var object_btm_right_div = $('<div>', {
                                     class: 'objectedit-btm-right-div'});
