@@ -98,6 +98,7 @@ function create_new_sheet(){
             'type': sheet_type,
             'description': sheet_desc,
             'project': project,
+            'project_id': project_objects.pname,
             'page_id': page_id
        };
        $.ajax({
@@ -317,7 +318,8 @@ function create_new_page(){
     var data = {
         'page_name': page_name.val(),
         'page_description': page_desc.val(),
-        'project': project_objects.current_project
+        'project': project_objects.current_project,
+        'project_id': project_objects.pname,
     }
 
     if(data.page_name != null && data.page_name.trim().length > 0

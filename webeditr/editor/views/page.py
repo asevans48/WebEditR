@@ -6,7 +6,7 @@ from django.views.decorators.cache import never_cache
 from django.utils.html import escape
 
 from ..models import Page, Project, PageProject, ScriptSheet, StyleSheet, PageStylesheet, PageScriptSheet, \
-    ExternalStyleSheet, ExternalScriptSheet, PageExternalStylesheet, PageExternalScriptSheet
+    ExternalStyleSheet, ExternalScriptSheet, PageExternalStylesheet, PageExternalScriptSheet, ProjectStylesheet
 from ..modules.assets import get_stylesheets_by_page_id, get_scriptsheets_by_page_id, get_elements_by_page_id, \
     get_external_stylesheets_by_page_id, get_external_scriptsheets_by_page_id
 
@@ -19,6 +19,7 @@ def add_new_page(request):
         page_name = escape(rdict['page_name'][0])
         page_description = escape(rdict['page_description'][0])
         project = escape(rdict['project'][0])
+        project_id = int(escape(str(rdict['project_id'][0])))
         project = Project.objects.filter(name=project)
         if project.count() > 0:
             project = project.first()
@@ -47,6 +48,9 @@ def add_new_page(request):
                     ps.page = page_object
                     ps.style_sheet = style
                     ps.save()
+                    ps, created = ProjectStylesheet.objects.get_or_create(
+                                                                    style_sheet_id=style.id,
+                                                                    project_id=project.id)
                     return JsonResponse({'success': True, 'page_id': page_object.id})
                 else:
                     return JsonResponse({'sucecss': False, 'msg': 'Page Exists'})
@@ -117,7 +121,8 @@ def add_new_sheet(request):
             title = escape(rdict['title'][0])
             stype = escape(rdict['type'][0])
             desc = escape(rdict['description'][0])
-            project = rdict['project'][0]
+            project = escape(rdict['project'][0])
+            project_id = int(escape(str(rdict['project_id'][0])))
             if title and stype and desc and project:
                 if stype == 'CSS':
                     sheet, created = StyleSheet.objects.get_or_create(
@@ -151,6 +156,8 @@ def add_new_sheet(request):
                 elif stype == 'EJS':
                     page_sheet, created = PageExternalScriptSheet.objects.get_or_create(script_sheet=sheet, page=page)
                 page_sheet.save()
+                if stype == 'CSS':
+                    project_sheet, created = ProjectStylesheet.objects.get_or_Create(project_id=project_id, style_sheet=sheet)
                 return JsonResponse({'success': True, 'sheet_id': sheet.id})
             else:
                 return JsonResponse({'success': False, 'msg': 'Not All Information Provided'})

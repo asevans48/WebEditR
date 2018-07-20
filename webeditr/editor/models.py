@@ -155,6 +155,11 @@ class ProjectElement(models.Model):
     element = models.ForeignKey(Element, on_delete=models.DO_NOTHING)
 
 
+class ProjectStylesheet(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
+    style_sheet = models.ForeignKey(StyleSheet, on_delete=models.DO_NOTHING)
+
+
 class ScriptScriptSheet(models.Model):
     script_sheet = models.ForeignKey(ScriptSheet, on_delete=models.DO_NOTHING)
     func = models.ForeignKey(ScriptFunc, on_delete=models.DO_NOTHING)

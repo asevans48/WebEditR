@@ -251,6 +251,11 @@ function build_project_class_list(){
         'project_name': proj_name,
         'project_id': pname,
     }
+
+    $.ajax({
+        type: 'POST',
+        url: '/get_project_classes/'
+    })
 }
 
 
@@ -421,13 +426,23 @@ function get_object_creator(){
         object_creator.append(object_selector_div);
 
 
-        var object_potential_class_div = $('<div>', {
-                                        class: 'objecteditor-class-sel;-div'});
-        var object_class_list_spn = $('<span>', {
-                                    class: 'objecteditor-class-sel-spn'});
-        object_class_list = $('<select>', {
-                            class: 'objecteditor-class-sel'});
+        var project_class_div = $('<div>', {
+                                class: 'objecteditor-class-sel;-div'});
+        var project_class_list_spn = $('<span>', {
+                                     class: 'objecteditor-class-sel-spn'});
+        var project_class_list = $('<select>', {
+                                 class: 'objecteditor-class-sel'});
+        project_class_list = build_project_class_list(project_class_list);
+        project_class_list_spn.append(project_class_list);
+        project_class_div.append(project_class_list_spn);
 
+        var add_class_btn_spn = $('<span>', {
+                                class: 'objecteditor-add-class-btn-spn'});
+        var add_class_btn = $('<span>', {
+                            class: 'objecteditor-add-class-btn'});
+        add_class_btn_spn.append(add_class_btn);
+        project_class_div.append(add_class_btn_spn);
+        object_creator.append(project_class_div);
 
         //object bottom div
         var object_btm_div = $('<div>', {
