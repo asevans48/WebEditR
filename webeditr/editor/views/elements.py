@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.utils.html import escape
 from django.views.decorators.cache import never_cache
 
+from webeditr.editor.modules.json_generator import serialize_object
 from ..models import Element, ElementClasses, ProjectElement, Classes
 
 
@@ -89,6 +90,22 @@ def remove_class_from_element(request):
         for el_class in el_classes:
             el_class.delete()
         return JsonResponse({'success': True, 'object_name': object_name})
+    except Exception as e:
+        print(traceback.format_exc())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
+
+
+@never_cache
+def get_serialized_element(request):
+    try:
+        rdict = dict(request.POST)
+        object_name = escape(rdict['object_name'][0])
+        el = Element.objects.filter(name=object_name)
+        if el.count() > 0:
+            ser = serialize_object(el.name)
+            return JsonResponse({'success': True, 'objects': ser})
+        else:
+            return JsonResponse({'success': False, 'msg': 'Element Not Found'})
     except Exception as e:
         print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})

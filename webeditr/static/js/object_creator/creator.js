@@ -578,15 +578,17 @@ function get_object_creator(){
         //edit sbmt div
         var object_sbmt_div = $('<div>', {
                               class: 'objecteditor-sbmt-div'});
+        /*
         var object_sbmt_btn = $('<button>', {
                               class: 'btn btn-primary objecteditor-sbmt-btn',
                               onclick: 'save_object();'});
         object_sbmt_btn.append('Save');
+        */
         var object_del_btn = $('<button>', {
                              class: 'btn btn-primary objecteditor-del-btn',
                              onclick: 'delete_object();'});
         object_del_btn.append('Delete');
-        object_sbmt_div.append(object_sbmt_btn);
+        //object_sbmt_div.append(object_sbmt_btn);
         object_sbmt_div.append(object_del_btn);
         object_creator.append(object_sbmt_div);
         $('.editor').append(object_creator);
