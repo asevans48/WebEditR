@@ -76,6 +76,7 @@ urlpatterns = [
         name='get_element_names_by_project_id'),
     re_path('^add_class_to_element/', elements.add_class_to_element, name='add_class_to_element'),
     re_path('^remove_class_from_element/', elements.remove_class_from_element, name='remove_class_from_element'),
+    re_path('^get_serialized_element/', elements.get_serialized_element, name='get_serialzied_element'),
 
     #select
 

@@ -32,7 +32,7 @@ def serialize_el_with_children(el):
     el_dict['children'] = []
     if children.count() > 0:
         for child in children:
-            el_dict['children'].append(serialize_el_with_children(el))
+            el_dict['children'].append(serialize_el_with_children(child))
     return el_dict
 
 
