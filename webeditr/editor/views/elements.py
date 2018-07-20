@@ -70,3 +70,25 @@ def add_class_to_element(request):
     except Exception as e:
         print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})
+
+
+@never_cache
+def remove_class_from_element(request):
+    try:
+        rdict = dict(request.POST)
+        object_name = escape(rdict['object_name'][0])
+        class_name = escape(rdict['class_name'][0])
+        sql = """
+              SELECT * FROM webeditr.editor_elementclasses 
+              WHERE 
+                    classes_id IN (SELECT id FROM webeditr.editor_classes WHERE name LIKE '{}')
+                    AND
+                    element_id IN (SELECT id FROM webeditr.editor_element WHERE name LIKE '{}');
+              """.format(class_name, object_name)
+        el_classes = ElementClasses.objects.raw(sql)
+        for el_class in el_classes:
+            el_class.delete()
+        return JsonResponse({'success': True, 'object_name': object_name})
+    except Exception as e:
+        print(traceback.format_exc())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})

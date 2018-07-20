@@ -90,6 +90,38 @@ function add_class_to_object(){
 }
 
 
+function remove_object_class(elmnt){
+    var parent_el = $(elmnt).parent().parent();
+    var class_name = $('.objecteditor-class-name-spn').html();
+    if(creator.current_object_name != null && creator.current_object_name != 'Object Name'){
+        var data = {
+            'class_name': class_name,
+            'project_id': project_objects.pname,
+            'project_name': project_objects.current_project,
+            'page_name': project_objects.current_page,
+            'object_name': creator.current_object_name,
+        }
+        $.ajax({
+            type: 'POST',
+            url: '/remove_class_from_element/',
+            data: data,
+            success: function(data){
+                if(data.success == true){
+                    build_class_list();
+                }else{
+                    console.log(data.msg);
+                    alert(data.msg);
+                }
+            }
+        }).fail(function(jqXHR, textStatus){
+            console.log('Failed to Remove Class', textStatus);
+            console.log(jqXHR);
+            alert('Internal Error');
+        });
+    }
+}
+
+
 function build_class_list(class_list_div=$('.objectedit-class-list')){
     class_list_div.html('');
     console.log(class_list_div);
@@ -117,7 +149,8 @@ function build_class_list(class_list_div=$('.objectedit-class-list')){
                             var class_rem_spn = $('<span>', {
                                                 class: 'objecteditor-class-rem-spn'});
                             var class_rem_btn = $('<i>', {
-                                                class: 'objecteditor-class-rem-btn fa fa-times'});
+                                                class: 'objecteditor-class-rem-btn fa fa-times',
+                                                onclick: 'remove_object_class();'});
                             class_rem_spn.append(class_rem_btn);
                             class_div.append(class_rem_spn);
                             $(class_list_div).append(class_div);
@@ -205,7 +238,6 @@ function submit_object_attrs(oname, append=true){
                 console.log(rdata.msg);
                 alert(rdata.msg);
             }else{
-                console.log(data);
                 var name = data['name'];
                 if(name != 'Object Name'){
                     var contains_name = false;
@@ -530,7 +562,7 @@ function get_object_creator(){
                              class: 'objectedit-btm-div'});
 
         var object_btm_left_div = $('<div>', {
-                              class: 'objectedit-btm-left'});
+                              class: 'objectedit-btm-left-div'});
         var class_list_div = $('<div>', {
                               class: 'objectedit-class-list'});
         build_class_list(class_list_div);
@@ -540,9 +572,6 @@ function get_object_creator(){
 
         var object_btm_right_div = $('<div>', {
                                     class: 'objectedit-btm-right-div'});
-        var object_preview_div = $('<div>', {
-                                 class: 'objectedit-preview-div'});
-        object_btm_right_div.append(object_preview_div);
         object_btm_div.append(object_btm_right_div);
         object_creator.append(object_btm_div);
 

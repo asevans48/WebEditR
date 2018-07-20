@@ -2,7 +2,7 @@
 .objecteditor{
     position: absolute;
     width: 500px;
-    height: 300px;
+    height: 400px;
     left: 600px;
     top: 250px;
     border-radius: 22px;
@@ -152,4 +152,60 @@
     width: 150px;
     margin-top: 20px;
     margin-left: 140px;
+}
+
+
+.objecteditor-btm-div{
+    display: flow-root;
+}
+
+
+.objecteditor-btm-left-div{
+    position: absolute;
+    top: 300px;
+    left 2px;
+    float: left;
+    width: 150px;
+    height: 125px;
+    overflow-y: scroll;
+}
+
+
+.objecteditor-class-div{
+    width: 150px;
+    height: 200px;
+    overflow-y: scroll;
+    margin-top: 20px;
+    margin-left: 20px;
+    font-size: 1.5em;
+    color: white;
+    font-weight: bold;
+}
+
+
+.objecteditor-class-div i:hover{
+    opacity: 0.5;
+}
+
+
+.objecteditor-class-rem-btn{
+    margin-left: 10px;
+}
+
+
+.objectedit-btm-right-div{
+    position: absolute;
+    top: 150px;
+    left: 200px;
+    float: left;
+    width: 290px;
+    height: 190px;
+    overflow: scroll;
+    background-color: white;
+}
+
+
+.objecteditor-sbmt-div{
+    position: absolute;
+    top: 335px;
 }
