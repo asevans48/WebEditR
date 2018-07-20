@@ -62,7 +62,6 @@ function build_class_list(class_list_div=$('.objectedit-class-list')){
                 'object_name': obj_name,
             }
 
-
             $.ajax({
                 type: 'POST',
                 url: '/get_element_classes/',
@@ -141,7 +140,6 @@ function submit_object_attrs(oname){
         var el = $(elmnt);
         var name = el.attr('name');
         var val = el.val();
-        console.log(name, val);
         if(val != creator.attr_name_map[name]){
             data[name] = val;
         }else{
@@ -243,6 +241,16 @@ function remove_attr_editor(){
 
 function tag_name_handler(elmnt){
     var attr_name = $(elmnt).val();
+}
+
+
+function build_project_class_list(){
+    var proj_name = project_objects.current_project;
+    var pname = project_objects.pname;
+    var data = {
+        'project_name': proj_name,
+        'project_id': pname,
+    }
 }
 
 
@@ -411,6 +419,15 @@ function get_object_creator(){
         object_edit_spn.append(object_edit_btn);
         object_selector_div.append(object_edit_spn);
         object_creator.append(object_selector_div);
+
+
+        var object_potential_class_div = $('<div>', {
+                                        class: 'objecteditor-class-sel;-div'});
+        var object_class_list_spn = $('<span>', {
+                                    class: 'objecteditor-class-sel-spn'});
+        object_class_list = $('<select>', {
+                            class: 'objecteditor-class-sel'});
+
 
         //object bottom div
         var object_btm_div = $('<div>', {

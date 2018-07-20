@@ -51,7 +51,6 @@ def get_project_assets(request):
             pdict = {}
             pdict['pages'] = []
             pages = list(PageProject.objects.filter(project=project_id))
-            page_list = []
             for page in pages:
                 page_dict = {
                     'name': page.page.name,
