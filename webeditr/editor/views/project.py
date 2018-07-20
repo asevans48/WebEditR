@@ -1,7 +1,6 @@
 
 import traceback
 
-from django.db import connection
 from django.http import JsonResponse
 from django.utils.html import escape
 from django.views.decorators.cache import never_cache
