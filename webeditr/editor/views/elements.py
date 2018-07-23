@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.utils.html import escape
 from django.views.decorators.cache import never_cache
 
-from webeditr.editor.modules.json_generator import serialize_object
+from ..modules.json_generator import serialize_object
 from ..models import Element, ElementClasses, ProjectElement, Classes
 
 
@@ -102,6 +102,7 @@ def get_serialized_element(request):
         object_name = escape(rdict['object_name'][0])
         el = Element.objects.filter(name=object_name)
         if el.count() > 0:
+            el = el.first()
             ser = serialize_object(el.name)
             return JsonResponse({'success': True, 'objects': ser})
         else:

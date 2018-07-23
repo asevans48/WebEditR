@@ -1,5 +1,11 @@
 //page functions (e.g. functions called on page change)
 
+var page = {
+    style_chars: ['.', '#', '[', ':'],
+    style_el_names: ['div', 'a', 'p', 'i', 'ul', 'ol', 'body', 'li', 'input', 'textarea', ''],
+}
+
+
 function get_page_elements(){
     var data = {
         'current_page': project_objects.current_page
@@ -145,7 +151,11 @@ function load_sheet_content(page_name){
                         $(Object.keys(classes)).each(function(index, classname){
                             var attributes = classes[classname];
                             if(attributes != undefined && Object.keys(attributes).length > 0){
-                                var class_string = classname+'{';
+                                var prefix = '';
+                                if(page.style_chars.includes(classname.trim().charAt(0)) == false){
+                                    prefix = '.';
+                                }
+                                var class_string = prefix + classname.trim() + '{';
                                 $(Object.keys(attributes)).each(function(index, attr){
                                     class_string += attr;
                                     class_string += ':';

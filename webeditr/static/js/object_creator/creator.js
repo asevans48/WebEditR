@@ -16,12 +16,23 @@ var creator = {
 }
 
 
+var attr_map_keys = Object.keys(creator.attr_name_map);
+
+
+function setup_preview(obj_name){
+    if(get_object_preview != undefined){
+        get_object_preview(obj_name);
+    }
+}
+
+
 function handle_object_select(){
     var sel_list = $('.objecteditor-selector-list');
     var obj_name = sel_list.find(':selected').text();
     if(obj_name != undefined && obj_name != 'Object Name'){
         creator.current_object_name = obj_name;
         get_object_attributes();
+        setup_preview(obj_name);
         build_class_list();
     }else{
         creator.current_object_name = null;
@@ -67,7 +78,6 @@ function add_class_to_object(){
                    'project_name': project_objects.current_project,
                    'project_id': project_objects.pname,
                    'page_name': project_objects.current_page};
-        console.log(data);
         $.ajax({
             type: 'POST',
             url: '/add_class_to_element/',
@@ -124,7 +134,6 @@ function remove_object_class(elmnt){
 
 function build_class_list(class_list_div=$('.objectedit-class-list')){
     class_list_div.html('');
-    console.log(class_list_div);
     var obj_name = creator.current_object_name;
     if(obj_name != undefined && obj_name != null){
         if(obj_name != 'Object Name'){
@@ -255,6 +264,8 @@ function submit_object_attrs(oname, append=true){
                         $('.objecteditor-selector-list').prepend(opt);
                     }
                 }
+                creator.current_object_attributes = data;
+                get_object_preview(name);
             }
         }
     }).fail(function(jqXHR, textStatus){
@@ -366,13 +377,22 @@ function build_project_class_list(project_class_list){
 }
 
 
-function append_attribute(key_name, editor_div=$('.objectattr-editor-inputs-div')){
-    var keys = Object.keys(creator.current_object_attributes);
+function append_attribute(key_name,
+                          keys=Object.keys(creator.current_object_attributes),
+                          editor_div=$('.objectattr-editor-inputs-div')){
     var attr_name = creator.attr_name_map[key_name];
     if(keys.includes(key_name) == true){
         //create the input for the
-        attr_name = creator.current_object_attributes[key_name];
+        var val = creator.current_object_attributes[key_name];
+        if(val != null){
+            if(typeof(val) == typeof('') && val.trim().length > 0){
+                attr_name = val;
+            }else if(typeof(val) != typeof('')){
+                attr_name = val;
+            }
+        }
     }
+
     var inpt_div = $('<div>', {
                    class: 'objectattr-inpt-div'});
     var attr_inpt = null;
@@ -381,6 +401,7 @@ function append_attribute(key_name, editor_div=$('.objectattr-editor-inputs-div'
                     class: 'objectattr-inpt form-control',
                     name: key_name});
         attr_inpt.val(attr_name);
+        attr_inpt.append(attr_name);
     }else if(key_name == 'content'){
         attr_inpt = $('<textarea>', {
             class: 'objectattr-tarea form-control',
@@ -409,6 +430,7 @@ function append_attribute(key_name, editor_div=$('.objectattr-editor-inputs-div'
 
 
 function open_object_attr_editor(){
+    var keys = Object.keys(creator.current_object_attributes);
     var object_attr_editor_div = $('.object-editor-div');
     if(object_attr_editor_div != undefined){
         object_attr_editor_div.remove();
@@ -426,9 +448,11 @@ function open_object_attr_editor(){
     //inputs
     var object_attr_input_div = $('<div>', {
                                 class: 'objectattr-editor-inputs-div'});
-    var attrs = Object.keys(creator.attr_name_map);
-    $(attrs).each(function(index, value){
-        object_attr_input_div = append_attribute(value, object_attr_input_div);
+    $(attr_map_keys).each(function(index, value){
+        object_attr_input_div = append_attribute(
+                                            value,
+                                            keys,
+                                            object_attr_input_div);
     });
     object_attr_editor_div.append(object_attr_input_div);
 

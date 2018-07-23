@@ -195,6 +195,7 @@
 
 .objectedit-btm-right-div{
     position: absolute;
+    overflow: scroll;
     top: 150px;
     left: 200px;
     float: left;

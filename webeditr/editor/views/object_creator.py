@@ -21,7 +21,7 @@ def create_or_edit_object(request):
         class_name = escape(rdict['class_name'][0])
         description = escape(rdict['description'][0])
         attributes = escape(rdict['attributes'][0])
-        perc_page_height = rdict.get('per_page_height', None)
+        perc_page_height = rdict.get('perc_page_height', None)
         perc_page_width = rdict.get('perc_page_width', None)
         if perc_page_height is None or len(perc_page_height[0].strip()) is 0:
             perc_page_height = .1

@@ -3,7 +3,8 @@ Converts elements to JSON arrays to be written.
 
 @author aevans
 '''
-from webeditr.editor.models import Element, ElementContent, ElementChildren
+
+from ..models import Element, ElementContent, ElementChildren
 
 
 def get_element_dict(el):
@@ -14,7 +15,7 @@ def get_element_dict(el):
     :return:  dict
     """
     ctnt = ElementContent.objects.filter(element_id=el.id)
-    el_dict = el.to_dict
+    el_dict = el.to_dict()
     if ctnt.count() > 0:
         el_dict['content'] = ctnt.first().content
     return el_dict
@@ -28,7 +29,7 @@ def serialize_el_with_children(el):
     :return:  dict
     """
     el_dict = get_element_dict(el)
-    children = ElementChildren.objects.filter(element_id=el.id)
+    children = ElementChildren.objects.filter(parent_id=el.id)
     el_dict['children'] = []
     if children.count() > 0:
         for child in children:
