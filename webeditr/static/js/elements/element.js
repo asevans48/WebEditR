@@ -142,6 +142,11 @@ function remove_element(){
 }
 
 
+function edit_element(){
+
+}
+
+
 function prep_object(elmnt){
     var elmnt = $(elmnt);
     elmnt.mouseover(handle_mouse_over);
