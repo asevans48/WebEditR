@@ -33,6 +33,8 @@ class Element(models.Model):
     attributes = JSONField(null=True)
     perc_page_height = models.FloatField(null=False)
     perc_page_width = models.FloatField(null=False)
+    x_perc = models.FloatField()
+    y_perc = models.FloatField()
 
     def to_dict(self):
         return {

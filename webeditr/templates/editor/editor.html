@@ -4,12 +4,15 @@
         {% load static %}
         {% load staticfiles %}
 
+        <!-- jQuery -->
+        <script src="{% static 'js/jquery/jquery-3.3.1.min.js' %}"></script>
+
         <!-- fontawesome 5.1 -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/fontawesome/all.css' %}"/>
         <!-- fontawesome-free-5.1.1-web/js/fontawesome.min.js -->
         <script src="{% static 'js/fontawesome/all.js' %}"></script>
 
-        <!-- glyphicons -->
+        <!-- bootstrap -->
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/material-icons.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap-glyphicon.css' %}"/>
 
@@ -65,12 +68,14 @@
          <!-- object creator css -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/creators/object_creator.css' %}"/>
 
+         <!-- object creator css -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/selectors/object-selector.css' %}"/>
+
         <!-- editor js -->
         <script src="{% static 'js/editor/external_script_editor.js' %}"></script>
         <script src="{% static 'js/editor/external_sheet_editor.js' %}"></script>
         <script src="{% static 'js/angular/angular.min.js' %}"></script>
         <script src="{% static 'js/stringutils/escapeutils.js' %}"></script>
-        <script src="{% static 'js/jquery/jquery-3.3.1.min.js' %}"></script>
         <script src="{% static 'js/dimensions/dimensions.js' %}"></script>
         <script src="{% static 'js/ui/jquery-ui.js' %}"></script>
         <script src="{% static 'js/security/cookies.js' %}"></script>
@@ -84,26 +89,29 @@
         <script src="{% static 'js/elements/element.js' %}"></script>
         <script src="{% static 'js/object_creator/creator.js' %}"></script>
         <script src="{% static 'js/object_creator/element_creator.js' %}"></script>
+        <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     </head>
     <body>
         {% csrf_token %}
-        <div class="page-background background-dots">
+        <div class="container background-dots">
+            <div class="page-background">
 
-        </div>
-        <div class="user-defined-background">
+            </div>
+            <div class="user-defined-background">
 
-        </div>
-        <div class="pallet">
+            </div>
+            <div class="pallet">
 
-        </div>
-        <div class="filesystem">
+            </div>
+            <div class="filesystem">
 
-        </div>
-        <div class="editor">
+            </div>
+            <div class="editor container">
 
-        </div>
-        <div class="element-area">
+            </div>
+            <div class="element-area">
 
+            </div>
         </div>
     </body>
 </html>

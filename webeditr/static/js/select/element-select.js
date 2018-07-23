@@ -20,6 +20,8 @@ function select_object(){
                     }
 
                     root_tag = $(root_tag).draggable();
+                    root_tag = prep_object(root_tag);
+                    root_tag.addClass('edit-el');
                     $('.element-area').append(root_tag);
                     remove_object_selector();
                 }else{

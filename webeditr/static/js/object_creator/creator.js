@@ -534,7 +534,7 @@ function get_object_creator(){
         var object_selector_spn = $('<span>', {
                                    class: 'objecteditor-selector-list-span'});
         var object_selector_list = $('<select>', {
-                                   class: 'objecteditor-selector-list form-control'});
+                                   class: 'objecteditor-selector-list selectpicker'});
         var def_opt = $('<option>', {
                       class: 'objecteditor-opt'});
         def_opt.val('Object Name');
@@ -566,7 +566,7 @@ function get_object_creator(){
         var project_class_list_spn = $('<span>', {
                                      class: 'objecteditor-class-sel-spn'});
         var project_class_list = $('<select>', {
-                                 class: 'objecteditor-class-sel form-control'});
+                                 class: 'objecteditor-class-sel selectpicker'});
         project_class_list = build_project_class_list(project_class_list);
         project_class_list_spn.append(project_class_list);
         project_class_div.append(project_class_list_spn);

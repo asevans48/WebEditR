@@ -92,6 +92,10 @@ function load_project_assets(pname, project_title){
                                     $('.pallet').show();
                                     keyo.is_editor_hidden = false;
                                 }
+                            }else if(key_pressed == 61){
+                                increase_object_size();
+                            }else if(key_pressed == 173){
+                                decrease_object_size();
                             }else{
                                 keyo.ctl_key_pressed = false;
                             }
