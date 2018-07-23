@@ -44,7 +44,7 @@ function build_tag(objects, perc_modifier=1){
         var attrs = objects['attributes'];
         $(Object.keys(attrs)).each(function(index, key){
            var val = attrs[key];
-           tag.attr(key, val);
+           tag.css(key, val);
         });
     }
     tag = get_dimensions(tag, objects, perc_modifier);

@@ -1,19 +1,4 @@
 
-function get_object_fill(){
-
-}
-
-
-function get_pallet_button(){
-
-}
-
-
-function populate_project_pallet(page_name){
-
-}
-
-
 function hide_pallet(){
     $('.pallet').hide();
 }
@@ -33,7 +18,7 @@ function create_lower_button_div(){
                          class: 'pallet pallet-sel-obj-div'});
     var sel_object_btn = $('<i>', {
                          class: 'pallet pallet-sel-obj-btn pallet-btn glyphicon glyphicon-asterisk',
-                         onclick: 'get_object_selection();'});
+                         onclick: 'get_object_selector();'});
     sel_object_div.append(sel_object_btn);
     row_a.append(sel_object_div);
     var create_object_div = $('<div>', {
