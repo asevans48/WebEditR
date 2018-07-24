@@ -1,0 +1,47 @@
+
+.objselect{
+    width: 250px;
+    height: 100px;
+    border-radius: 22px;
+}
+
+
+.objselect-title-div{
+    text-align:center;
+    font-size: 2em;
+    color: white;
+    font-weight: bold
+}
+
+
+.objselect-title-div i:hover{
+    opacity: 0.5;
+}
+
+
+.objselect-rem-btn{
+    margin-left: 10px;
+    margin-top: 1px;
+}
+
+
+.objselect-selector-div{
+    text-align: center;
+    margin-top: 5px;
+}
+
+
+.objselect-sbmt-div{
+    text-align: center;
+}
+
+
+.objselect-sbmt-btn{
+    margin-left: 87px;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-top: 5px;
+    height: 25px;
+    width: 80px;
+    border-radius: 10px;
+}

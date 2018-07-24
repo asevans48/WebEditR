@@ -30,11 +30,11 @@ function save_element_dimensions(){
                     alert(data.msg);
                 }
             }
-        }).fail(function(jqXHR, textStatus)){
+        }).fail(function(jqXHR, textStatus){
             console.log('Failed to Save Position', textStatus);
             console.log(jqXHR);
             alert('Internal Error');
-        }
+        });
     }
 }
 
@@ -113,7 +113,7 @@ function handle_mouse_over(){
 
 
 function handle_mouse_out(){
-    $(this).css('border': '');
+    $(this).css('border', '');
 }
 
 

@@ -84,7 +84,7 @@ function remove_object_selector(){
 
 function get_object_selector(){
     var selector = $('<div>', {
-                       class: 'objselect'});
+                       class: 'objselect standard-grey-gradient shadow'});
     var title_div = $('<div>', {
                     class: 'objselect-title-div'});
     var title_spn = $('<span>', {
@@ -93,7 +93,8 @@ function get_object_selector(){
     var rem_spn = $('<span>', {
                   class: 'objselect-rem-spn'});
     var rem_btn = $('<i>', {
-                  class: 'objselect-rem-btn fa fa-times'});
+                  class: 'objselect-rem-btn fa fa-times',
+                  onclick: 'remove_object_selector();'});
     rem_spn.append(rem_btn);
     title_div.append(title_spn);
     title_div.append(rem_spn);
@@ -111,9 +112,14 @@ function get_object_selector(){
     selector_div.append(oselector);
     selector.append(selector_div);
 
-    var rem_btn_div = $();
-    selector.append(rem_btn_div);
+    var sbmt_btn_div = $('<div>', {
+                        class: 'objselect-sbtm-div'});
+    sbmt_btn = $('<button>', {
+                class: 'btn btn-primary objselect-sbmt-btn'});
+    sbmt_btn.append('Select')
+    sbmt_btn_div.append(sbmt_btn);
+    selector.append(sbmt_btn_div);
+    selector.draggable();
 
-
-    $('.editor').append(selector_div);
+    $('.editor').append(selector);
 }
