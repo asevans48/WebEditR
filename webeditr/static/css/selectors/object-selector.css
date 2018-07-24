@@ -1,8 +1,12 @@
 
 .objselect{
+    position: absolute;
+    top: 225px;
+    left: 725px;
     width: 250px;
     height: 100px;
     border-radius: 22px;
+    z-index: 1000000;
 }
 
 

@@ -325,6 +325,13 @@ function delete_object(){
 
 
 function remove_object_creator(){
+    try{
+        if(element && element.current_element && refresh_element){
+            refresh_element();
+        }
+    }catch(err){
+        console.log(err.message);
+    }
     $('.objecteditor').remove();
 }
 

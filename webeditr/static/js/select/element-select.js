@@ -3,7 +3,7 @@ function select_object(){
     var cname = $('.objselect-selector-sel').find(':selected').text();
     if(cname && cname != null && cname != 'Select Object'){
         var data = {
-            'object_name': obj_name,
+            'object_name': cname,
         };
 
         $.ajax({
@@ -11,12 +11,13 @@ function select_object(){
             url: '/get_serialized_element/',
             data: data,
             success: function(data){
+                console.log(data);
                 if(data.success){
                     var objects = data.objects;
-                    var oarr = build_tag(objects, perc_modifier);
+                    var oarr = build_tag(objects);
                     var root_tag = null;
                     if(oarr != undefined && oarr[1] != undefined && oarr[1] != null){
-                        root_tag = append_children(oarr[0], oarr[1], perc_modifier);
+                        root_tag = append_children(oarr[0], oarr[1]);
                     }
 
                     root_tag = $(root_tag).draggable();
@@ -51,14 +52,14 @@ function build_object_select_list(sel_list){
     var data = {
         'project_id': project_objects.pname,
     };
-
     $.ajax({
         type: 'POST',
         url: '/get_element_names_by_project_id/',
         data: data,
         success: function(data){
+            console.log(data);
             if(data.success){
-                var cnames = data['class_names'];
+                var cnames = data.elements;
                 if(cnames && cnames != null){
                     $(cnames).each(function(index, cname){
                         var opt = build_opt(cname);
@@ -73,6 +74,7 @@ function build_object_select_list(sel_list){
     }).fail(function(jqXHR, textStatus){
         console.log('Failed to Build Select List', textStatus);
         console.log(jqXHR);
+        alert('Internal Error');
     });
 }
 
@@ -115,7 +117,8 @@ function get_object_selector(){
     var sbmt_btn_div = $('<div>', {
                         class: 'objselect-sbtm-div'});
     sbmt_btn = $('<button>', {
-                class: 'btn btn-primary objselect-sbmt-btn'});
+                class: 'btn btn-primary objselect-sbmt-btn',
+                onclick: 'select_object();'});
     sbmt_btn.append('Select')
     sbmt_btn_div.append(sbmt_btn);
     selector.append(sbmt_btn_div);
