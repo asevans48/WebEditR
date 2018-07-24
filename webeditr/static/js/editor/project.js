@@ -49,54 +49,66 @@ function load_project_assets(pname, project_title){
                     $(document).keyup(function(e){
                         var key_pressed = e.keycode || e.which;
                         if(key_pressed != 17 && keyo.ctl_key_pressed == true){
-                            if(key_pressed == 50){
-                                var dim_div = $('.dimensions-div');
-                                if(dim_div.html() == undefined || dim_div.html() == null){
-                                    open_project_dimensions_panel(
-                                                                  pname,
-                                                                  project_title);
-                                }else{
-                                    dim_div.remove();
+                            try{
+                                if(key_pressed == 50){
+                                    var dim_div = $('.dimensions-div');
+                                    if(dim_div.html() == undefined || dim_div.html() == null){
+                                        open_project_dimensions_panel(
+                                                                      pname,
+                                                                      project_title);
+                                    }else{
+                                        dim_div.remove();
+                                    }
+                                }else if(key_pressed == 49){
+                                    var fsys_div = $('.fsys-div');
+                                    if(fsys_div.html() == undefined || fsys_div.html() == null){
+                                        open_project_file_panel(
+                                                               pname,
+                                                               project_title,
+                                                               data);
+                                    }else{
+                                        fsys_div.remove();
+                                    }
+                                }else if(key_pressed == 51){
+                                    var pallet_div = $('.pallet-div');
+                                    if(pallet_div.html() == undefined || pallet_div.html() == null){
+                                        open_project_pallet(
+                                                            pname,
+                                                            project_title);
+                                    }else{
+                                        pallet_div.remove();
+                                    }
+                                }else if(key_pressed == 51){
+                                    var pageinf_div = $('.pageinf-div');
+                                    if(pageinf_div.html() == undefined || pageinf_div.html() == null){
+                                        get_page_info_div();
+                                    }else{
+                                        pageinf_div.remove();
+                                    }
+                                }else if(key_pressed == 52){
+                                    if(keyo.is_editor_hidden == false){
+                                        $('.pallet').hide();
+                                        keyo.is_editor_hidden = true;
+                                    }else{
+                                        $('.pallet').show();
+                                        keyo.is_editor_hidden = false;
+                                    }
+                                }else if(key_pressed == 61){
+                                    increase_object_size();
+                                }else if(key_pressed == 173){
+                                    decrease_object_size();
+                                }else if(key_pressed == 79){
+                                    get_object_parent();
+                                }else if(key_pressed == 73){
+                                    //get_media_appender();
+                                }else if(key_pressed == 69){
+                                    //get_element_editor();
+                                }else if(key_pressed == 90){
+                                    //get_zindex_editor();
+                                }else if(key_pressed = 46){
+                                    //remove_element();
                                 }
-                            }else if(key_pressed == 49){
-                                var fsys_div = $('.fsys-div');
-                                if(fsys_div.html() == undefined || fsys_div.html() == null){
-                                    open_project_file_panel(
-                                                           pname,
-                                                           project_title,
-                                                           data);
-                                }else{
-                                    fsys_div.remove();
-                                }
-                            }else if(key_pressed == 51){
-                                var pallet_div = $('.pallet-div');
-                                if(pallet_div.html() == undefined || pallet_div.html() == null){
-                                    open_project_pallet(
-                                                        pname,
-                                                        project_title);
-                                }else{
-                                    pallet_div.remove();
-                                }
-                            }else if(key_pressed == 51){
-                                var pageinf_div = $('.pageinf-div');
-                                if(pageinf_div.html() == undefined || pageinf_div.html() == null){
-                                    get_page_info_div();
-                                }else{
-                                    pageinf_div.remove();
-                                }
-                            }else if(key_pressed == 52){
-                                if(keyo.is_editor_hidden == false){
-                                    $('.pallet').hide();
-                                    keyo.is_editor_hidden = true;
-                                }else{
-                                    $('.pallet').show();
-                                    keyo.is_editor_hidden = false;
-                                }
-                            }else if(key_pressed == 61){
-                                increase_object_size();
-                            }else if(key_pressed == 173){
-                                decrease_object_size();
-                            }else{
+                            }finally{
                                 keyo.ctl_key_pressed = false;
                             }
                         }else{

@@ -1,12 +1,57 @@
 
+import copy
+import re
 import traceback
 
 from django.http import JsonResponse
 from django.utils.html import escape
 from django.views.decorators.cache import never_cache
 
-from ..modules.json_generator import serialize_object
+from ..modules.json_generator import serialize_object, get_class_name
 from ..models import Element, ElementClasses, ProjectElement, Classes
+
+
+@never_cache
+def set_element_zindex(request):
+    try:
+        rdict = dict(request.POST)
+        object_name = escape(rdict['object_name'][0])
+        element_zindex = int(rdict['zindex'][0])
+    except Exception as e:
+        print(traceback.format_exc())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
+
+
+@never_cache
+def resize_element(request):
+    try:
+        rdict = dict(request.POST)
+        el_width = int(rdict['width'][0])
+        el_height = int(rdict['height'][0])
+        perc_width = int(rdict['perc_width'][0])
+        perc_height = int(rdict['perc_height'][0])
+        obj_name = escape(rdict['object_name'][0])
+        el = Element.objects.filter(name=obj_name)
+        if el.count() > 0:
+            el = el.first()
+            el.perc_page_width = perc_width
+            el.perc_page_height = perc_height
+            el.save()
+        else:
+            print(traceback.format_exc())
+            return JsonResponse({'success': False, 'msg': 'Failed to Find Object'})
+    except Exception as e:
+        print(traceback.format_exc())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
+
+
+@never_cache
+def reposition_element(request):
+    try:
+        pass
+    except Exception as e:
+        print(traceback.format_exc())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
 
 
 @never_cache
@@ -104,9 +149,35 @@ def get_serialized_element(request):
         if el.count() > 0:
             el = el.first()
             ser = serialize_object(el.name)
+            class_name = get_class_name(el)
+            ser['class_name'] = class_name
             return JsonResponse({'success': True, 'objects': ser})
         else:
             return JsonResponse({'success': False, 'msg': 'Element Not Found'})
+    except Exception as e:
+        print(traceback.format_exc())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
+
+
+@never_cache
+def clone_element(request):
+    try:
+        rdict = dict(request.POST)
+        object_name = escape(rdict['object_name'][0])
+        new_name = escape(rdict['new_object_name'][0])
+        el = Element.objects.filter(name=object_name)
+        if el.count() > 0:
+            el = el.first()
+            new_el = copy.copy(el)
+            new_el.id = None
+            new_el.name = new_name
+            try:
+                delattr(new_el, '_prefetched_objects_cache')
+            except AttributeError:
+                pass
+            new_el.save()
+        else:
+            return JsonResponse({'success': False, 'msg': 'Failed to Find Element'})
     except Exception as e:
         print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})

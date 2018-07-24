@@ -1,12 +1,13 @@
-
+import json
 import traceback
 
 from django.http import JsonResponse
-from django.views.decorators.cache import never_cache
 from django.utils.html import escape
+from django.views.decorators.cache import never_cache
 
 from ..models import Page, Project, PageProject, ScriptSheet, StyleSheet, PageStylesheet, PageScriptSheet, \
-    ExternalStyleSheet, ExternalScriptSheet, PageExternalStylesheet, PageExternalScriptSheet, ProjectStylesheet
+    ExternalStyleSheet, ExternalScriptSheet, PageExternalStylesheet, PageExternalScriptSheet, ProjectStylesheet, \
+    Element, PageElement, ProjectElement, Background, PageBackground
 from ..modules.assets import get_stylesheets_by_page_id, get_scriptsheets_by_page_id, get_elements_by_page_id, \
     get_external_stylesheets_by_page_id, get_external_scriptsheets_by_page_id
 
@@ -291,4 +292,55 @@ def get_page_external_stylesheets(request):
         return JsonResponse({'success': False, 'msg': sheets})
     except Exception as e:
         print(traceback.extract_tb())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
+
+
+@never_cache
+def remove_page_element(request):
+    try:
+        rdict = dict(request.POST)
+        page_name = escape(rdict['page_name'][0])
+        oname = escape(rdict['obj_name'][0])
+        page = Page.objects.filter(name=page_name)
+        project_id = escape(rdict['project_id'][0])
+        proj = Project.objects.filter(id=project_id)
+        obj = Element.objects.filter(name=oname)
+        if page.count() > 0 and obj.count() > 0 and proj.count() > 0:
+            page = page.first()
+            obj = obj.first()
+            page_el = PageElement.objects.filter(page_id=page.id, element_id=obj.id)
+            ct = page_el.count()
+            if ct > 0:
+                page_el = page_el.first()
+                page_el.delete()
+                if ct is 1:
+                    proj_el = ProjectElement.objects.filter(element_id=obj.id, project_id=project_id)
+                    if proj_el.count() > 0:
+                        proj_el.first().delete()
+                    obj.delete()
+            else:
+                return JsonResponse({'success': True, 'msg': 'Element Not Part of Page'})
+        else:
+            return JsonResponse({'success': False, 'msg': 'Failed to Find Page'})
+    except Exception as e:
+        print(traceback.format_exc())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
+
+
+@never_cache
+def set_page_background(request):
+    try:
+        rdict = dict(request.POST)
+        page_name = escape(rdict['page_name'][0])
+        bg_name = escape(rdict['background_name'][0])
+        bg_css = escape(rdict['background_css'][0])
+        page = Page.objects.filter(name=page_name)
+        if page.count() > 0:
+            page = page.first()
+            bg, created = Background.objects.get_or_create(name=bg_name)
+            bg.background_css = bg_css
+            bg.save()
+            PageBackground.objects.get_or_create(page=page, background=bg)
+    except Exception as e:
+        print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})

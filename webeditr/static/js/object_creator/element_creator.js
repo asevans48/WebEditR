@@ -4,8 +4,8 @@ var preview = {
 }
 
 var tag_map = {
+                'class': 'class',
                 'name': 'name',
-                'class_name': 'class',
                 'perc_page_height': 'perc_page_height',
                 'perc_page_width': 'perc_page_width'};
 var tag_keys = Object.keys(tag_map);
@@ -78,6 +78,7 @@ function get_object_preview(obj_name, perc_modifier=preview.percent_size_reducti
             data: data,
             success: function(data){
                 if(data.success){
+                    console.log(data);
                     //build out tags
                     var objects = data.objects;
                     var oarr = build_tag(objects, perc_modifier);
@@ -88,6 +89,7 @@ function get_object_preview(obj_name, perc_modifier=preview.percent_size_reducti
 
                     //append to editor
                     if(root_tag != undefined && root_tag != null){
+                        console.log(root_tag);
                         $('.objectedit-btm-right-div').html('');
                         var obj_div = $('<div>', {
                                       style: 'position: relative; margin-left: 10px; margin-top: 10px;'});

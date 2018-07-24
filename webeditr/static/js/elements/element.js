@@ -1,6 +1,7 @@
 
 var potential_parent = {
     parent_name: null,
+    is_getting_parent: false,
 }
 
 var element = {
@@ -29,6 +30,11 @@ function set_element_details(elmnt){
     element.current_width = el.css('width');
     element.current_height_perc = element.current_height / $(window).height();
     element.current_width_perc = element.current_width / window.innerWidth;
+}
+
+
+function get_object_parent(){
+
 }
 
 
@@ -74,7 +80,7 @@ function save_current_positions(){
 
     $.ajax({
         type: 'POST',
-        url: '/save_current_position/'
+        url: '/save_current_position/',
         data: data,
         async: false,
         success: function(data){
@@ -135,20 +141,24 @@ function refresh_element(elmnt){
 }
 
 
-function remove_element(elmnt){
+function remove_element(){
     if(element.current_element && element.current_element != null){
         var data = {
+            'project_id': project_objects.pname,
+            'project_name': project_objects.current_project,
+            'page': project_objects.current_page,
             'obj_name': element.current_element,
         };
 
         $.ajax({
             type: 'POST',
-            url: '/remove_current_element/',
+            url: '/remove_page_element/',
             data: data,
             success: function(data){
                 if(data.success == false){
                     alert('Element Removal Was Not Successful');
                 }
+                $('[name="' + element.current_element + '"]').remove();
             }
         }).fail(function(jqXHR, textStatus){
             console.log('Removing Current Element ', textStatus);

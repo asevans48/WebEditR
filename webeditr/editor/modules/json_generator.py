@@ -3,8 +3,22 @@ Converts elements to JSON arrays to be written.
 
 @author aevans
 '''
+import re
 
-from ..models import Element, ElementContent, ElementChildren
+from ..models import Element, ElementContent, ElementChildren, ElementClasses
+
+
+def get_class_name(el):
+    class_name = el.class_name
+    if class_name is None:
+        class_name = ''
+    classes = ElementClasses.objects.filter(element=el)
+    if classes.count() > 0:
+        for classo in classes:
+            classo = classo.classes
+            pname = re.sub('[\.\#]+', '', classo.name)
+            class_name = "{} {}".format(class_name, pname)
+    return class_name
 
 
 def get_element_dict(el):
@@ -16,6 +30,7 @@ def get_element_dict(el):
     """
     ctnt = ElementContent.objects.filter(element_id=el.id)
     el_dict = el.to_dict()
+    el_dict['class'] = get_class_name(el)
     if ctnt.count() > 0:
         el_dict['content'] = ctnt.first().content
     return el_dict

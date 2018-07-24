@@ -11,6 +11,10 @@ style_storage = FileSystemStorage(location = '/media/stylesheets')
 script_storage = FileSystemStorage(location = '/media/scripts')
 
 # models
+class Background(models.Model):
+    name = models.CharField(max_length=512, null=False)
+    background_css = JSONField()
+
 
 class Classes(models.Model):
     name = models.CharField(max_length=512, null=False)
@@ -33,8 +37,6 @@ class Element(models.Model):
     attributes = JSONField(null=True)
     perc_page_height = models.FloatField(null=False)
     perc_page_width = models.FloatField(null=False)
-    x_perc = models.FloatField()
-    y_perc = models.FloatField()
 
     def to_dict(self):
         return {
@@ -165,3 +167,8 @@ class ProjectStylesheet(models.Model):
 class ScriptScriptSheet(models.Model):
     script_sheet = models.ForeignKey(ScriptSheet, on_delete=models.DO_NOTHING)
     func = models.ForeignKey(ScriptFunc, on_delete=models.DO_NOTHING)
+
+
+class PageBackground(models.Model):
+    page = models.ForeignKey(Page, on_delete=models.DO_NOTHING)
+    background = models.ForeignKey(Background, on_delete=models.DO_NOTHING)

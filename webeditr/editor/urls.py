@@ -77,16 +77,21 @@ urlpatterns = [
     re_path('^add_class_to_element/', elements.add_class_to_element, name='add_class_to_element'),
     re_path('^remove_class_from_element/', elements.remove_class_from_element, name='remove_class_from_element'),
     re_path('^get_serialized_element/', elements.get_serialized_element, name='get_serialzied_element'),
+    re_path('^remove_page_element/', page.remove_page_element, name='remove_page_element'),
 
-    #select
+    #elements set zindex
+    re_path('^set_element_zindex/', elements.set_element_zindex, name='set_element_zindex'),
 
-    #resize
+    #elements clone
+    re_path('^clone_element/', elements.clone_element, name='clone_element'),
 
-    #reposition
+    #elements resize
 
-    #fill
+    #elements reposition
 
-    #gradient
+    #elements fill
 
-    #background
+    #elements gradient
+
+    #page background
 ]
