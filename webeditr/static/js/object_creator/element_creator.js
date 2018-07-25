@@ -44,10 +44,24 @@ function build_tag(objects, perc_modifier=1){
         var attrs = objects['attributes'];
         $(Object.keys(attrs)).each(function(index, key){
            var val = attrs[key];
-           tag.css(key, val);
+           tag.attr(key, val);
         });
     }
     tag = get_dimensions(tag, objects, perc_modifier);
+    if(objects['css_attributes'] != undefined && objects['css_attributes'] != null){
+        var attrs = objects['css_attributes'];
+        $(Object.keys(attrs)).each(function(index, key){
+           var val = attrs[key];
+           key = key.trim().toLowerCase();
+           if(key == 'width' || key == 'height'){
+                val = ''+val;
+                val = val.replace('px', '');
+                val = parseInt(val) * perc_modifier;
+                val = val + 'px';
+           }
+           tag.css(key, val);
+        });
+    }
     return [tag, objects['children']]
 }
 

@@ -1,4 +1,4 @@
-
+import json
 import traceback
 
 from django.http import JsonResponse
@@ -12,6 +12,7 @@ from ..models import Element, Classes, ElementClasses, ElementContent, ProjectEl
 def create_or_edit_object(request):
     try:
         rdict = dict(request.POST)
+        print(rdict)
         project_id = int(escape(str(rdict['project_id'][0])))
         page_name = escape(rdict['page_name'][0])
         name = escape(rdict['name'][0])
@@ -20,7 +21,12 @@ def create_or_edit_object(request):
         tag_name = escape(rdict['tag_name'][0])
         class_name = escape(rdict['class_name'][0])
         description = escape(rdict['description'][0])
-        attributes = escape(rdict['attributes'][0])
+        css_attributes= rdict['css_attributes'][0]
+        if css_attributes is not None:
+            css_attributes = json.loads(css_attributes)
+        attributes = rdict['attributes'][0]
+        if attributes is not None:
+            attributes = json.loads(attributes)
         perc_page_height = rdict.get('perc_page_height', None)
         perc_page_width = rdict.get('perc_page_width', None)
         if perc_page_height is None or len(perc_page_height[0].strip()) is 0:
@@ -46,6 +52,7 @@ def create_or_edit_object(request):
         el.class_name = class_name
         el.description = description
         el.attributes = attributes
+        el.css_attributes = css_attributes
         el.perc_page_height = perc_page_height
         el.perc_page_width = perc_page_width
         el.save()

@@ -50,7 +50,7 @@ function clone_element(){
         $('.clonename').remove();
         var clone_div = $('<div>', {
                         class: 'clonename'});
-        var clone_title_div = $('<div>'. {
+        var clone_title_div = $('<div>', {
                               class: 'clonename-title-div'});
         var clone_title_spn = $('<span>', {
                               class: 'clonename-title-spn'});
@@ -376,9 +376,9 @@ function handle_mouse_up(){
             elmnt.current_width_perc = offset.left / window.innerWidth;
             elmnt.current_height_perc = offset.top /$(window).height();
 
-            if(old_oname != oname || (old_x != x || old_y != y)){
-                save_current_positions();
-            }
+            //if(old_oname != oname || (old_x != x || old_y != y)){
+            //    save_current_positions();
+            //}
         }
     }else if(element.current_element){
         set_element_parent($(this));
@@ -396,8 +396,20 @@ function handle_mouse_out(){
 }
 
 
-function handle_mouse_down(){
+function handle_mouse_down(e){
+    var elmnt = $('this');
     clear_element();
+    var mdown = document.createEvent("MouseEvents");
+    mdown.initMouseEvent("mousedown", true, true, window, 0, e.screenX, e.screenY, e.clientX, e.clientY, true, false, false, true, 0, null);
+    $(this).closest('.draggable')[0].dispatchEvent(mdown);
+
+    $(this).on('click', function(e){
+        var $draggable = $(this).closest('.draggable');
+        if($draggable.data("preventBehaviour")){
+            e.preventDefault();
+            $draggable.data("preventBehaviour", false)
+        }
+    });
 }
 
 

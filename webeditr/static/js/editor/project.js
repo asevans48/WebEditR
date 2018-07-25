@@ -102,7 +102,7 @@ function load_project_assets(pname, project_title){
                                 }else if(key_pressed == 82){
                                     remove_element_parents();
                                 }else if(key_pressed == 73){
-                                    get_media_appender();
+                                    get_media_appender(e);
                                 }else if(key_pressed == 69){
                                     //get_element_editor();
                                 }else if(key_pressed == 90){

@@ -1,4 +1,14 @@
 
+function set_draggable(elmnt){
+    var elmnt = $(elmnt);
+    $(".draggable").draggable({
+        start: function( event, ui ) {
+           $(this).data('preventBehaviour', true);
+        }
+    });
+}
+
+
 function select_object(){
     var cname = $('.objselect-selector-sel').find(':selected').text();
     if(cname && cname != null && cname != 'Select Object'){
@@ -24,6 +34,7 @@ function select_object(){
                     root_tag = prep_object(root_tag);
                     root_tag.addClass('edit-el');
                     $('.element-area').append(root_tag);
+                    set_draggable(root_tag);
                     remove_object_selector();
                 }else{
                     console.log(data.msg);

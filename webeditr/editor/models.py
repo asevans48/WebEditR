@@ -35,6 +35,7 @@ class Element(models.Model):
     class_name = models.CharField(max_length=512)
     description = models.TextField()
     attributes = JSONField(null=True)
+    css_attributes = JSONField(null=True)
     perc_page_height = models.FloatField(null=False)
     perc_page_width = models.FloatField(null=False)
 
@@ -46,6 +47,7 @@ class Element(models.Model):
             'tag_name': self.tag_name,
             'class_name': self.class_name,
             'description': self.description,
+            'css_attributes': self.css_attributes,
             'attributes': self.attributes,
             'perc_page_height': self.perc_page_height,
             'perc_page_width': self.perc_page_width

@@ -9,6 +9,7 @@ var creator = {
                     'tag_name': 'Tag Name',
                     'class_name': 'Class Name',
                     'description': 'Description',
+                    'css_attributes': 'CSS Attributes',
                     'attributes': 'Attributes',
                     'perc_page_height': 'Percent Page Height',
                     'perc_page_width': 'Percent Page Width',
@@ -222,22 +223,61 @@ function save_object(){
 }
 
 
-function submit_object_attrs(oname, append=true){
+function get_attrs_from_string(val, kv_sep, attr_sep=';'){
+    var attrs = {};
+    if(val.trim().length > 0){
+        var vals = val.split(attr_sep);
+        for(var i = 0; i < vals.length; i++){
+            var kv = vals[i];
+            if(kv.trim().length > 0){
+                var kvarr = kv.split(kv_sep);
+                var name = kvarr[0];
+                var val = kvarr[1].trim();
+                attrs[name] = val;
+            }
+        }
+    }
+    return attrs;
+}
+
+
+function get_attr_data(){
     var inputs = $('.objectattr-inpt');
     var data = {}
     $(inputs).each(function(index, elmnt){
         var el = $(elmnt);
         var name = el.attr('name');
         var val = el.val();
-        if(val != creator.attr_name_map[name]){
-            data[name] = val;
-        }else{
-            data[name] = null;
+        var lname = name.trim().toLowerCase();
+        if(lname != 'attributes' && lname != 'css_attributes'){
+            if(val != creator.attr_name_map[name]){
+                data[name] = val;
+            }else{
+                data[name] = null;
+            }
+        }else if(lname =='css_attributes'){
+            var attrs = {};
+            if(val && val.trim().toLowerCase() != 'css attributes'){
+                attrs = get_attrs_from_string(val, ':')
+            }
+            data['css_attributes'] = JSON.stringify(attrs);
+        }else if(lname == 'attributes'){
+            var attrs = {};
+            if(val && val.trim().toLowerCase() != 'attributes'){
+                attrs = get_attrs_from_string(val, '=');
+            }
+            data['attributes'] = JSON.stringify(attrs);
         }
     })
     data['project_id'] = project_objects.pname;
     data['project_name'] = project_objects.current_project;
     data['page_name'] = project_objects.current_page;
+    return data;
+}
+
+
+function submit_object_attrs(oname, append=true){
+    var data = get_attr_data();
     $.ajax({
         type: 'POST',
         url: '/create_or_edit_object/',
@@ -265,6 +305,12 @@ function submit_object_attrs(oname, append=true){
                     }
                 }
                 creator.current_object_attributes = data;
+                var attrs = creator.current_object_attributes['attributes'];
+                attrs= JSON.parse(attrs);
+                creator.current_object_attributes['attributes'] = attrs;
+                attrs = creator.current_object_attributes['css_attributes'];
+                attrs = JSON.parse(attrs);
+                creator.current_object_attributes['css_attributes'] = attrs;
                 get_object_preview(name);
             }
         }
@@ -283,7 +329,7 @@ function edit_object(){
             submit_object_attrs(obj_name, false);
         }
     }catch(err){
-        console.log('Failed to Edit Object Attrs')
+        console.log('Failed to Edit Object Attrs');
         alert(err.message);
     }
     $('.objectattr-editor-div').remove();
@@ -327,7 +373,7 @@ function delete_object(){
 function remove_object_creator(){
     try{
         if(element != undefined && element.current_element && refresh_element){
-            refresh_element();
+            refresh_element(element.current_element);
         }
     }catch(err){
         console.log(err.message);
@@ -384,6 +430,16 @@ function build_project_class_list(project_class_list){
 }
 
 
+function build_attr_string(o, sep){
+    var attr_str = '';
+    $(Object.keys(o)).each(function(index, key_name){
+        var val = o[key_name];
+        attr_str += key_name + sep + val + ";";
+    })
+    return attr_str;
+}
+
+
 function append_attribute(key_name,
                           keys=Object.keys(creator.current_object_attributes),
                           editor_div=$('.objectattr-editor-inputs-div')){
@@ -395,7 +451,13 @@ function append_attribute(key_name,
             if(typeof(val) == typeof('') && val.trim().length > 0){
                 attr_name = val;
             }else if(typeof(val) != typeof('')){
-                attr_name = val;
+                if(key_name == 'attributes'){
+                    attr_name = build_attr_string(val, '=');
+                }else if(key_name == 'css_attributes'){
+                    attr_name = build_attr_string(val, ':');
+                }else{
+                    attr_name = val;
+                }
             }
         }
     }
@@ -420,7 +482,7 @@ function append_attribute(key_name,
                     class: 'objectattr-inpt form-control',
                     name: key_name,
                     placeholder: 'Tag Name'});
-        var opts = ['div', 'input', 'iframe', 'img', 'p', 'span', 'address', 'embed', 'article', 'aside', 'audio', 'svg', 'blockquote', 'button', 'i', 'cite', 'table', 'em', 'picture', 'pre', 'section', 'select', 'ul', 'ol']
+        var opts = ['div', 'input', 'p', 'span', 'address', 'embed', 'article', 'aside', 'svg', 'blockquote', 'button', 'i', 'cite', 'table', 'em', 'picture', 'pre', 'section', 'select', 'ul', 'ol'];
         $(opts).each(function(index, tag_name){
             var opt = $('<option>', {
                       class: 'object-attr-option'});
