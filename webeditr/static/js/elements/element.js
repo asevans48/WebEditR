@@ -1,8 +1,16 @@
 
+var old_x = 0;
+var old_y = 0;
+
+
 var potential_parent = {
     parent_name: null,
     is_getting_parent: false,
 }
+
+
+var non_draggables = ['input', 'button', 'select', 'video', 'audio'];
+
 
 var element = {
     current_element: null,
@@ -376,9 +384,9 @@ function handle_mouse_up(){
             elmnt.current_width_perc = offset.left / window.innerWidth;
             elmnt.current_height_perc = offset.top /$(window).height();
 
-            //if(old_oname != oname || (old_x != x || old_y != y)){
-            //    save_current_positions();
-            //}
+            if(old_x != x || old_y != y){
+                save_current_positions();
+            }
         }
     }else if(element.current_element){
         set_element_parent($(this));
@@ -396,20 +404,11 @@ function handle_mouse_out(){
 }
 
 
-function handle_mouse_down(e){
-    var elmnt = $('this');
+function handle_mouse_down(){
     clear_element();
-    var mdown = document.createEvent("MouseEvents");
-    mdown.initMouseEvent("mousedown", true, true, window, 0, e.screenX, e.screenY, e.clientX, e.clientY, true, false, false, true, 0, null);
-    $(this).closest('.draggable')[0].dispatchEvent(mdown);
-
-    $(this).on('click', function(e){
-        var $draggable = $(this).closest('.draggable');
-        if($draggable.data("preventBehaviour")){
-            e.preventDefault();
-            $draggable.data("preventBehaviour", false)
-        }
-    });
+    var offset = $(this).offset();
+    old_x = offset.left;
+    old_y = offset.top;
 }
 
 

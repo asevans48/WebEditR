@@ -296,6 +296,24 @@ def get_page_external_stylesheets(request):
 
 
 @never_cache
+def add_page_element(request):
+    try:
+        rdict = dict(request.POST)
+        oname = escape(rdict['object_name'][0])
+        page_name = escape(rdict['page_name'][0])
+        page= Page.objects.filter(name=page_name)
+        el = Element.objects.filter(name=oname)
+        if page.count() > 0 and el.count() > 0:
+            page_el = PageElement.objects.get_or_create(element=el, page=page)
+            return JsonResponse({'succecss': True, 'page_el_id': page_el.id})
+        else:
+            return JsonResponse({'success': False, 'msg': 'Page or Element Not Found'})
+    except Exception as e:
+        print(traceback.format_exc())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
+
+
+@never_cache
 def remove_page_element(request):
     try:
         rdict = dict(request.POST)

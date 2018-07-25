@@ -1,11 +1,17 @@
 
-function set_draggable(elmnt){
-    var elmnt = $(elmnt);
-    $(".draggable").draggable({
-        start: function( event, ui ) {
-           $(this).data('preventBehaviour', true);
-        }
-    });
+function set_page_element(elmnt){
+    var elmnt = $(element);
+    var data = {
+        'object_name': elmnt.attr('name'),
+        'project_id': project_objects.pname,
+        'project_name': project_objects.project_name,
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: ''
+    })
+
 }
 
 
@@ -29,12 +35,13 @@ function select_object(){
                     if(oarr != undefined && oarr[1] != undefined && oarr[1] != null){
                         root_tag = append_children(oarr[0], oarr[1]);
                     }
-
                     root_tag = $(root_tag).draggable();
                     root_tag = prep_object(root_tag);
                     root_tag.addClass('edit-el');
+                    $(root_tag).draggable({
+                        cancel: null,
+                    })
                     $('.element-area').append(root_tag);
-                    set_draggable(root_tag);
                     remove_object_selector();
                 }else{
                     console.log(data.msg);

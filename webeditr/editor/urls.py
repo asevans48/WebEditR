@@ -78,6 +78,7 @@ urlpatterns = [
     re_path('^remove_class_from_element/', elements.remove_class_from_element, name='remove_class_from_element'),
     re_path('^get_serialized_element/', elements.get_serialized_element, name='get_serialzied_element'),
     re_path('^remove_page_element/', page.remove_page_element, name='remove_page_element'),
+    re_path('^add_page_element/', page.add_page_element, name='add_page_element'),
 
     #elements set zindex
     re_path('^set_element_zindex/', elements.set_element_zindex, name='set_element_zindex'),
