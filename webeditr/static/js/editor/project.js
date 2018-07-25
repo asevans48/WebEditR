@@ -108,7 +108,7 @@ function load_project_assets(pname, project_title){
                                 }else if(key_pressed == 90){
                                     //get_zindex_editor();
                                 }else if(key_pressed == 46){
-                                    //remove_element();
+                                    remove_page_element();
                                 }else if(key_pressed == 86){
                                     clone_element();
                                 }

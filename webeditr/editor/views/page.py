@@ -303,8 +303,13 @@ def add_page_element(request):
         page_name = escape(rdict['page_name'][0])
         page= Page.objects.filter(name=page_name)
         el = Element.objects.filter(name=oname)
+        top = int(rdict['top'][0])
+        left = int(rdict['left'][0])
         if page.count() > 0 and el.count() > 0:
-            page_el = PageElement.objects.get_or_create(element=el, page=page)
+            page = page.first()
+            el = el.first()
+            page_el = PageElement.objects.create(element=el, page=page, top=top, left=left)
+            page_el.save()
             return JsonResponse({'succecss': True, 'page_el_id': page_el.id})
         else:
             return JsonResponse({'success': False, 'msg': 'Page or Element Not Found'})

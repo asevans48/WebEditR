@@ -1,21 +1,91 @@
 
+function remove_elmnt(elmnt){
+    var elmnt = $(elmnt);
+    var page_el_id = elmnt.attr('page_el_id');
+    var name = elmnt.attr('name');
+    if(page_el_id && name){
+        var data = {
+            'page_el_id': page_el_id,
+            'object_name': name,
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/remove_page_element/',
+            data: data,
+            success: function(data){
+                if(data.success){
+                    elmnt.remove();
+                }else{
+                    console.log(data.msg);
+                    alert(data.msg);
+                }
+            }
+        }).fail(function(jqXHR, textStatus){
+            console.log('Failed to Remove Page Element ', textStatus);
+            console.log(jqXHR);
+            alert('Internal Error');
+        });
+    }
+}
+
+
+function remove_elmnt_recursively(elmnt){
+    alert(element.current_element);
+    var elmnt = $(elmnt);
+    var children = elmnt.children();
+    if(children.length > 0){
+        $(children).each(function(){
+            remove_elmnt(this);
+        });
+    }
+    remove_elmnt(elmnt);
+}
+
+
+function remove_page_element(){
+    if(element.current_element && element.current_element != null){
+        var elmnt = $('[name="' + element.current_element + '"]');
+        if(elmnt.length > 0){
+            remove_elmnt_recursively(elmnt);
+        }
+    }
+}
+
 function set_page_element(elmnt){
-    var elmnt = $(element);
+    var elmnt = $(elmnt);
+    console.log(elmnt);
+    var offset = $(elmnt).offset();
     var data = {
         'object_name': elmnt.attr('name'),
         'project_id': project_objects.pname,
         'project_name': project_objects.project_name,
+        'page_name': project_objects.current_page,
+        'left': offset.left,
+        'top': offset.top,
     }
 
     $.ajax({
         type: 'POST',
-        url: ''
-    })
+        url: '/add_page_element/',
+        data: data,
+        success: function(data){
+            if(data.success == false){
+                console.log(data.msg);
+                alert(data.msg);
+            }else{
+                elmnt.attr('page_el_id', data.page_el_id);
+            }
+        }
+    }).fail(function(jqXHR, textStatus){
+        console.log('Failed to Add Page Element', textStatus);
+        console.log(jqXHR);
+    });
 
 }
 
 
-function select_object(){
+function select_object(add_to_db=true){
     var cname = $('.objselect-selector-sel').find(':selected').text();
     if(cname && cname != null && cname != 'Select Object'){
         var data = {
@@ -43,6 +113,9 @@ function select_object(){
                     })
                     $('.element-area').append(root_tag);
                     remove_object_selector();
+                    if(add_to_db){
+                        set_page_element(root_tag);
+                    }
                 }else{
                     console.log(data.msg);
                     alert(data.msg);
