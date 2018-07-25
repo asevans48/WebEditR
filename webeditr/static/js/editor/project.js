@@ -99,14 +99,18 @@ function load_project_assets(pname, project_title){
                                     decrease_object_size();
                                 }else if(key_pressed == 79){
                                     get_object_parent();
+                                }else if(key_pressed == 82){
+                                    remove_element_parents();
                                 }else if(key_pressed == 73){
-                                    //get_media_appender();
+                                    get_media_appender();
                                 }else if(key_pressed == 69){
                                     //get_element_editor();
                                 }else if(key_pressed == 90){
                                     //get_zindex_editor();
-                                }else if(key_pressed = 46){
+                                }else if(key_pressed == 46){
                                     //remove_element();
+                                }else if(key_pressed == 86){
+                                    clone_element();
                                 }
                             }finally{
                                 keyo.ctl_key_pressed = false;

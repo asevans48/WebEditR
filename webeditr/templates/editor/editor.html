@@ -71,6 +71,9 @@
          <!-- object creator css -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/selectors/object-selector.css' %}"/>
 
+         <!-- media css -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/media/media.css' %}"/>
+        
         <!-- editor js -->
         <script src="{% static 'js/editor/external_script_editor.js' %}"></script>
         <script src="{% static 'js/editor/external_sheet_editor.js' %}"></script>
@@ -91,6 +94,7 @@
         <script src="{% static 'js/object_creator/element_creator.js' %}"></script>
         <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
         <script src="{% static 'js/select/element-select.js' %}"></script>
+        <script src="{% static 'js/media/media.js' %}"></script>
     </head>
     <body class="background-dots">
         {% csrf_token %}

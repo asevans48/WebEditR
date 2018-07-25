@@ -8,7 +8,7 @@ from django.utils.html import escape
 from django.views.decorators.cache import never_cache
 
 from ..modules.json_generator import serialize_object, get_class_name
-from ..models import Element, ElementClasses, ProjectElement, Classes
+from ..models import Element, ElementClasses, ProjectElement, Classes, ElementChildren, Page, Project, PageElement
 
 
 @never_cache
@@ -165,19 +165,83 @@ def clone_element(request):
         rdict = dict(request.POST)
         object_name = escape(rdict['object_name'][0])
         new_name = escape(rdict['new_object_name'][0])
+        project_id = int(rdict['project_id'][0])
+        page_name = escape(rdict['page_name'][0])
         el = Element.objects.filter(name=object_name)
         if el.count() > 0:
-            el = el.first()
-            new_el = copy.copy(el)
-            new_el.id = None
-            new_el.name = new_name
-            try:
-                delattr(new_el, '_prefetched_objects_cache')
-            except AttributeError:
-                pass
-            new_el.save()
+            project = Project.objects.filter(id=project_id)
+            page = Page.objects.filter(name=page_name)
+            if page.count() > 0 and project.count() > 0:
+                el = el.first()
+                new_el = copy.copy(el)
+                new_el.id = None
+                new_el.name = new_name
+                try:
+                    delattr(new_el, '_prefetched_objects_cache')
+                except AttributeError:
+                    pass
+                new_el.save()
+                if project.count() > 0:
+                    project = project.first()
+                    ProjectElement.objects.create(project=project, element=new_el)
+                if page.count() > 0:
+                    PageElement.objects.create(page=page, element=new_el)
+                return JsonResponse({'success': True, 'el_id': new_el.id})
+            else:
+                return JsonResponse({'success': False, 'msg': 'Failed to Find Page or Project'})
         else:
             return JsonResponse({'success': False, 'msg': 'Failed to Find Element'})
+    except Exception as e:
+        print(traceback.format_exc())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
+
+
+@never_cache
+def set_object_parent(request):
+    try:
+        rdict = dict(request.POST)
+        object_name = escape(rdict['object_name'][0])
+        parent_name = escape(rdict['parent_name'][0])
+        page_name = escape(rdict['page_name'][0])
+        parent = Element.objects.filter(name=parent_name)
+        child = Element.objects.filter(name=object_name)
+        page = Page.objects.filter(name=page_name)
+        if parent.count() > 0 and child.count() > 0 and page.count() > 0:
+            parent = parent.first()
+            child = child.first()
+            ec, created = ElementChildren.objects.get_or_create(parent=parent,
+                                                                child=child,
+                                                                page=page)
+            return JsonResponse({'success': True, 'created': created})
+        else:
+            return JsonResponse({'success': False, 'msg': 'Parent, Page, or Child Not Found'})
+    except Exception as e:
+        print(traceback.format_exc())
+        return JsonResponse({'success': False, 'msg': 'Internal Error'})
+
+
+@never_cache
+def remove_object_parents(request):
+    try:
+        rdict = dict(request.POST)
+        page_name = escape(rdict['page_name'][0])
+        object_name = escape(rdict['object_name'][0])
+        page = Page.objects.filter(name=page_name)
+        element = Element.objects.filter(name=object_name)
+        if page.count() > 0 and element.count() > 0:
+            page = page.first()
+            element = element.first()
+            children = ElementChildren.objects.filter(child=element, page=page)
+            if children.count() > 0:
+                link_id = 0
+                for child in children:
+                    link_id = child.id
+                    child.delete()
+                return JsonResponse({'success': True, 'link_id': link_id})
+            else:
+                return JsonResponse({'success': False, 'msg': 'Child Not Found'})
+        else:
+            return JsonResponse({'sucecss': False, 'msg': 'Page or Element Not Found'})
     except Exception as e:
         print(traceback.format_exc())
         return JsonResponse({'success': False, 'msg': 'Internal Error'})

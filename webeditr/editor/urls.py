@@ -85,6 +85,10 @@ urlpatterns = [
     #elements clone
     re_path('^clone_element/', elements.clone_element, name='clone_element'),
 
+    #hierarchy
+    re_path('^remove_element_parents', elements.remove_object_parents, name='remove_element_parents'),
+    re_path('^set_element_parent/', elements.set_object_parent, name='set_element_parent'),
+
     #elements resize
 
     #elements reposition

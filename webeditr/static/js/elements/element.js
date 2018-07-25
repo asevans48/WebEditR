@@ -17,6 +17,141 @@ var element = {
 }
 
 
+function rem_clone_div(){
+    $('.clonename').remove();
+}
+
+
+function create_clone(){
+    var clone_div = $('.clonename');
+    if(clone_div.length && element.current_element != null){
+        var clone_name = $('.clonename-inpt').val();
+        if(clone_name != null && clone_name.trim().length > 0){
+            var data = {
+                'object_name': element.current_element,
+                'new_object_name': clone_name,
+                'page_name': project_objects.current_page,
+                'project_id': project_objects.pname,
+                'project_name': project_objects.current_project,
+            }
+        }else{
+            console.log('Clone Name Not Provided');
+            alert('Clone Name Not Provided');
+        }
+    }else{
+        console.log('Element Not Selected');
+        alert('element Not Selected');
+    }
+}
+
+
+function clone_element(){
+    if(element.current_element && element.current_element != null){
+        $('.clonename').remove();
+        var clone_div = $('<div>', {
+                        class: 'clonename'});
+        var clone_title_div = $('<div>'. {
+                              class: 'clonename-title-div'});
+        var clone_title_spn = $('<span>', {
+                              class: 'clonename-title-spn'});
+        clone_title_spn.append('Cloned Object Name');
+        clone_title_div.append(clone_title_spn);
+        var clone_rem_spn = $('<span>', {
+                            class: 'clonename-rem-spn'});
+        var clone_rem_btn = $('<i>', {
+                            class: 'clonename-rem-btn',
+                            onclick: 'rem_clone_div();'});
+        clone_rem_spn.append(clone_rem_btn);
+        clone_title_div.append(clone_rem_btn);
+        var clone_name_div = $('<div>', {
+                             class: 'clonename-inpt-div'});
+        var clone_name_inpt = $('<input>', {
+                              class: 'clonename-inpt',
+                              placeholder: 'Clone Name'});
+        clone_name_div.append(clone_name_inpt);
+        var sbmt_clone_div = $('<div>', {
+                             class: 'clonename-sbmt-div'});
+        var sbmt_clone_btn = $('<button>', {
+                             class: 'clonename-sbmt-btn btn btn-primary',
+                             onclick: 'create_clone();'});
+        sbmt_clone_btn.append('Clone');
+        sbmt_clone_div.append(sbmt_clone_div);
+        $('.editor').append(sbmt_clone_div);
+    }
+}
+
+
+function remove_element_parents(){
+    if(element.current_element){
+        var elmnt = $("[name='" + element.current_element + "']");
+
+        if(elmnt.length > 0){
+           var data = {
+               'object_name': elmnt.attr('name'),
+               'project_id': project_objects.project_id,
+               'project_name': project_objects.current_project,
+               'page_name': project_objects.current_page,
+               'page_id': project_objects.pname,
+           }
+
+           $.ajax({
+               type: 'POST',
+               url: '/remove_element_parents/',
+               data: data,
+               success: function(data){
+                   if(data.success){
+                       elmnt.detach.appendTo($('.element-area'));
+                   }else{
+                       console.log(data.msg);
+                       alert(data.msg);
+                   }
+               }
+           }).fail(function(jqXHR, textStatus){
+               console.log('Failed to Remove Parentst', textStatus);
+               console.log(jqXHR);
+           });
+        }
+    }
+}
+
+
+function set_element_parent(elmnt){
+    var parent = $(elmnt);
+    if(parent){
+        var parent_name = parent.attr('name');
+        var data = {
+            'object_name': element.current_element,
+            'parent_name': parent_name,
+            'project_id': project_objects.project_id,
+            'project_name': project_objects.current_project,
+            'page_name': project_objects.current_page,
+            'page_id': project_objects.pname,
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/set_element_parent/',
+            data: data,
+            success: function(data){
+                if(data.success){
+                    var el = $('[name="' + element.current_element + '"]');
+                    if(el){
+                        parent.append(el);
+                    }
+                }else{
+                    console.log(data.msg);
+                    alert(data.msg);
+                }
+            }
+        }).fail(function(jqXHR, textStatus){
+            console.log('Failed to Set Element Parent', textStatus);
+            console.log(jqXHR);
+            alert('Internal Error');
+        });
+    }
+}
+
+
 function set_element_details(elmnt){
     var el = $(elmnt);
     var offset = el.offset();
@@ -34,7 +169,11 @@ function set_element_details(elmnt){
 
 
 function get_object_parent(){
-
+    if(potential_parent.is_getting_parent == false){
+        potential_parent.is_getting_parent == true;
+    }else{
+        potential_parent.is_getting_parent == false;
+    }
 }
 
 
@@ -227,18 +366,22 @@ function decrease_object_size(){
 
 
 function handle_mouse_up(){
-    console.log(this);
-    if($(this).attr("class") != undefined && $(this).attr("class").includes("edit-el")){
-        var elmnt = $(this);
-        var offset = elmnt.offset();
-        elmnt.current_x_position = offset.left;
-        elmnt.current_y_position = offset.top;
-        elmnt.current_width_perc = offset.left / window.innerWidth;
-        elmnt.current_height_perc = offset.top /$(window).height();
+    if(potential_parent.is_getting_parent == false){
+        if($(this).attr("class") != undefined && $(this).attr("class").includes("edit-el")){
+            var elmnt = $(this);
+            var offset = elmnt.offset();
+            element.current_element = $(this).attr('name');
+            elmnt.current_x_position = offset.left;
+            elmnt.current_y_position = offset.top;
+            elmnt.current_width_perc = offset.left / window.innerWidth;
+            elmnt.current_height_perc = offset.top /$(window).height();
 
-        if(old_oname != oname || (old_x != x || old_y != y)){
-            save_current_positions();
+            if(old_oname != oname || (old_x != x || old_y != y)){
+                save_current_positions();
+            }
         }
+    }else if(element.current_element){
+        set_element_parent($(this));
     }
 }
 

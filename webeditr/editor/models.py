@@ -105,6 +105,7 @@ class ClassesStylesheet(models.Model):
 class ElementChildren(models.Model):
     parent = models.ForeignKey(Element, on_delete=models.DO_NOTHING, related_name='parent')
     child = models.ForeignKey(Element, on_delete=models.DO_NOTHING, related_name='child')
+    page = models.ForeignKey(Page, on_delete=models.DO_NOTHING)
 
 
 class ElementClasses(models.Model):
