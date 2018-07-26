@@ -244,7 +244,7 @@ function load_page(page_name){
     setup_page_dimensions(project_objects.current_project, page_name);
     load_page_scripts(page_name);
     load_page_styles(page_name);
-    //get_page_elements();
+    get_page_elements();
     $('.pallet').show();
 }
 

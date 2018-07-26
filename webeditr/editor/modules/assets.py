@@ -1,22 +1,23 @@
 
-from django.core.cache import cache
-from ..models import PageStylesheet, PageScriptSheet, PageElement, PageExternalScriptSheet, PageExternalStylesheet
+from ..models import PageStylesheet, PageScriptSheet, PageElement, PageExternalScriptSheet, PageExternalStylesheet, \
+    ElementContent
 
 
 def get_elements_by_page_id(project_id, elements=[]):
-    els = None
     els = PageElement.objects.all().filter(page=project_id)
-    sheets = {}
     if els.count() > 0:
         for el in els:
-            elements.append(el.to_dict())
+            el_dict = el.to_dict
+            content = ElementContent.objects.filter(element=el)
+            if content.count() > 0:
+                content = content.first()
+                el_dict['inner_html'] = content.content
+            elements.append(el_dict)
     return elements
 
 
 def get_scriptsheets_by_page_id(project_id, scripts={}):
-    els = None
     els = PageScriptSheet.objects.all().filter(page=project_id)
-    scripts = {}
     if els.count() > 0:
         for el in els:
             el_name = el.script_sheet.name
@@ -27,9 +28,7 @@ def get_scriptsheets_by_page_id(project_id, scripts={}):
 
 
 def get_stylesheets_by_page_id(project_id, sheets={}):
-    els = None
     els = PageStylesheet.objects.all().filter(page=project_id)
-    sheets = {}
     if els.count() > 0:
         for el in els:
             el_name = el.style_sheet.name
@@ -39,10 +38,8 @@ def get_stylesheets_by_page_id(project_id, sheets={}):
     return sheets
 
 
-def get_external_scriptsheets_by_page_id(page_id):
-    els = None
+def get_external_scriptsheets_by_page_id(page_id, sheets={}):
     els = PageExternalScriptSheet.objects.filter(page_id=page_id)
-    sheets = {}
     if els.count() > 0:
         for el in els:
             el_name = el.script_sheet.name
@@ -53,10 +50,8 @@ def get_external_scriptsheets_by_page_id(page_id):
     return sheets
 
 
-def get_external_stylesheets_by_page_id(page_id):
-    els = None
+def get_external_stylesheets_by_page_id(page_id, sheets={}):
     els = PageExternalStylesheet.objects.filter(page_id=page_id)
-    sheets = {}
     if els.count() > 0:
         for el in els:
             el_name = el.style_sheet.name

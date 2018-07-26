@@ -1,14 +1,13 @@
 
 import copy
-import re
 import traceback
 
 from django.http import JsonResponse
 from django.utils.html import escape
 from django.views.decorators.cache import never_cache
 
-from ..modules.json_generator import serialize_object, get_class_name
 from ..models import Element, ElementClasses, ProjectElement, Classes, ElementChildren, Page, Project, PageElement
+from ..modules.json_generator import serialize_object, get_class_name
 
 
 @never_cache
