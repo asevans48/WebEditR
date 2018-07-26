@@ -10,6 +10,27 @@ function get_page_elements(){
     var data = {
         'current_page': project_objects.current_page
     }
+
+    $.ajax({
+        type: 'POST',
+        url: '/get_page_elements/',
+        data: data,
+        success: function(data){
+            if(data.success){
+               els = data.elements
+               for(var i = 0; i < els.length; i++){
+                   el = els[i];
+                   build
+               }
+            }else{
+
+            }
+        }
+    }).fail(function(jqXHR, textStatus){
+        console.log('Failed to Get Page Elements', textStatus);
+        console.log(jqXHR);
+        alert('Internal Error');
+    })
 }
 
 

@@ -1,10 +1,10 @@
 
 from ..models import PageStylesheet, PageScriptSheet, PageElement, PageExternalScriptSheet, PageExternalStylesheet, \
-    ElementContent
+    ElementContent, Page
 
 
-def get_elements_by_page_id(project_id, elements=[]):
-    els = PageElement.objects.all().filter(page=project_id)
+def get_elements_by_page_id(page_id, elements=[]):
+    els = PageElement.objects.all().filter(page=page_id)
     if els.count() > 0:
         for el in els:
             el_dict = el.to_dict
@@ -14,6 +14,14 @@ def get_elements_by_page_id(project_id, elements=[]):
                 el_dict['inner_html'] = content.content
             elements.append(el_dict)
     return elements
+
+
+def get_elements_by_page_name(page_name, elements =[]):
+    page = Page.objects.filter(name=page_name)
+    if page.count() > 0:
+        page = page.first()
+        return get_elements_by_page_id(page.id)
+    return []
 
 
 def get_scriptsheets_by_page_id(project_id, scripts={}):

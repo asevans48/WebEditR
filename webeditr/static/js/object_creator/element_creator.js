@@ -37,6 +37,8 @@ function build_tag(objects, perc_modifier=1){
     $(Object.keys(objects)).each(function(index, key){
         if(tag_keys.includes(key) == true){
             tag.attr(tag_map[key], objects[key]);
+        }else if(key == 'inner_html' || key == 'content'){
+            tag.html(objects[key]);
         }
     });
 
