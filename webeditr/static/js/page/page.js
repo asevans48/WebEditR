@@ -17,7 +17,7 @@ function get_page_elements(){
         data: data,
         success: function(data){
             if(data.success){
-               els = data.elements
+               els = data.elements;
                for(var i = 0; i < els.length; i++){
                    el = els[i];
                    build

@@ -1,6 +1,8 @@
 # Web Editor
 
-This tool is mean to be used in the design sprint process as a rapid prototyping tool. It can be used as a visual sketch pad for multi-page web applications of substance or that is at least the attention. That way developers on new projects can avoid wasting time on the front end b.s. aside from connecting to the backend where the magic happens.
+NOTE: This tool is not a primary concern for myself or my company but will be seeing updates at least until someone implements similar usability features.
+
+This tool is meant to be used in the design sprint process as a rapid prototyping tool. It can be used as a visual sketch pad for multi-page web applications of substance or that is at least the attention. That way developers on new projects can avoid wasting time on the front end b.s. aside from connecting to the backend where the magic happens.
 
 # Requirements
 

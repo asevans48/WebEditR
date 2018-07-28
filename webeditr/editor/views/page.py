@@ -177,8 +177,6 @@ def remove_sheet(request):
         sheet_id = int(rdict['sheet_id'][0])
         sheet_type = escape(rdict['sheet_type'][0])
         page_id = int(rdict['page_id'][0])
-        page_sheet=None
-        page_script=None
         if sheet_type.upper().strip() == "JS":
             page_script = PageScriptSheet.objects.filter(script_sheet_id=sheet_id, page_id=page_id)
             if page_script.count() > 0:
